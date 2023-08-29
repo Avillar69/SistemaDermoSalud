@@ -1,0 +1,187 @@
+@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Menu</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Seguridad</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Menu
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+        </div>
+    </div>
+</div>
+
+
+<div id="rowFrm" style="display:none;">
+    <div class="card m-b-10">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Artículo</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class='form-horizontal'>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group row m-b-5 p-l-10" style="display:none;">
+                                <input placeholder='' id='txtidMenu' type='text' style="display:none;">
+                            </div>
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtDescripcion">Descripcion</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id="txtDescripcion" type="text" class="form-control form-control-sm" onkeypress="return isLetterKey(event, this);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtidMenuPadre">ID Menu Padre</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id="txtidMenuPadre" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="control-label col-md-4" for="txtNivel">Nivel</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id="txtNivel" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtPosicion">Posicion</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id="txtPosicion" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtAction' class="control-label col-md-4">Action</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id='txtAction' type='text' class="form-control form-control-sm" onkeypress="return isLetterKey(event, this);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtController' class="control-label col-md-4">Controller</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id='txtController' type='text' class="form-control form-control-sm" onkeypress="return isLetterKey(event, this);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtIcono' class="control-label col-md-4">Icono </label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id='txtIcono' type='text' class="form-control form-control-sm" onkeypress="return isLetterKey(event, this);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtFechaModificacion' class="control-label col-md-4">Fecha  </label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id='txtFechaModificacion' type='text' class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12 m-b-5 m-t-5" style="display:none">
+                        <input id="txtFiltro" class="form-control input-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                        <div class="col-md-8">
+                            <div class="btn-toolbar flex-wrap float-right" role="toolbar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 hidden-sm-down" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/Seguridad/Seg_Menu.js"></script>

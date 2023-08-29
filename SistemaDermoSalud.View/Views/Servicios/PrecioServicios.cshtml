@@ -1,0 +1,59 @@
+﻿
+@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+        @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+        @Html.Raw("</script>");
+    }
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Precio Tratamientos</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Configuraciones</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Precio Tratamientos
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a class="btn btn-outline-primary" title="Imprimir"><i class="ft-printer"></i></a>
+            <div role="group" class="btn-group">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a class="dropdown-item">Pdf</a>
+                    <a  class="dropdown-item">Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-body" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12" style="margin-bottom:2px;">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                    </div>
+                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src='~/Scripts/app.js'></script>
+<script src="~/Scripts/Configuraciones/PrecioServicios.js"></script>

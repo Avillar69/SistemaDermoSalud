@@ -1,0 +1,286 @@
+@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Personal</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">RRHH</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Personal
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+        </div>
+    </div>
+</div>
+<div class="content-body" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12" style="margin-bottom:2px;">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                    </div>
+                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowFrm" style="display:none;">
+    <div class="card col-sm-12">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Usuario</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class="container-fluid">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group-sm" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                        </div>
+                        <div class='form-group row m-b-5 p-l-10' style="display:none;">
+                            <label for='txtCodigo' class="control-label col-sm-3">Codigo</label>
+                            <div class="col-12 col-sm-4">
+                                <input id='txtCodigo' readonly placeholder='Autgenerado' type='text' class="form-control  form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 col-12 text-center">
+                                <img src="~/app-assets/images/users/dftuser.png" class="rounded-circle height-100 width-100" id="persImg">
+                                <div class="containerFile">
+                                    <button class="btn btn-info btn-sm" onclick="imgClick();">Seleccionar Imagen</button>
+                                    <input type="file" style="display:none" id="inpImage" class="form-control-file" />
+                                </div>
+                            </div>
+                            <div class="col-md-10 col-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtnombre' class="control-label col-md-4 col-12">Nombre</label>
+                                            <div class="col-md-8 col-12">
+                                                <input id="txtnombre" type="text" class="form-control cf form-control-sm" onkeypress="return isLetterKey(event, this);" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtapepat' class="control-label col-md-4 col-12">Apellido Paterno</label>
+                                            <div class="col-md-8 col-12">
+                                                <input id='txtapepat' type='text' class="form-control cf form-control-sm" onkeypress="return isLetterKey(event, this);">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtapemat' class="control-label col-md-4 col-12">Apellido Materno</label>
+                                            <div class="col-md-8 col-12">
+                                                <input id='txtapemat' type='text' class="form-control cf form-control-sm" onkeypress="return isLetterKey(event, this);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <div class='form-group row'>
+                                            <label class='col-sm-4 control-label' for='txtEdad'>Edad</label>
+                                            <div class='col-sm-8'>
+                                                <input class='form-control cf form-control-sm' placeholder='' id='txtEdad' type='text' onkeypress="return IngresoNumero(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtdoc' class="control-label col-md-4 col-12">Documento</label>
+                                            <div class="col-md-8 col-12">
+                                                <input id='txtdoc' type='text' class="form-control cf form-control-sm" onkeypress="return IngresoNumero(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='cbosex' class="control-label col-md-4 col-12">Sexo</label>
+                                            <div class="col-md-8 col-12">
+                                                <select id='cbosex' class="form-control cf form-control-sm" style="height:26px">
+                                                    <option value="M">Masculino</option>
+                                                    <option value="F">Femenino</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtFechaNacimiento' class="control-label col-md-4 col-12">Fecha Nacimiento</label>
+                                            <div class="col-md-8 col-12">
+                                                <input id='txtFechaNacimiento' type='text' class="form-control cf form-control-sm datepicker">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtFechaIngreso' class="control-label col-md-4 col-12">Fecha Ingreso</label>
+                                            <div class="col-md-8 col-12">
+                                                <input id='txtFechaIngreso' type='text' class="form-control cf form-control-sm datepicker">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='cboEstadoCivil' class="control-label col-md-4 col-12">Est.Civil</label>
+                                            <div class="col-12 col-md-8 col-12">
+                                                <select id='cboEstadoCivil' class="form-control cf form-control-sm" style="height:26px">
+                                                    <option value="" selected>Seleccione</option>
+                                                    <option value="S">Soltero</option>
+                                                    <option value="C">Casado</option>
+                                                    <option value="V">Viudo</option>
+                                                    <option value="D">Divorciado</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txttelf' class="control-label col-md-4 col-12">Telefono</label>
+                                            <div class="col-12 col-md-8">
+                                                <input id='txttelf' type='text' class="form-control cf form-control-sm" onkeypress="return IngresoNumero(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtmovil' class="control-label col-md-4 col-12">Celular</label>
+                                            <div class="col-12 col-md-8">
+                                                <input id='txtmovil' type='text' class="form-control cf form-control-sm" onkeypress="return IngresoNumero(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtdireccion' class="control-label col-md-2 col-12">Direccion</label>
+                                            <div class="col-12 col-md-10">
+                                                <input id='txtdireccion' type='text' class="form-control cf form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='cboCargo' class="control-label col-md-4 col-12">Puesto</label>
+                                            <div class="col-md-8 col-12">
+                                                <select id='cboCargo' class="form-control cf form-control-sm" style="height:26px"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtdoc' class="control-label col-md-4 col-12">Colegiatura</label>
+                                            <div class="col-md-8 col-12">
+                                                <input id='txtColegiatura' type='text' class="form-control cf form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtlogin' class="control-label col-md-4 col-12">Login</label>
+                                            <div class="col-12 col-md-8">
+                                                <input id='txtlogin' type='text' class="form-control cf form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label for='txtlogin' class="control-label col-md-4 col-12">Color</label>
+                                            <div class="col-12 col-md-8">
+                                                <input id="mycp" type="text" class="form-control cf form-control-sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label class="control-label col-md-4 col-12">Estado</label>
+                                            <div class="col-md-8 col-12">
+                                                <div class="checkbox check-info">
+                                                    <input type="checkbox" checked="checked" name="chkActivo" id="chkActivo">
+                                                    <label for="chkActivo"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class='form-group row m-b-5 p-l-10'>
+                                            <label class="control-label col-md-4 col-12">Planilla</label>
+                                            <div class="col-md-8 col-12">
+                                                <div class="checkbox check-info">
+                                                    <input type="checkbox" checked="checked" id="chkPlanilla">
+                                                    <label for="chkPlanilla"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtUsuario' class="control-label col-sm-3">Documento</label>
+                                <div class="col-12 col-sm-4">
+                                    <input id='txtUsuario' type='text' class="form-control  form-control-sm" tabindex="3">
+                                </div>
+                            </div>
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='cboRol' class="control-label col-sm-3">Rol</label>
+                                <div class="col-12 col-sm-4">
+                                    <select id='cboRol' type='text' class="form-control  form-control-sm" tabindex="2"></select>
+                                </div>
+                            </div>
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtPassword' class="control-label col-sm-3">Password</label>
+                                <div class="col-12 col-sm-4">
+                                    <input id='txtPassword' type='password' class="form-control  form-control-sm" tabindex="3">
+                                </div>
+                            </div>*@
+                        @*<div class='form-group row m-b-5 p-l-10'>
+                                <label class="control-label col-3">Activo</label>
+                                <div class="col-sm-4">
+                                    <div class="checkbox check-info">
+                                        <input type="checkbox" checked="checked" name="chkActivo" id="chkActivo">
+                                        <label for="chkActivo"></label>
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src='~/Scripts/app.js'></script>
+<script src='~/Scripts/Seguridad/Personal.js'></script>

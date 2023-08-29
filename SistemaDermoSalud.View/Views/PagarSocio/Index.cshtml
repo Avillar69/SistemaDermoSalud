@@ -1,0 +1,489 @@
+﻿@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+<style>
+    .floatThead-wrapper {
+        margin-top: 10px;
+    }
+</style>
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Pagos</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Compras</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Pagos
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+            <a class="btn btn-outline-primary" title="Imprimir"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
+            <div role="group" class="btn-group">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="rowFilter" style="margin-bottom:10px;">
+    <div class="card-header" id="headingOne">
+        <div class="row">
+            <div class="col-sm-12">
+                <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title" id="lblTi">Parámetros de Búsqueda</h4>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div class="col-12" id="frm">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-4 col-12 p-0">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for="txtFilFecIn" class="control-label col-md-3 m-t-5">Fecha</label>
+                                <div class="col-12 col-md-9">
+                                    <div class="input-daterange input-group" id="datepicker-range">
+                                        <input type="text" id="txtFilFecIn" class="form-control-sm form-control" name="start">
+                                        <div class="input-group-addon">
+                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                        </div>
+                                        <input type="text" id="txtFilFecFn" class="form-control-sm form-control" name="end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 p-0">
+                            <button type='button' class='btn btn-success float-right waves-effect waves-light' id='btnBuscar'><i class="fa fa-search"></i> <span class="bold">Buscar</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div id="error"></div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12 m-b-5 m-t-5">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                        <div class="col-md-8">
+                            <div class="btn-toolbar flex-wrap float-right" role="toolbar">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" style="display:none">
+                        <div class="card-body">
+                            <div class="col-12" id="frm">
+                                <div class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-md-8 col-12 p-0">
+                                            <div class='form-group row m-b-5 p-l-10'>
+                                                <label for="txtFilFecIn" class="control-label col-md-4 m-t-5">Fecha</label>
+                                                <div class="col-12 col-md-8">
+                                                    <div class="input-daterange input-group" id="datepicker-range">
+                                                        <input type="text" id="txtFilFecIn" class="input-sm form-control" name="start">
+                                                        <div class="input-group-addon">
+                                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                                        </div>
+                                                        <input type="text" id="txtFilFecFn" class="input-sm form-control" name="end">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 p-0">
+                                            <button type='button' class='btn btn-success float-right waves-effect waves-light' id='btnBuscar'><i class="fa fa-search"></i> <span class="bold">Buscar</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 hidden-sm-down" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div id="rowFrm" style="display:none;">
+    <div class="card m-b-10">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h3 class='panel-title' id='lblTituloPanel'>Registro Pago</h3>
+                </div>
+
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class='form-horizontal'>
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtDocumento' class="control-label col-md-4">N°Documento</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtDocumento' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalDocumento" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtFecha' class="control-label col-md-4">Fecha Documento</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtFecha' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-10">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtProveedor' class="control-label col-md-2">Proveedor</label>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtRazonSocial" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <div class="form-group row m-b-5 p-l-10" style="display:none;">
+                                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                                            <input placeholder='' id='txtID2' type='text' style="display:none;">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtTotal' class="control-label col-md-4">Total</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtTotal' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtMontoAplicado' class="control-label col-md-4">Monto aplicado</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtMontoAplicado' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*la diferencia es el total - Monto Aplicado*@
+                        <div class="col-12 col-md-5">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtDiferencia' class="control-label col-md-4">Diferencia</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtDiferencia' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='cboMoneda' class="control-label col-sm-4">Moneda</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <select id='cboMoneda' class="form-control form-control-sm" disabled></select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtMontoCancelar' class="control-label col-md-4">Monto a Pagar</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtMontoCancelar' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtFechaPago' class="control-label col-md-4">Fecha Pago</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtFechaPago' type='text' class="form-control form-control-sm">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtTipoOperacion' class="control-label col-md-4">Tipo Operacion</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <div class="col-10 p-0">
+                                                <select class="form-control form-control-sm" id="txtTipoOperacion" onchange="buscarXCombo()">
+                                                    <option value="1" name="1">Transferencia</option>
+                                                    <option value="2" name="2">Cheque</option>
+                                                    <option value="3" name="3">Deposito</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+
+                        <br />
+
+                        <div class="col-12 col-md-4" id="divCuentaOrigen" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtCuentaOrigen' class="control-label col-md-4">Cuenta Origen</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtCuentaOrigen' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalCuentaOrigen" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4" id="divCuentaDestino" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtCuentaDestino' class="control-label col-md-4" id='lblCuenta'>Cuenta Destino</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtCuentaDestino' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalCuentaDestino" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-md-4" id="divOperacion" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtNOperacion' class="control-label col-md-4" id="lblOperacion">Nro Operacion</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtNOperacion' type='text' class="form-control form-control-sm">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4" id="divFCC" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtFechaCobroCheque' class="control-label col-md-4">Apartir de</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtFechaCobroCheque' type='text' class="form-control form-control-sm">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-10">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtObservacion' class="control-label col-md-2">Observación</label>
+                                <div class="col-sm-9 p-0">
+                                    <textarea rows="2" class="form-control input-sm" id="txtObservacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-b-10" style="display:none">
+            <div class="card-body">
+                <div class="table-responsive" style="height:200px;">
+                    <div class="" id="tb_DetalleF">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id='modal-Modal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+        <div class='modal-dialog' role='document' style="max-width:800px">
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div class="row" style="display:none;">
+                            <div class='col-sm-12' id="div_Frm_Modal">
+                                <!-- formulario del modal -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
+                            </div>
+                        </div>
+                        <div class="row" id="rowTabla" style="font-size:12px;">
+                            <div class="col-sm-12">
+                                <div class="col-md-12 m-t-10" id="divTablaCabecera_Modal"></div>
+                                <div class="col-md-12 table-responsive" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;background-color:#f2f2f2">
+                                    <div id="contentArea" class="clusterize-content">
+                                        <!--Aca es la chamba donde se guardara todo los datos del modal-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="div_Frm_Detalle" style="display:none">
+    <div class="form-horizontal">
+        <div class="form-group" style="display:none;">
+            <input placeholder="" id="txtId_Detalle" type="text" style="display:none;">
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtCodigo_Detalle" class="control-label col-sm-3">Código</label>
+                <div class="col-sm-3">
+                    <input placeholder="Autgenerado" readonly="" id="txtCodigo_Detalle" type="text" maxlength="3" disabled="" class="form-control input-sm" tabindex="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtDescripcion_Detalle" class="control-label col-sm-3">Descripción</label>
+                <div class="col-sm-9">
+                    <input id="txtDescripcion_Detalle" type="text" class="form-control input-sm" tabindex="3">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="chkActivo_Detalle" class="control-label col-sm-3">Activo</label>
+                <div class="col-sm-9">
+                    <input type="checkbox" id="chkActivo_Detalle" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/Compras/PagaSocio.js"></script>
+
+
+
+

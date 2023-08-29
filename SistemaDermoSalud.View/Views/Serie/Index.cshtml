@@ -1,0 +1,169 @@
+﻿@{
+    if (Session["Config"] == null)
+    {
+        @Html.Raw("<script>");
+        @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+        @Html.Raw("</script>");
+    }
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">SERIE</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Ventas</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        SERIE
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12" style="margin-bottom:2px;">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                    </div>
+                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowFrm" style="display:none;">
+    <div class="card col-sm-12">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nueva Serie</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class="container-fluid">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group-sm" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                        </div>
+                        <div class='form-group row m-b-5 p-l-10'>
+                            <label class="col-md-2 control-label" for="txtTipoDocumento">Tipo Doc.</label>
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-10 p-0">
+                                        <input id="txtTipoDocumento" type="text" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <button id="btnModalTipoDocumento" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group row m-b-5 p-l-10'>
+                            <label for='txtSerie' class="control-label col-md-2">Serie</label>
+                            <div class="col-12 col-md-4 row">
+                                <input id="txtSerie" type="text" class='form-control form-control-sm' />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!---->
+<div id='modal-Modal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row" style="display:none;">
+                        <div class='col-sm-12' id="div_Frm_Modals">
+                            <!-- formulario del modal -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
+                        </div>
+                    </div>
+                    <div class="row" id="rowTabla">
+                        <div class="col-sm-12">
+                            <div class="col-md-12 m-t-10 p-0" id="divTablaCabecera_Modal"></div>
+                            <div class="col-md-12 table-responsive p-0" id="divTabla_Modal" style="min-height:250px;overflow-y:scroll;overflow-x:hidden;">
+                                <div id="contentArea" class="clusterize-content">
+
+                                </div>
+                            </div>
+                        </div>
+                        @*<div id="scrollArea" class="clusterize-scroll">
+
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="div_Frm_Detalles" style="display:none">
+    <div class="form-horizontal">
+        <div class="form-group" style="display:none;">
+            <input placeholder="" id="txtId_Detalle" type="text" style="display:none;">
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtCodigo_Detalle" class="control-label col-sm-3">Código</label>
+                <div class="col-sm-3">
+                    <input placeholder="Autgenerado" readonly="" id="txtCodigo_Detalle" type="text" maxlength="3" disabled="" class="form-control form-control-sm" tabindex="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtDescripcion_Detalle" class="control-label col-sm-3">Descripción</label>
+                <div class="col-sm-9">
+                    <input id="txtDescripcion_Detalle" type="text" class="form-control form-control-sm" tabindex="3">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="chkActivo_Detalle" class="control-label col-sm-3">Activo</label>
+                <div class="col-sm-9">
+                    <input type="checkbox" id="chkActivo_Detalle" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='~/Scripts/app.js'></script>
+<script src="~/Scripts/Configuraciones/Serie.js"></script>

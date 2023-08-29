@@ -1,0 +1,237 @@
+@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+
+
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Pacientes</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">LABORES MEDICAS</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Pacientes
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+            <a class="btn btn-outline-primary" title="Imprimir"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
+            <div role="group" class="btn-group">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12" style="margin-bottom:2px;">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                    </div>
+                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowFrm" style="display:none;">
+    <div class="card col-sm-12">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Paciente</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class='container-fluid'>
+                    <div class='form-horizontal'>
+                        <div class="form-group-sm" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                        </div>
+                        <div class='form-group row m-b-5 p-l-10' style="display:none;">
+                            <label for='txtCodigo' class="control-label col-sm-3">Codigo</label>
+                            <div class="col-12 col-sm-4">
+                                <input id='txtCodigo' readonly placeholder='Autgenerado' type='text' class="form-control  form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 col-12 text-center">
+                                <img src="~/app-assets/images/users/dftuser.png" class="rounded-circle height-100 width-100" id="persImg">
+                                <div class="containerFile">
+                                    <button class="btn btn-primary btn-sm" onclick="imgClick();">Seleccionar Imagen</button>
+                                    <input type="file" style="display:none" id="inpImage" class="form-control-file" />
+                                </div>
+                            </div>
+                            <div class="col-md-10 col-12">
+                                <div class="row">
+                                    <div class='col-md-6' style="display:none">
+                                        <div class='form-group'>
+                                            <label class='col-sm-3 control-label' for='txtidPaciente'>idPaciente</label>
+                                            <div class='col-sm-9'>
+                                                <input class='form-control form-control-sm cf' placeholder='' id='txtidPaciente' type='text'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtNombres'>Nombres</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtNombres' type='text' onkeypress="return isLetterKey(event, this);">
+                                                </div>
+                                                <label for='txtNombres'>*</label>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtApellidoP'>Ape. Paterno</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtApellidoP' type='text' onkeypress="return isLetterKey(event, this);">
+                                                </div>
+                                                <label for='txtApellidoP'>*</label>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtApellidoM'>Ape. Materno</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtApellidoM' type='text' onkeypress="return isLetterKey(event, this);">
+                                                </div>
+                                                <label for='txtApellidoM'>*</label>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtFechaNacimiento'>Fec. Nacimiento</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtFechaNacimiento' type='text'>
+                                                </div>
+                                                <label for='txtFechaNacimiento'>*</label>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtEdad'>Edad</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtEdad' type='text' onkeypress="return IngresoNumero(event)">
+                                                </div>
+                                                <label for='txtEdad'>*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class='form-group row'>
+                                                <label for='cboSexo' class="control-label col-sm-4">Sexo</label>
+                                                <div class="col-12 col-md-7">
+                                                    <select id='cboSexo' type='text' class="form-control cf form-control-sm" tabindex="2" style="height:26px">
+                                                        <option value="M">Masculino</option>
+                                                        <option value="F">Feminino</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtDNI'>DNI</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtDNI' type='text' onkeypress="return IngresoNumero(event)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtTelefono'>Telefono</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtTelefono' type='text' onkeypress="return IngresoNumero(event)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtMovil'>Móvil</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtMovil' type='text' onkeypress="return IngresoNumero(event)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' for='txtEmail'>Email</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtEmail' type='text'>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-4 control-label' readonly for='txtUltimaConsulta'>Ultima Consulta</label>
+                                                <div class='col-sm-7'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtUltimaConsulta' type='text'>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class='form-group row m-b-5 p-l-10'>
+                                                <label class="control-label col-md-5 col-12">Estado</label>
+                                                <div class="col-md-7 col-12">
+                                                    <div class="checkbox check-info">
+                                                        <input type="checkbox" checked="checked" name="chkActivo" id="chkActivo">
+                                                        <label for="chkActivo"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-12'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-2 control-label' for='txtDireccion'>Dirección</label>
+                                                <div class='col-sm-9'>
+                                                    <input class='form-control cf form-control-sm' placeholder='' id='txtDireccion' type='text'>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-12'>
+                                            <div class='form-group row'>
+                                                <label class='col-sm-2 control-label' for='txtObservaciones'>Observaciones</label>
+                                                <div class='col-sm-9'>
+                                                    <input class='form-control cf form-control-sm text-uppercase' placeholder='' id='txtObservaciones' type='text'>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='~/Scripts/app.js'></script>
+<script src='~/Scripts/LabMedica/Pacientes.js'></script>

@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaDermoSalud.View", "SistemaDermoSalud.View\SistemaDermoSalud.View.csproj", "{3CDCBDD9-7221-4622-A2B4-721452776646}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaDermoSalud.DataAccess", "SistemaDermoSalud.DataAccess\SistemaDermoSalud.DataAccess.csproj", "{DC3B5987-B297-4986-8E15-AD4DD7B229FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaDermoSalud.Entities", "SistemaDermoSalud.Entities\SistemaDermoSalud.Entities.csproj", "{0769488E-48DF-4B10-AB48-18E13BD74DB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaDermoSalud.Business", "SistemaDermoSalud.Bussiness\SistemaDermoSalud.Business.csproj", "{61CBDB37-4B81-4F58-9B55-A29025F214B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaDermoSalud.Helpers", "SistemaDermoSalud.Helpers\SistemaDermoSalud.Helpers.csproj", "{6F0A9635-39C0-4566-8FEF-BC8AFD6EDA77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CDCBDD9-7221-4622-A2B4-721452776646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CDCBDD9-7221-4622-A2B4-721452776646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CDCBDD9-7221-4622-A2B4-721452776646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CDCBDD9-7221-4622-A2B4-721452776646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC3B5987-B297-4986-8E15-AD4DD7B229FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC3B5987-B297-4986-8E15-AD4DD7B229FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC3B5987-B297-4986-8E15-AD4DD7B229FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC3B5987-B297-4986-8E15-AD4DD7B229FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0769488E-48DF-4B10-AB48-18E13BD74DB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0769488E-48DF-4B10-AB48-18E13BD74DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0769488E-48DF-4B10-AB48-18E13BD74DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0769488E-48DF-4B10-AB48-18E13BD74DB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61CBDB37-4B81-4F58-9B55-A29025F214B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61CBDB37-4B81-4F58-9B55-A29025F214B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61CBDB37-4B81-4F58-9B55-A29025F214B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61CBDB37-4B81-4F58-9B55-A29025F214B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F0A9635-39C0-4566-8FEF-BC8AFD6EDA77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F0A9635-39C0-4566-8FEF-BC8AFD6EDA77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F0A9635-39C0-4566-8FEF-BC8AFD6EDA77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F0A9635-39C0-4566-8FEF-BC8AFD6EDA77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://186.64.122.205:8080/tfs/dermosalud
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = SistemaDermoSalud.Bussiness\\SistemaDermoSalud.Business.csproj
+		SccProjectName1 = SistemaDermoSalud.Bussiness
+		SccLocalPath1 = SistemaDermoSalud.Bussiness
+		SccProjectUniqueName2 = SistemaDermoSalud.DataAccess\\SistemaDermoSalud.DataAccess.csproj
+		SccProjectName2 = SistemaDermoSalud.DataAccess
+		SccLocalPath2 = SistemaDermoSalud.DataAccess
+		SccProjectUniqueName3 = SistemaDermoSalud.Entities\\SistemaDermoSalud.Entities.csproj
+		SccProjectName3 = SistemaDermoSalud.Entities
+		SccLocalPath3 = SistemaDermoSalud.Entities
+		SccProjectUniqueName4 = SistemaDermoSalud.Helpers\\SistemaDermoSalud.Helpers.csproj
+		SccProjectName4 = SistemaDermoSalud.Helpers
+		SccLocalPath4 = SistemaDermoSalud.Helpers
+		SccProjectUniqueName5 = SistemaDermoSalud.View\\SistemaDermoSalud.View.csproj
+		SccProjectName5 = SistemaDermoSalud.View
+		SccLocalPath5 = SistemaDermoSalud.View
+	EndGlobalSection
+EndGlobal

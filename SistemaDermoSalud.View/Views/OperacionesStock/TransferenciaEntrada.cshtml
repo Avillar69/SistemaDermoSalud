@@ -1,0 +1,425 @@
+﻿@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+<div class="row page-titles">
+    <div class="col-md-6 col-sm-12 align-self-center">
+        <h4 class="text-themecolor m-b-0 m-t-0">Transferencia de Entrada de Mercancías</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Mantenimientos</a></li>
+            <li class="breadcrumb-item active">Transferencia de Entrada</li>
+        </ol>
+    </div><div class='clearfix'>
+    </div>
+</div>
+<div class="card" id="rowFilter" style="margin-bottom:10px;">
+    <div class="card-header" id="headingOne">
+        <div class="row">
+            <div class="col-sm-12">
+                <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title" id="lblTi">Parámetros de Búsqueda</h4>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div class="col-12" id="frm">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-4 col-12 p-0">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for="txtFilFecIn" class="control-label col-md-4 m-t-5">Fecha</label>
+                                <div class="col-12 col-md-8">
+                                    <div class="input-daterange input-group" id="datepicker-range">
+                                        <input type="text" id="txtFilFecIn" class="input-sm form-control" name="start">
+                                        <div class="input-group-addon">
+                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                        </div>
+                                        <input type="text" id="txtFilFecFn" class="input-sm form-control" name="end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 p-0">
+                            <button type='button' class='btn btn-success float-right waves-effect waves-light' id='btnBuscar'><i class="fa fa-search"></i> <span class="bold">Buscar</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12 m-b-5 m-t-5">
+                        <input id="txtFiltro" class="form-control input-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                        <div class="col-md-8">
+                            <div class="btn-toolbar flex-wrap float-right" role="toolbar">
+                                <div class="btn-group sm-m-t-10">
+                                    <button type="button" class="btn btn-default" onclick='mostrarDetalle(1)'>
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default">
+                                        <i class="fa fa-file-excel-o"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default">
+                                        <i class="fa fa-print"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 hidden-sm-down" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="rowFrm" style="display:none;">
+    <div class="card m-b-10">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h3 class='panel-title' id='lblTituloPanel'>Nueva Transferencia de Entrada</h3>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class='form-horizontal'>
+                    <div class="form-group row m-b-5 p-l-10" style="display:none;">
+                        <input placeholder='' id='txtID' type='text' style="display:none;">
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtLocalDet">Local</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtLocalDet" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                        <button id="btnModalLocalDet" type="button" class="btn waves-effect waves-light btn-info btn-xs col-2">
+                                            <i class="pg-arrow_down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtAlmacen">Almacen Origen</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtAlmacen" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                        <button id="btnModalAlmacen" type="button" class="btn waves-effect waves-light btn-info btn-xs col-2">
+                                            <i class="pg-arrow_down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtAlmacenDestino">Almacen Destino</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtAlmacenDestino" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                        <button id="btnModalAlmacenDestino" type="button" class="btn waves-effect waves-light btn-info btn-xs col-2">
+                                            <i class="pg-arrow_down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtFecha">Fecha Movimiento</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtFecha" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtTipoMovimiento">Tipo Movimiento</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtTipoMovimiento" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                        <button id="btnModalTipoMovimiento" type="button" class="btn waves-effect waves-light btn-info btn-xs col-2">
+                                            <i class="pg-arrow_down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtEstado">Estado Transferencia</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtEstado" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                        <button id="btnModalEstado" type="button" class="btn waves-effect waves-light btn-info btn-xs col-2">
+                                            <i class="pg-arrow_down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtObservacion' class="control-label col-4 col-sm-2">Observaciones</label>
+                                <div class="col-8 col-sm-10">
+                                    <input id='txtObservacion' type='text' class="form-control input-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card m-b-10">
+        <div class="card-header" id="headingOne">
+            <h4 class="mb-0">
+                <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
+                    Datos de Artículo
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class='form-horizontal'>
+                <div class="card-body">
+                    <div class="row" style="padding:0px;">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtArticulo">Artículo</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtArticulo" type="text" value="articulo1" class="form-control input-sm" readonly>
+                                        </div>
+                                        <button id="btnModalArticulo" type="button" class="btn waves-effect waves-light btn-info btn-xs" tabindex="15">
+                                            <i class="pg-arrow_down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtCantidad">Cantidad</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtCantidad" type="text" value=20 class="form-control input-sm" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-2 text-center">
+                            <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnAgregarArticulo">Agregar</button>
+                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarArticulo" style="visibility:hidden">Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="row" style="padding:0px;">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtMarca">Marca</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtMarca" type="text" value="m1" class="form-control input-sm" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtStock">Stock Actual</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtStock" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding:0px;">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtUnidadMedida">Unidad de Medida</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtUnidadMedida" value="UNI" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtStockTotal">Stock Total</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtStockTotal" type="text" class="form-control input-sm" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="col-sm-12 hidden-sm-down" id="cabeTablaArticulo">
+                                <div class="row panel bg-info" style="color:white;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                    <div class="col-12 col-md-2" style="display:none;">
+                                        <label>id</label>
+                                    </div>
+                                    <div class="col-12 col-md-1">
+                                        <label>Item</label>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label>Articulo</label>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label>Marca</label>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <label>Unidad de Medida</label>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label>Cantidad</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 table-responsive" id="divTablaArticulo">
+                                <div id="contentArticulo" class="clusterize-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+
+<div id='modal-Modal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog modal-lg' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row" style="display:none;">
+                        <div class='col-sm-12' id="div_Frm_Modals">
+                            <!-- formulario del modal -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input id="txtFiltroMod" class="form-control input-sm" placeholder="Filtrar ... " />
+                        </div>
+                    </div>
+                    <div class="row" id="rowTabla">
+                        <div class="col-sm-12">
+                            <div class="col-md-12 m-t-10" id="divTablaCabecera_Modal"></div>
+                            <div class="col-md-12 table-responsive" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;" ;background-color:#f2f2f2">
+                                <div id="contentArea" class="clusterize-content">
+
+                                </div>
+                            </div>
+                        </div>
+                        @*<div id="scrollArea" class="clusterize-scroll">
+
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="div_Frm_Detalles" style="display:none">
+    <div class="form-horizontal">
+        <div class="form-group" style="display:none;">
+            <input placeholder="" id="txtId_Detalle" type="text" style="display:none;">
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtCodigo_Detalle" class="control-label col-sm-3">Código</label>
+                <div class="col-sm-3">
+                    <input placeholder="Autgenerado" readonly="" id="txtCodigo_Detalle" type="text" maxlength="3" disabled="" class="form-control input-sm" tabindex="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtDescripcion_Detalle" class="control-label col-sm-3">Descripción</label>
+                <div class="col-sm-9">
+                    <input id="txtDescripcion_Detalle" type="text" class="form-control input-sm" tabindex="3">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="chkActivo_Detalle" class="control-label col-sm-3">Activo</label>
+                <div class="col-sm-9">
+                    <input type="checkbox" id="chkActivo_Detalle" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<link href="~/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>*@
+<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/Inventario/OperacionStock_TransferenciaEntrada.js"></script>

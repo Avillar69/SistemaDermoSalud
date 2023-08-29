@@ -1,0 +1,82 @@
+<div class='row'>
+    <div class='col-sm-12'>
+        <div class='page-header-title'>
+            <h3 class='pull-left page-title'></h3>
+                <div class='breadcrumb pull-right'>
+                <button class='btn btn-sm  btn-primary pull-right' data-target='modal1' onclick='mostrarDetalle(1)' style='margin-left:10px;'>Nuevo</button>
+                <button class='btn btn-sm  btn-success pull-right hide-phone' id='btnPdf' style='margin-left:10px;'>Descargar PDF</button>
+                <button class='btn btn-sm btn-info pull-right hide-phone' id='btnExcel' style='margin-left:10px;'>Descargar Excel</button>
+                </div><div class='clearfix'>
+            </div>
+        </div>
+    </div>
+    <div class='col-sm-12'>
+        <div class='row'>
+            <div id='divTabla' class='table-responsive'>
+            </div>
+        </div>
+    </div>
+    <div class='col-sm-12' style='display:none'>
+        <div class='container-fluid'>
+            <div class='container-fluid'>
+                <div class='col-xs-6'>
+                    <div class='topbar-left col-xs-6'>
+                        <h4 style='font-size:1.2em;'>Total de Registros: <span id='spnTotalRegistros'></span></h4>
+                    </div>
+                </div>
+            </div>
+            <div class='container-fluid text-center'>
+                <div>
+                    <ul id='ulPagina' class='pagination'>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div id='modal-form' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <h4 class='modal-title' id='lblTituloModal'></h4>
+            </div>
+            <div class='modal-body'>
+               <div class='container-fluid'>
+                    <div class='form-horizontal'>
+            <div class='col-md-4'>
+                <div class='from-group'>
+                    <label class='col-sm-3 control-label' for='txtidAcceso'>idAcceso</label>
+                    <div class='col-sm-9'>
+                        <input class='form-control form-control-sm' placeholder='' id='txtidAcceso' type='text'>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4'>
+                <div class='from-group'>
+                    <label class='col-sm-3 control-label' for='txtidMenu'>idMenu</label>
+                    <div class='col-sm-9'>
+                        <input class='form-control form-control-sm' placeholder='' id='txtidMenu' type='text'>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4'>
+                <div class='from-group'>
+                    <label class='col-sm-3 control-label' for='txtidRol'>idRol</label>
+                    <div class='col-sm-9'>
+                        <input class='form-control form-control-sm' placeholder='' id='txtidRol' type='text'>
+                    </div>
+                </div>
+            </div>
+                    </div>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-default' data-dismiss='modal'>Cancelar</button>
+                <button type='button' class='btn btn-primary' id='btnGrabar'>Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='~/Scripts/app.js'></script>
+<script src='~/Scripts/.js'></script>

@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0769488E-48DF-4B10-AB48-18E13BD74DB6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SistemaDermoSalud.Entities</RootNamespace>
+    <AssemblyName>SistemaDermoSalud.Entities</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AD_CuentaOrigenDTO.cs" />
+    <Compile Include="AD_GuiaRemisionDetalleDTO.cs" />
+    <Compile Include="AD_GuiaRemisionDTO.cs" />
+    <Compile Include="AD_SocioNegocioDTO.cs" />
+    <Compile Include="ALM_MovimientoDTO.cs" />
+    <Compile Include="AtencionMedicaDTO.cs" />
+    <Compile Include="AtencionMedica_Cab_RecetaDTO.cs" />
+    <Compile Include="AtencionMedica_EvolucionDTO.cs" />
+    <Compile Include="AtencionMedica_RecetaDTO.cs" />
+    <Compile Include="CalendarEventDTO.cs" />
+    <Compile Include="CargosDTO.cs" />
+    <Compile Include="CitasDetalleDTO.cs" />
+    <Compile Include="CitasDTO.cs" />
+    <Compile Include="Compras\COM_CuentasUsuariosDTO.cs" />
+    <Compile Include="Compras\COM_ListaPrecioDTO.cs" />
+    <Compile Include="Compras\COM_PagaSocioDTO.cs" />
+    <Compile Include="Compras\COM_DocumentoCompraDetalleDTO.cs" />
+    <Compile Include="Compras\COM_DocumentoCompraDTO.cs" />
+    <Compile Include="Compras\COM_OrdenCompraDTO.cs" />
+    <Compile Include="Compras\COM_OrdenCompra_DetalleDTO.cs" />
+    <Compile Include="CONF_Comision_MedicoDTO.cs" />
+    <Compile Include="DashboardDocDTO.cs" />
+    <Compile Include="DashboardDTO.cs" />
+    <Compile Include="Finanzas\FN_PagosDetalle.cs" />
+    <Compile Include="Finanzas\FN_PagosDTO.cs" />
+    <Compile Include="Finanzas\FN_TipoCambioDTO.cs" />
+    <Compile Include="Finanzas\FN_CajaDetalleDTO.cs" />
+    <Compile Include="Finanzas\FN_CajaDTO.cs" />
+    <Compile Include="Finanzas\FN_ConceptosCajaDTO.cs" />
+    <Compile Include="Finanzas\FN_PagosDetalleDTO.cs" />
+    <Compile Include="Finanzas\FN_ProyectosDTO.cs" />
+    <Compile Include="HistoriaClinicaDTO.cs" />
+    <Compile Include="Inventario\KardexDTO.cs" />
+    <Compile Include="INV_StockDTO.cs" />
+    <Compile Include="LaboratorioDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_AlmacenDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_ArticuloDisenoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_ArticuloDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_CategoriaDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_EmpresaDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_MarcaDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_MotivoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_SerieDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_TipoAfectacionDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_UnidadMedidaDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_BancoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_CargoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_Clase_ArticuloDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_EstadoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_FormaPagoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_LocalDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_MonedaDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_PaisDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_TipoComprobanteDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_TipoDocumentoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_TipoMovimientoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_TipoPersonaDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_UbigeoDTO.cs" />
+    <Compile Include="MonedaDTO.cs" />
+    <Compile Include="MedicamentoDTO.cs" />
+    <Compile Include="Nubefact\Guias.cs" />
+    <Compile Include="Nubefact\Invoice.cs" />
+    <Compile Include="Nubefact\Items.cs" />
+    <Compile Include="Nubefact\Respuesta.cs" />
+    <Compile Include="ObjSesionDTO.cs" />
+    <Compile Include="PacientesDTO.cs" />
+    <Compile Include="PersonalDTO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecetaMedicaDTO.cs" />
+    <Compile Include="RecetaMedica_DetalleDTO.cs" />
+    <Compile Include="ResultDTO.cs" />
+    <Compile Include="RH_EmpleadoDTO.cs" />
+    <Compile Include="Seg_AccesoDTO.cs" />
+    <Compile Include="Seg_LogDTO.cs" />
+    <Compile Include="Seg_MenuDTO.cs" />
+    <Compile Include="Seg_NotificacionDTO.cs" />
+    <Compile Include="Seg_RolDTO.cs" />
+    <Compile Include="Seg_UsuarioDTO.cs" />
+    <Compile Include="ServiciosDTO.cs" />
+    <Compile Include="TipoServicioDTO.cs" />
+    <Compile Include="Ventas\VEN_DocumentoVentaDetalleDTO.cs" />
+    <Compile Include="Ventas\VEN_DocumentoVentaDTO.cs" />
+    <Compile Include="HistoriaClinica_ArchivosDTO.cs" />
+    <Compile Include="Ventas\VEN_DocVentaDetalleDTO.cs" />
+    <Compile Include="Ventas\VEN_DocVentaDTO.cs" />
+    <Compile Include="Ventas\VEN_GuiaRemisionDTO.cs" />
+    <Compile Include="Ventas\VEN_NotaCreditoDTO.cs" />
+    <Compile Include="Ventas\VEN_NotaCredito_DetalleDTO.cs" />
+    <Compile Include="Ventas\VEN_PedidosDetalleDTO.cs" />
+    <Compile Include="Ventas\VEN_PedidosDTO.cs" />
+    <Compile Include="Ventas\VEN_SerieDTO.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

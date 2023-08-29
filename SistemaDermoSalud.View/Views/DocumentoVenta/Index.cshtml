@@ -1,0 +1,753 @@
+﻿@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+<style>
+    .floatThead-wrapper {
+        margin-top: 10px;
+    }
+</style>
+
+
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Documentos de venta</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Ventas</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Documentos de venta
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+            <a onclick="imprimirVentaPorCliente()" class="btn btn-outline-primary" title="Reporte por Cliente"><i class="ft-file-text" id="btnImprimirPorCliente"></i></a>
+            <a onclick="imprimirRegistroVentas()" class="btn btn-outline-primary" title="Reporte de Ventas"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
+            <div role="group" class="btn-group">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="error"></div>
+</div>
+<div class="card" id="rowFilter" style="margin-bottom:10px;">
+    <div class="card-header" id="headingOne">
+        <div class="row">
+            <div class="col-sm-12">
+                <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title" id="lblTi">Parámetros de Búsqueda</h4>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div class="col-12" id="frm">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-4 col-12 p-0">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for="txtFilFecIn" class="control-label col-md-3 m-t-5">Fecha</label>
+                                <div class="col-12 col-md-9">
+                                    <div class="input-daterange input-group" id="datepicker-range">
+                                        <input type="text" id="txtFilFecIn" class="form-control-sm form-control" name="start">
+                                        <div class="input-group-addon">
+                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                        </div>
+                                        <input type="text" id="txtFilFecFn" class="form-control-sm form-control" name="end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 p-0">
+                            <button type='button' class='btn btn-success float-right waves-effect waves-light' id='btnBuscar'><i class="fa fa-search"></i> <span class="bold">Buscar</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12 m-b-5 m-t-5">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                        <div class="col-md-8">
+                            <div class="btn-toolbar flex-wrap float-right" role="toolbar">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 hidden-sm-down" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="rowFrm" style="display:none;">
+    <div class="card m-b-10">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Doc. de Venta</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar" style="margin-left:10px;">Cancelar</button>
+                    <button type='button' class='btn btn-info pull-right waves-effect waves-light' id='btnEnviarSunat' style="margin-left:10px;">Enviar Sunat</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class='form-horizontal'>
+                    <div class="row">
+                        <div class="col-12 col-md-4" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtLocalDet">Local</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtLocalDet" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalLocalDet" type="button" class="btn waves-effect waves-light btn-info btn-xs">
+                                            <i class="pg-arrow_down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtAlmacenDet">Almacen</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtAlmacenDet" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalAlmacenDet" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="control-label col-md-4" for="txtTipoVenta">Motivo</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtTipoVenta" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalTipoVenta" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtTipoDocumento">Tipo Doc.</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtTipoDocumento" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalTipoDocumento" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4" id="divCita" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtOC' class="control-label col-md-4">Cita</label>
+                                <div class="col-sm-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtCita' type='text' class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalCita" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtNroSerie' class="control-label col-md-4">Serie</label>
+                                <div class="col-sm-7 p-0">
+                                    <select class="form-control form-control-sm" id="cboNroSerie"></select>
+                                    <input id='txtNroSerie' class="form-control form-control-sm" type='text' style="display:none" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtNroComprobante' class="control-label col-md-4">Nro Doc.</label>
+                                <div class="col-sm-7 p-0">
+                                    <input id='txtNroComprobante' type='text' class="form-control form-control-sm" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtFecha' class="control-label complex-colorpicker col-md-4" placeholder="dd-mm-yyyy">Fecha</label>
+                                <div class="col-sm-7 p-0">
+                                    <input id='txtFecha' type='text' class="form-control form-control-sm" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtObservacion' class="control-label col-md-2">Observación</label>
+                                <div class="col-sm-9 p-0">
+                                    <textarea rows="2" class="form-control form-control-sm" id="txtObservacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="form-group" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtRazonSocial">Clientes</label>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-11 p-0">
+                                            <input id="txtRazonSocial" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalRazonSocial" type="button" tabindex="9" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtNroDocumento' class="control-label col-md-4">N° Doc.</label>
+                                <div class="col-md-7 p-0">
+                                    <div class="col-xs-11">
+                                        <input id='txtNroDocumento' type='text' class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtDireccion">Dirección</label>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-11 p-0">
+                                            <input id="txtDireccion" type="text" class="form-control form-control-sm" >
+                                        </div>
+                                        <button id="btnModalDireccion" type="button" tabindex="9" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtTipoCambio' class="control-label col-md-4">Tipo Cambio</label>
+                                <div class="col-sm-7 p-0">
+                                    <input id='txtTipoCambio' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="control-label col-md-4 " for="txtMoneda">Moneda</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtMoneda" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalMoneda" type="button" tabindex="11" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtFormaPago">Forma de Pago</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtFormaPago" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalFormaPago" type="button" tabindex="12" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='cboTipoAfectacion' class="control-label col-sm-4">Tipo IGV</label>
+                                <div class="col-sm-7 p-0">
+                                    <select id='cboTipoAfectacion' type='text' class="form-control input-sm" style="height:23px;"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtIGV' class="control-label col-md-4">IGV Incluido</label>
+                                <div class="col-sm-7 p-0">
+                                    <div class="checkbox check-info">
+                                        <input type="checkbox" id="chkIGV" checked>
+                                        <label for="chkIGV"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row" id="divArticulos">
+                        <div class="col-12 col-md-6">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-3 control-label" for="txtArticulo">Articulo</label>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-8 p-0">
+                                            <input id="txtArticulo" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalArticulo" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtCantidad' class="control-label col-sm-6">Cantidad</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtCantidad' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtPrecio' class="control-label col-sm-6">Precio</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtPrecio' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtTotal' class="control-label col-sm-6">Total</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtTotal' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2 text-right">
+                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnAgregarArticulo">Agregar</button>
+                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnActualizarArticulo" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
+                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarArticulo" style="display:none">Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="row" id="divOtroServicio" style="display:none">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtOtroServicio">Servicio</label>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-12 p-0">
+                                            <input id="txtOtroServicio" type="text" class="form-control form-control-sm" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtTotalOtroServicio' class="control-label col-sm-6">Total</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtTotalOtroServicio' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2 text-right">
+                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnAgregarOtroServicio">Agregar</button>
+                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnActualizarOtroServicio" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
+                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarOtroServicio" style="display:none">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-10">
+        <div class="card-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="card m-b-10" id="tablaDeDetalles">
+                            <div class="card-body">
+                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+                                </div>
+                                <div class="table-responsive" style="height:150px;">
+                                    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                        <div class="col-12 col-md-1" style="display:none;">
+                                            <label></label>
+                                        </div>
+                                        <div class="col-12 col-md-1" style="display:none;">
+                                            <label></label>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label>Descripción</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Cantidad</label>
+                                        </div>
+                                        <div class="col-12 col-md-1" style="display:none;">
+                                            <label>U.M.</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Precio</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>SubTotal</label>
+                                        </div>
+                                        <div class="col-12 col-md-2"></div>
+                                    </div>
+                                    <div class="" id="tb_DetalleF">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card m-b-10" id="tablaDeServicios" style="display:none">
+                            <div class="card-body">
+                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaServicio">
+                                </div>
+                                <div class="table-responsive" style="height:150px;">
+                                    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                        <div class="col-12 col-md-1" style="display:none;">
+                                            <label></label>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <label>Item</label>
+                                        </div>
+                                        <div class="col-12 col-md-8">
+                                            <label>Descripción</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Precio</label>
+                                        </div>
+                                    </div>
+                                    <div class="" id="tb_DetalleServicio">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" id="divMontosTotales">
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtDescuentoPrincipal' class="col-md-6 control-label">% Descuento</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtDescuentoPrincipal' type='text' class="form-control form-control-sm text-right" value="0.00">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtGravada' class="col-md-6 control-label">Gravada</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtGravada' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtSubTotalF' class="col-md-6 control-label">Exonerada</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtExonerado' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtSubTotalF' class="col-md-6 control-label">Inafecta</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtInafecto' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtSubTotalF' class="col-md-6 control-label">Anticipo (-)</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtAnticipo' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtExportacion' class="col-md-6 control-label">Exportacion</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtExportacion' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtGratuita' class="col-md-6 control-label">Gratuita</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtGratuita' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtIGVF' class="col-md-6 control-label">IGV</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtIGVF' type='text' class="form-control form-control-sm text-right" value="0.00" onkeypress="return IngresoNumero(event)" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtOtrosCargosF' class="col-md-6 control-label">Otros Cargos</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtOtrosCargosF' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtDescuento' class="col-md-6 control-label">Dcto Total</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtDescuento' type='text' class="form-control form-control-sm text-right" value="0.00" onkeypress="return IngresoNumero(event)" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtTotalF' class="col-md-6 control-label">Total</label>
+                                <div class="col-sm-6 p-0">
+                                    <input id='txtTotalF' type='text' class="form-control form-control-sm text-right" value="0.00" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modal-Modal' class='modal stick-up show' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog modal-lg' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row" style="display:none;">
+                        <div class='col-sm-12' id="div_Frm_Modal">
+                            <!-- formulario del modal -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
+                        </div>
+                    </div>
+                    <div class="row" id="rowTabla" style="font-size:12px;">
+                        <div class="col-sm-12">
+                            <div class="col-md-12 m-t-10 p-0" id="divTablaCabecera_Modal"></div>
+                            <div class="col-md-12 table-responsive p-0" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;background-color:#f2f2f2">
+                                <div id="contentArea" class="clusterize-content">
+
+                                </div>
+                            </div>
+                        </div>
+                        @*<div id="scrollArea" class="clusterize-scroll">
+
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="div_Frm_Detalle" style="display:none">
+    <div class="form-horizontal">
+        <div class="form-group" style="display:none;">
+            <input placeholder="" id="txtId_Detalle" type="text" style="display:none;">
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtCodigo_Detalle" class="control-label col-sm-3">Código</label>
+                <div class="col-sm-3">
+                    <input placeholder="Autgenerado" readonly="" id="txtCodigo_Detalle" type="text" maxlength="3" disabled="" class="form-control form-control-sm" tabindex="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtDescripcion_Detalle" class="control-label col-sm-3">Descripción</label>
+                <div class="col-sm-9">
+                    <input id="txtDescripcion_Detalle" type="text" class="form-control form-control-sm" tabindex="3">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="chkActivo_Detalle" class="control-label col-sm-3">Activo</label>
+                <div class="col-sm-9">
+                    <input type="checkbox" id="chkActivo_Detalle" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='modalPago' class='modal stick-up show lg' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Registrar Forma de Pago</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <br />
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class='col-sm-12' id="div_Frm_Modal">
+                            <!-- formulario del modal -->
+                        </div>
+                        <div class="col-12 col-md-10">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtTipoPago">Tipo Pago</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0" id="txtTipoPago">
+                                            <select class="form-control form-control-sm" onchange="buscarXCombo()" id="cboTipoPago">
+                                                <option value="" disabled selected>seleccione...</option>
+                                                <option value="1" name="1">EFECTIVO</option>
+                                                <option value="2" name="2">TARJETA</option>
+                                                <option value="3" name="3">EFECTIVO Y TARJETA</option>
+                                                <option value="4" name="4">CRÉDITO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10" id="divTarjeta">
+                            <div class='form-group row m-b-5 p-l-10' i>
+                                <label class="col-md-4 control-label" for="cbxTarjeta">Tarjeta</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0" id="cbxTarjeta">
+                                            <select class="form-control form-control-sm" id="cboTarjeta">
+                                                <option value="0" disabled selected>seleccione...</option>
+                                                <option value="1" name="1">VISA</option>
+                                                <option value="2" name="2">MASTERCARD</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10" id="divOperacion">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtNOperacion' class="control-label col-md-4" id="lblOperacion">Nro Operacion</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtNOperacion' type='text' class="form-control form-control-sm">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>      
+                        
+                            <div class="col-12 col-md-10" id="divObservacionCaja">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label for='txtObservacionCaja' class="control-label col-md-4">Observación</label>
+                                    <div class="col-sm-8">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <textarea rows="2" class="form-control form-control-sm" id="txtObservacionCaja"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                          
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabarPago" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/Ventas/DocVenta.js"></script>
+
+

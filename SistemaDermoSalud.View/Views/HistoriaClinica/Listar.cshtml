@@ -1,0 +1,1488 @@
+@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+        @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+        @Html.Raw("</script>");
+    }
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Historias Clínicas</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Labores Médicas</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Historia Clínica
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+            <a class="btn btn-outline-primary" title="Imprimir"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
+            <div role="group" class="btn-group">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
+                    <a  class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12" style="margin-bottom:2px;">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                    </div>
+                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*modal de atencion medica*@
+<div id='modalAtencion' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog modal-full' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Atencion Medica</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="card col-sm-12">
+
+                    <div class="row">
+                        <h5 style="padding-left:30px;">MOTIVO DE CONSULTA</h5>
+                        <div class="col-md-12" style="padding-left:30px;">
+                            <div class="row">
+                                <div class='col-md-12'>
+                                    <textarea class='form-control  form-control-sm vald' placeholder='' id='txtMotivoConsulta' rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="card-body p-t-5 p-b-5">
+                        <div class='row'>
+                            <h5 style="padding-left:14px;">Citas</h5>
+                            <div class='col-md-1'>
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkCitas'>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12" id="tablaCitas">
+                            <div class="card-body">
+                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+                                </div>
+                                <div class="table-responsive" style="height:200px;">
+                                    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                        <div class="col-12 col-md-1" style="display:none;">
+                                            <label></label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label>-</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>N° Cita</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Fecha</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Medico</label>
+                                        </div>
+                                    </div>
+                                    <div class="" id="tb_DetalleCitas">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-4'>
+                                <div class='form-group row' style="display:none;">
+                                    <label class='col-sm-3 control-label' for='txtIDAtencion'>idAtencion</label>
+                                    <div class='col-sm-9'>
+                                        <input class='form-control  form-control-sm' id='txtIDAtencion' type='text' readonly>
+                                    </div>
+                                </div>
+                                <div class='form-group row' style="display:none;">
+                                    <label class='col-sm-3 control-label' for='txtIDCita'>idCita</label>
+                                        <div class='col-sm-9'>
+                                            <input class='form-control  form-control-sm' id='txtIDCita' type='text' readonly>
+                                        </div>
+                                </div>
+                                <div class='form-group row'>
+                                    <label class="col-md-3 control-label" for="txtCitaAtencion">N° Cita</label>
+                                    <div class="col-md-9 row">
+                                        <input id="txtCitaAtencion" type="text" class="form-control form-control-sm" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-8'>
+                                <div class='form-group row'>
+                                    <label class='col-md-2 control-label' for='txtMedicoAtencion'>Medico</label>
+                                    <div class='col-md-10'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <input id="txtMedicoAtencion" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <h5 style="padding-left:30px;">PLAN TERAPEUTICO</h5>
+                        <div class="col-md-12" style="padding-left:30px;">
+                            <div class="row">
+                                <div class='col-md-12'>
+                                    <textarea class='form-control  form-control-sm vald' placeholder='' id='txtPlanTerapeutico' rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="card-body p-t-5 p-b-5">
+                        <div class="row">
+                            <h5>RECETA MEDICA</h5> 
+                            <div class="col-md-2" style="padding-left:10px;">
+                                <button type='button' class='btn btn-cyan waves-effect waves-light' id='btnNuevaReceta' style="padding-top:0px;height:20px;"><i class='fa fa-plus'></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="row" style="padding-left:35px;">
+                            <div class="col-md-6 col-12">
+                                <div class="col-12 col-md-12" id="tablaRecetaCabecera">
+                                    <div class="card-body">
+                                        <div class="col-sm-12 hidden-sm-down" id="cabeceraTablaReceta">
+                                        </div>
+                                        <div class="table-responsive" style="height:100px;">
+                                            <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                                <div class="col-12 col-md-1" style="display:none;">
+                                                    <label></label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>Fecha</label>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label>Nro Receta</label>
+                                                </div>
+                                            </div>
+                                            <div class="" id="tb_CabeceraReceta">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class='row'>*@
+                                @*<div class='col-md-6'>*@
+                                <div style="display:none" id="divRecetas">
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtNroReceta'>N° Receta</label>
+                                    <div class='col-md-3'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <input id="txtNroReceta" type="text" class="form-control form-control-sm" readonly>
+                                                <input id="txtIDReceta" type="text" class="form-control form-control-sm" style="display:none" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class='col-md-3'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnNuevaReceta'><i class='fa fa-plus'></i></button>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                </div>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtMedicamentoReceta'>Medicamento</label>
+                                    <div class='col-md-9'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <input id="txtMedicamentoReceta" type="text" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*</div>*@
+                                @*<div class='col-md-3'>*@
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtDosisReceta'>Dosis</label>
+                                    <div class='col-md-9'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <input class='form-control  form-control-sm' placeholder='' id='txtDosisReceta' type='text'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*</div>
+                <div class='col-md-3'>*@
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtViaReceta'>Via</label>
+                                    <div class='col-md-9'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <input class='form-control  form-control-sm' placeholder='' id='txtViaReceta' type='text'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*</div>*@
+                                @*</div>*@
+                                @*<div class='row'>*@
+                                @*<div class='col-md-6'>*@
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtFrecuenciaReceta'>Frecuencia</label>
+                                    <div class='col-md-9'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <input id="txtFrecuenciaReceta" type="text" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*</div>
+                <div class='col-md-3'>*@
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtDuracionReceta'>Duracion</label>
+                                    <div class='col-md-9'>
+                                        <div class="row">
+                                            <div class="col-11 p-0">
+                                                <input class='form-control  form-control-sm' placeholder='' id='txtDuracionReceta' type='text'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*</div>
+                <div class='col-md-3'>*@
+                                <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnCancelarReceta'>Cancelar</button>
+                                <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarReceta'>Agregar</button>
+                                @*<button type='button' class='btn btn-info pull-right waves-effect waves-light' id='btnImprimirReceta'>Imprimir</button>*@
+                                @*</div>*@
+                                @*</div>*@
+                            </div>
+                        </div>
+                            <div class="col-md-6">
+                                <div class="col-12 col-md-12" id="tablaReceta">
+                                    <div class="card-body">
+                                        <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+                                        </div>
+                                        <div class="table-responsive" style="height:180px;">
+                                            <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                                <div class="col-12 col-md-1" style="display:none;">
+                                                    <label></label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>Medicamento</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Dosis</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Via</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Frecuencia</label>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Duracion</label>
+                                                </div>
+                                            </div>
+                                            <div class="" id="tb_DetalleReceta">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type='button' class='btn btn-info pull-right waves-effect waves-light' id='btnImprimirReceta'>Imprimir</button>
+                                <button type='button' class='btn btn-info pull-right waves-effect waves-light' id='btnGrabarReceta'>Grabar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="card-body p-t-5 p-b-5">
+                        <h5 style="padding-left:0px;">EVOLUCION</h5>
+                        <div class='row'>
+                            <div class="col-md-4">
+                                <div class='form-group row'>
+                                    <label class='col-md-5 control-label' for='txtFechaEvolucion'>Fecha </label>
+                                    <div class='col-md-7'>
+                                        <input class='form-control cf form-control-sm' placeholder='' id='txtFechaEvolucion' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class="col-md-10">
+                                <div class='form-group row'>
+                                    <label class='col-md-2 control-label' for='txtDescripcionEvolucion'>Descripcion</label>
+                                    <div class='col-md-10'>
+                                        <textarea class='form-control  form-control-sm' placeholder='' id='txtDescripcionEvolucion' rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-2'>
+                                <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarEvolucion'>Agregar</button>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12" id="tablaEvolucion">
+                            <div class="card-body">
+                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+                                </div>
+                                <div class="table-responsive" style="height:150px;">
+                                    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                        <div class="col-12 col-md-1" style="display:none;">
+                                            <label></label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Fecha</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label>Evolucion</label>
+                                        </div>
+                                    </div>
+                                    <div class="" id="tb_HC_Evolucion">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabarAtencionMedica' style="margin-left:10px;">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="row" id="rowFrm" style="display:none;">
+    <div class="card col-sm-12">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo </h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="card-body p-t-5 p-b-5">
+            <h5>DATOS FILIATORIOS</h5>
+            <div class='row'>
+                <div class='col-md-3'>
+                    <div class='form-group row' style="display:none;">
+                        <label class='col-sm-3 control-label' for='txtID'>idHistoria</label>
+                        <div class='col-sm-9'>
+                            <input class='form-control  form-control-sm' placeholder='' id='txtID' type='text'>
+                        </div>
+                    </div>
+                    <div class='form-group row'>
+                        <label class="col-md-4 control-label" for="txtHistoria">Historia</label>
+                        <div class="col-md-8 row">
+                            <input id="txtHistoria" type="text" class="form-control form-control-sm" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-md-6'>
+                    <div class='form-group row'>
+                        <label class='col-md-2 control-label' for='txtPaciente'>Paciente</label>
+                        <div class='col-md-10'>
+                            <div class="row">
+                                <div class="col-11 p-0">
+                                    <input id="txtPaciente" type="text" class="form-control form-control-sm" readonly>
+                                </div>
+                                <button id="btnModalPaciente" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-4'>
+                    <div class='form-group row'>
+                        <label class='col-md-5 control-label' for='txtFechaNacimiento'>Fecha Nacimiento</label>
+                        <div class='col-md-7'>
+                            <input class='form-control cf form-control-sm' placeholder='' id='txtFechaNacimiento' type='text' readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class='form-group row'>
+                        <label class='col-md-4 control-label' for='txtEdad'>Edad</label>
+                        <div class='col-md-8'>
+                            <input class='form-control  form-control-sm' placeholder='' id='txtEdad' type='text' readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class='col-md-3'>
+                    <div class='form-group row'>
+                        <label class='col-md-3 control-label' for='txtDNI'>DNI</label>
+                        <div class='col-md-9' style="padding-left:20px;">
+                            <input class='form-control  form-control-sm' placeholder='' id='txtDNI' type='text' readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-3'>
+                    <div class='form-group row'>
+                        <label class='col-md-4 control-label' for='txtSexo'>Sexo</label>
+                        <div class='col-md-8'>
+                            <input class='form-control  form-control-sm' placeholder='' id='txtSexo' type='text' readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-4'>
+                    <div class='form-group row'>
+                        <label class='col-md-5 control-label' for='txtFechaActual'>Fecha Actual</label>
+                        <div class='col-md-7'>
+                            <input class='form-control cf  form-control-sm' placeholder='' id='txtFechaActual' type='text' readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<hr />
+        <div class="row">
+        <h5 style="padding-left:30px;">MOTIVO DE CONSULTA</h5>
+        <div class="col-md-12" style="padding-left:30px;">
+        <div class="row">
+        <div class='col-md-12'>
+        <textarea class='form-control  form-control-sm vald' placeholder='' id='txtMotivoConsulta' rows="4"></textarea>
+        </div>
+        </div>
+        </div>
+        </div>*@
+        <hr />
+        <div class="row">
+            <div class='col-md-12'>
+                <div class="col-md-12" style="padding-left:30px;">
+                    <div class="row">
+                        <div class='col-md-4'>
+                            <div class='form-group row'>
+                                <h5 style="padding-left:0px;">ANTECEDENTES FAMILIARES</h5>
+                                <div class='col-md-3' style="padding-left:20px;">
+                                    <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkAFamiliares'>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divAFamiliares" style="display:none;">
+                    <div class="col-md-12" style="padding-left:30px;">
+                        <div class="row">
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtPadres' style="padding-right:10px;">Padres</label>
+                                    <div class='col-md-9' style="padding-left:20px;">
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtPadres' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtPadresVivos'>Vivos</label>
+                                    <div class='col-md-9'>
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtPadresVivos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtPadresFallecidos'>Fallecidos</label>
+                                    <div class='col-md-9'>
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtPadresFallecidos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-12'>
+                                <div class='form-group row'>
+                                    <label class='col-md-1 control-label' for='txtPadresCausas' style="padding-right:0px;">Causas</label>
+                                    <div class='col-md-11' style="padding-left:20px;">
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtPadresCausas' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtHermanos' style="padding-right:10px;">Hermanos</label>
+                                    <div class='col-md-9' style="padding-left:20px;">
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHermanos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtHermanosVivos'>Vivos</label>
+                                    <div class='col-md-9'>
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHermanosVivos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtHermanosFallecidos'>Fallecidos</label>
+                                    <div class='col-md-9'>
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHermanosFallecidos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-12'>
+                                <div class='form-group row'>
+                                    <label class='col-md-1 control-label' for='txtHermanosCausas' style="padding-right:0px;">Causas</label>
+                                    <div class='col-md-11' style="padding-left:20px;">
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHermanosCausas' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtHijos' style="padding-right:10px;">Hijos</label>
+                                    <div class='col-md-9' style="padding-left:20px;">
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHijos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtHijosVivos'>Vivos</label>
+                                    <div class='col-md-9'>
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHijosVivos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-md-3 control-label' for='txtHijosFallecidos'>Fallecidos</label>
+                                    <div class='col-md-9'>
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHijosFallecidos' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-12'>
+                                <div class='form-group row'>
+                                    <label class='col-md-1 control-label' for='txtHijosCausas' style="padding-right:0px;">Causas</label>
+                                    <div class='col-md-11' style="padding-left:20px;">
+                                        <input class='form-control  form-control-sm' placeholder='' id='txtHijosCausas' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h5 style="padding-left:30px;">ANTECEDENTES PERSONALES</h5>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkAlcohol' style="padding-right:10px;">Alcohol</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkAlcohol'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkTabaco' style="padding-right:10px;">Tabaco</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkTabaco'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkDrogas' style="padding-right:10px;">Drogas</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkDrogas'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkTransfusion' style="padding-right:10px;">Transfusion</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkTransfusion'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h5 style="padding-left:30px;">ANTECEDENTES PATOLOGICOS</h5>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkDiabetis' style="padding-right:10px;">Diabetis</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkDiabetis'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkVascular' style="padding-right:10px;">Enf.Vascular</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkVascular'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divVascular" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtVascular' style="padding-right:10px;">Cuando</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtVascular' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkHipertension' style="padding-right:10px;">Hipertension</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkHipertension'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkInfartos' style="padding-right:10px;">Infartos</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkInfartos'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divInfartos" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtInfartos' style="padding-right:10px;">Cuando</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtInfartos' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkTuberculosis' style="padding-right:10px;">Tuberculosis</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkTuberculosis'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkVarices' style="padding-right:10px;">Varices</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkVarices'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divVarices" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtVarices' style="padding-right:10px;">Lugar</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtVarices' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkHepatitis' style="padding-right:10px;">Hepatitis</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkHepatitis'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkAnticoagulantes' style="padding-right:10px;">Anticoagulantes</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkAnticoagulantes'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divAnticoagulantes" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtAnticoagulantes' style="padding-right:10px;">Dosis</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtAnticoagulantes' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkVIH' style="padding-right:10px;">VIH</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkVIH'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkAspirina' style="padding-right:10px;">Aspirina</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkAspirina'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divAspirina" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtAspirina' style="padding-right:10px;">Dosis</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtAspirina' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkSifilis' style="padding-right:10px;">Sifilis</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkSifilis'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkAnticonceptivos' style="padding-right:10px;">Anticonceptivos</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkAnticonceptivos'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divAnticonceptivos" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtAnticonceptivos' style="padding-right:10px;">Dosis</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtAnticonceptivos' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkAsma' style="padding-right:10px;">Asma</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkAsma'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkColageno' style="padding-right:10px;">Enf.Colageno</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkColageno'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divColageno" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtColageno' style="padding-right:10px;">Cual</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtColageno' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkGota' style="padding-right:10px;">Gota</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkGota'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkTiroides' style="padding-right:10px;">Enf.Tiroides</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkTiroides'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divTiroides" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtTiroides' style="padding-right:10px;">Medicacion</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtTiroides' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkHipercolesterolemia' style="padding-right:0px;">Hipercolesterolemia</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkHipercolesterolemia'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkCancer' style="padding-right:10px;">Cancer</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkCancer'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divCancer" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtCancer' style="padding-right:10px;">Lugar</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtCancer' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkMigraña' style="padding-right:10px;">Migraña</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkMigraña'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkMentales' style="padding-right:10px;">Enf.Mentales</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkMentales'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divMentales" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtMentales' style="padding-right:10px;">Medicacion</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtMentales' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-3'></div>
+                    <div class='col-md-3'>
+                        <div class='form-group row'>
+                            <label class='col-md-6 control-label' for='chkConvulsiones' style="padding-right:10px;">Convulsiones</label>
+                            <div class='col-md-3' style="padding-left:20px;">
+                                <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkConvulsiones'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6' id="divConvulsiones" style="display:none;">
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtConvulsiones' style="padding-right:10px;">Medicacion</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtConvulsiones' readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-md-6'>
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='FechaUltimaRegka' style="padding-right:10px;">Fecha Ultima Regla</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtFechaUltimaRegla'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6'>
+                        <div class='form-group row'>
+                            <label class='col-md-3 control-label' for='txtEmbarazos' style="padding-right:10px;">Embarazos</label>
+                            <div class='col-md-9' style="padding-left:20px;">
+                                <input type="text" class='form-control  form-control-sm' placeholder='' id='txtEmbarazos'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <label class='col-md-2 control-label' for='txtAntecedentesQx' style="padding-left:30px;">Antecedente Qx</label>
+                    <div class='col-md-10' style="padding-left:0px;">
+                        <textarea class='form-control  form-control-sm' placeholder='' id='txtAntecedentesQx' rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <label class='col-md-2 control-label' for='txtAlergias' style="padding-left:30px;">Alergias</label>
+                    <div class='col-md-10' style="padding-left:0px;">
+                        <textarea class='form-control  form-control-sm' placeholder='' id='txtAlergias' rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <label class='col-md-2 control-label' for='txtMedicacion' style="padding-left:30px;">Medicacion</label>
+                    <div class='col-md-10' style="padding-left:0px;">
+                        <textarea class='form-control  form-control-sm' placeholder='' id='txtMedicacion' rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <label class='col-md-2 control-label' for='txtOtros' style="padding-left:30px;">Otros</label>
+                    <div class='col-md-10' style="padding-left:0px;">
+                        <textarea class='form-control  form-control-sm' placeholder='' id='txtOtros' rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h5 style="padding-left:30px;">EXAMEN FISICO</h5>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <label class='col-md-2 control-label' for='txtImpresionGeneral' style="padding-right:0px;">Impresion General</label>
+                    <div class='col-md-10' style="padding-left:0px;">
+                        <textarea class='form-control  form-control-sm' placeholder='' id='txtImpresionGeneral' rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <label class='col-md-2 control-label' for='txtSignosVitales' style="padding-right:0px;">Signos Vitales:</label>
+                    <label class='col-md-1 control-label' for='txtSignosVitales' style="padding-right:0px;">FC</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtFC'>
+                    </div>
+                    <label class='col-md-1 control-label' for='txtSignosVitales' style="padding-right:0px;">TA</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtTA'>
+                    </div>
+                    <label class='col-md-1 control-label' for='txtSignosVitales' style="padding-right:0px;">FR</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtFR'>
+                    </div>
+                    <label class='col-md-1 control-label' for='txtSignosVitales' style="padding-right:0px;">Pulso</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtPulso'>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <label class='col-md-2 control-label' for='txtTAuxilar' style="padding-right:0px;">T°Auxiliar</label>
+                    <div class='col-md-4' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtTAuxilar' />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <div class='col-md-1' style="padding-left:0px;"></div>
+                    <label class='col-md-2 control-label' for='txtPesoHabitual' style="padding-right:0px;">Peso Habitual</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtPesoHabitual'>
+                    </div>
+                    <label class='col-md-1 control-label' for='txtPesoActual' style="padding-right:0px;">Peso Actual</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtPesoActual'>
+                    </div>
+                    <label class='col-md-1 control-label' for='txtTalla' style="padding-right:0px;">Talla</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtTalla'>
+                    </div>
+                    <label class='col-md-1 control-label' for='txtIMC' style="padding-right:0px;">IMC</label>
+                    <div class='col-md-1' style="padding-left:0px;">
+                        <input type="text" class='form-control  form-control-sm' placeholder='' id='txtIMC'>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class='col-md-12'>
+                <div class="col-md-12" style="padding-left:30px;">
+                    <div class="row">
+                        <div class='col-md-3'>
+                            <div class='form-group row'>
+                                <h5 style="padding-left:0px;">NUTRICION</h5>
+                                <div class='col-md-3' style="padding-left:20px;">
+                                    <input type="checkbox" class='form-control  form-control-sm' placeholder='' id='chkNutricion'>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divNutricion" style="display:none;">
+                    <div class="col-md-12" style="padding-left:30px;">
+                        <div class='form-group row'>
+                            <label class='col-md-2 control-label' for='txtCalorias' style="padding-right:0px;">Calorias/Dia</label>
+                            <div class='col-md-10' style="padding-left:0px;">
+                                <textarea class='form-control  form-control-sm' placeholder='' id='txtCalorias' rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left:30px;">
+                        <div class='form-group row'>
+                            <label class='col-md-2 control-label' for='txtNroAlimentacion' style="padding-right:0px;">Nro Veces Alimentacion</label>
+                            <div class='col-md-10' style="padding-left:0px;">
+                                <textarea class='form-control  form-control-sm' placeholder='' id='txtNroAlimentacion' rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left:30px;">
+                        <div class='form-group row'>
+                            <label class='col-md-2 control-label' for='txtGrasa' style="padding-right:0px;">Porcentaje Grasa</label>
+                            <div class='col-md-10' style="padding-left:0px;">
+                                <textarea class='form-control  form-control-sm' placeholder='' id='txtGrasa' rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left:30px;">
+                        <div class='form-group row'>
+                            <label class='col-md-2 control-label' for='txtDieta' style="padding-right:0px;">Dieta Regular</label>
+                            <div class='col-md-10' style="padding-left:0px;">
+                                <textarea class='form-control  form-control-sm' placeholder='' id='txtDieta' rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left:30px;">
+                        <div class='form-group row'>
+                            <label class='col-md-2 control-label' for='txtAlimientarias' style="padding-right:0px;">Preferencias Alimentarias</label>
+                            <div class='col-md-10' style="padding-left:0px;">
+                                <textarea class='form-control  form-control-sm' placeholder='' id='txtAlimientarias' rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left:30px;">
+                        <div class='form-group row'>
+                            <label class='col-md-2 control-label' for='txtObjetivo' style="padding-right:0px;">Objetivo</label>
+                            <div class='col-md-10' style="padding-left:0px;">
+                                <textarea class='form-control  form-control-sm' placeholder='' id='txtObjetivo' rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h5 style="padding-left:30px;">EXAMENES COMPLEMENTARIOS</h5>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <div class='col-md-12' style="padding-left:0px;">
+                        <textarea class='form-control  form-control-sm' placeholder='' id='txtExComplementarios' rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+        </div>
+        <div class="card-body p-t-5 p-b-5">
+            <div class="col-12 col-md-12">
+                <div class='form-group'>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input type="file" id="inpImage" class="form-control-file" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-12" id="tablaArchivos">
+                <div class="card-body">
+                    <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+                    </div>
+                    <div class="table-responsive" style="height:150px;">
+                        <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                            <div class="col-12 col-md-1" style="display:none;">
+                                <label></label>
+                            </div>
+                            <div class="col-md-1" style="display:none;">
+                                <label></label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Fecha</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Archivo</label>
+                            </div>
+                            <div class="col-md-1">
+                                <label>T.Archivo</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>descargar</label>
+                            </div>
+                        </div>
+                        <div class="" id="tb_DetalleArchivos">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h5 style="padding-left:30px;">OTROS ESTUDIOS</h5>
+            <div class="col-md-12" style="padding-left:30px;">
+                <div class='form-group row'>
+                    <div class='col-md-12' style="padding-left:0px;">
+                        <textarea class='form-control  form-control-sm' placeholder='' id='txtOtrosEstudios' rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="pull-left" id="divBtn_ModalAtencion" style="display:none">
+            <button type="button" class="btn btn-primary waves-effect waves-light" id="btnAbrir_ModalAtencion" data-grabar="">Agregar Atencion</button>
+        </div>
+        <hr />
+        <div class="card-body p-t-5 p-b-5">
+            <div class='row'>
+                <h5 style="padding-left:0px;">Atencion Medica</h5>
+            </div>
+            <div class="col-12 col-md-12" id="tablaAtencionMedica">
+                <div class="card-body">
+                    <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+                    </div>
+                    <div class="table-responsive" style="height:200px;">
+                        <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                            <div class="col-md-1">
+                                <label>-</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Fecha Atencion</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Medico</label>
+                            </div>
+                            <div class="col-md-5">
+                                <label>Plan Terapeutico</label>
+                            </div>
+                        </div>
+                        <div class="" id="tb_DetalleAtencionMedica">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="card col-sm-12">
+    <div class="card-body p-t-5 p-b-5">
+    <h5>ATENCION MEDICA</h5>
+    <div class='row'>
+    <div class='col-md-4'>
+    <div class='form-group row' style="display:none;">
+    <label class='col-sm-3 control-label' for='txtID'>idAtencion</label>
+    <div class='col-sm-9'>
+    <input class='form-control  form-control-sm' placeholder='' id='txtID' type='text'>
+    </div>
+    </div>
+    <div class='form-group row'>
+    <label class="col-md-2 control-label" for="txtCita">Cita</label>
+    <div class="col-md-8 row">
+    <input id="txtCita" type="text" class="form-control form-control-sm" readonly>
+    </div>
+    <button id="btnModalCita" type="button" class="btn btn-info btn-sm pr-2 pr-2">
+    <i class="pg-arrow_down"></i>
+    </button>
+    </div>
+    </div>
+    <div class='col-md-8'>
+    <div class='form-group row'>
+    <label class='col-md-2 control-label' for='txtMedico'>Medico</label>
+    <div class='col-md-10'>
+    <div class="row">
+    <div class="col-11 p-0">
+    <input id="txtMedico" type="text" class="form-control form-control-sm" readonly>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <hr />
+    <div class="row">
+    <h5 style="padding-left:30px;">PLAN TERAPEUTICO</h5>
+    <div class="col-md-12" style="padding-left:30px;">
+    <div class="row">
+    <div class='col-md-12'>
+    <textarea class='form-control  form-control-sm vald' placeholder='' id='txtMotivoConsulta' rows="4"></textarea>
+    </div>
+    </div>
+    </div>
+    </div>
+    <hr />
+    <div class="card-body p-t-5 p-b-5">
+    <h5>RECETA MEDICA</h5>
+    <div class='row'>
+    <div class='col-md-6'>
+    <div class='form-group row'>
+    <label class='col-md-3 control-label' for='txtMedicamento'>Medicamento</label>
+    <div class='col-md-9'>
+    <div class="row">
+    <div class="col-11 p-0">
+    <input id="txtMedicamento" type="text" class="form-control form-control-sm">
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class='col-md-3'>
+    <div class='form-group row'>
+    <label class='col-md-4 control-label' for='txtDosis'>Dosis</label>
+    <div class='col-md-8'>
+    <input class='form-control  form-control-sm' placeholder='' id='txtDosis' type='text'>
+    </div>
+    </div>
+    </div>
+    <div class='col-md-3'>
+    <div class='form-group row'>
+    <label class='col-md-4 control-label' for='txtVia'>Via</label>
+    <div class='col-md-8'>
+    <input class='form-control  form-control-sm' placeholder='' id='txtVia' type='text'>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class='row'>
+    <div class='col-md-6'>
+    <div class='form-group row'>
+    <label class='col-md-3 control-label' for='txtFrecuencia'>Frecuencia</label>
+    <div class='col-md-3'>
+    <div class="row">
+    <div class="col-11 p-0">
+    <input id="txtFrecuencia" type="text" class="form-control form-control-sm">
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class='col-md-3'>
+    <div class='form-group row'>
+    <label class='col-md-4 control-label' for='txtDuracion'>Duracion</label>
+    <div class='col-md-8'>
+    <input class='form-control  form-control-sm' placeholder='' id='txtDuracion' type='text'>
+    </div>
+    </div>
+    </div>
+    <div class='col-md-3'>
+    <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarReceta'>Agregar</button>
+    </div>
+    </div>
+    <div class="col-12 col-md-12" id="tablaReceta">
+    <div class="card-body">
+    <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+    </div>
+    <div class="table-responsive" style="height:150px;">
+    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+    <div class="col-12 col-md-1" style="display:none;">
+    <label></label>
+    </div>
+    <div class="col-md-4">
+    <label>Medicamento</label>
+    </div>
+    <div class="col-md-2">
+    <label>Dosis</label>
+    </div>
+    <div class="col-md-2">
+    <label>Via</label>
+    </div>
+    <div class="col-md-2">
+    <label>Frecuencia</label>
+    </div>
+    <div class="col-md-2">
+    <label>Duracion</label>
+    </div>
+    </div>
+    <div class="" id="tb_DetalleReceta">
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <hr />
+    <div class="card-body p-t-5 p-b-5">
+    <h5 style="padding-left:0px;">EVOLUCION</h5>
+    <div class='row'>
+    <div class="col-md-4">
+    <div class='form-group row'>
+    <label class='col-md-5 control-label' for='txtFechaEvolucion'>Fecha </label>
+    <div class='col-md-7'>
+    <input class='form-control cf form-control-sm' placeholder='' id='txtFechaEvolucion' type='text'>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class='row'>
+    <div class="col-md-10">
+    <div class='form-group row'>
+    <label class='col-md-2 control-label' for='txtEvolucion'>Descripcion</label>
+    <div class='col-md-10'>
+    <textarea class='form-control  form-control-sm' placeholder='' id='txtDescripcionEvolucion' rows="2"></textarea>
+    </div>
+    </div>
+    </div>
+    <div class='col-md-2'>
+    <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarEvolucion'>Agregar</button>
+    </div>
+    </div>
+    <div class="col-12 col-md-12" id="tablaEvolucion">
+    <div class="card-body">
+    <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+    </div>
+    <div class="table-responsive" style="height:150px;">
+    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+    <div class="col-12 col-md-1" style="display:none;">
+    <label></label>
+    </div>
+    <div class="col-md-2">
+    <label>Fecha</label>
+    </div>
+    <div class="col-md-10">
+    <label>Evolucion</label>
+    </div>
+    </div>
+    <div class="" id="tb_HC_Evolucion">
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div>*@
+</div>
+
+<!---->
+<div id='modal-Modal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog modal-lg' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row" style="display:none;">
+                        <div class='col-sm-12' id="div_Frm_Modals">
+                            <!-- formulario del modal -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
+                        </div>
+                    </div>
+                    <div class="row" id="rowTabla">
+                        <div class="col-sm-12">
+                            <div class="col-md-12 m-t-10 p-0" id="divTablaCabecera_Modal"></div>
+                            <div class="col-md-12 table-responsive p-0" id="divTabla_Modal" style="min-height:250px;overflow-y:scroll;overflow-x:hidden;">
+                                <div id="contentArea" class="clusterize-content">
+
+                                </div>
+                            </div>
+                        </div>
+                        @*<div id="scrollArea" class="clusterize-scroll">
+
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="div_Frm_Detalles" style="display:none">
+    <div class="form-horizontal">
+        <div class="form-group" style="display:none;">
+            <input placeholder="" id="txtId_Detalle" type="text" style="display:none;">
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtCodigo_Detalle" class="control-label col-sm-3">Código</label>
+                <div class="col-sm-3">
+                    <input placeholder="Autgenerado" readonly="" id="txtCodigo_Detalle" type="text" maxlength="3" disabled="" class="form-control form-control-sm" tabindex="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtDescripcion_Detalle" class="control-label col-sm-3">Descripción</label>
+                <div class="col-sm-9">
+                    <input id="txtDescripcion_Detalle" type="text" class="form-control form-control-sm" tabindex="3">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="chkActivo_Detalle" class="control-label col-sm-3">Activo</label>
+                <div class="col-sm-9">
+                    <input type="checkbox" id="chkActivo_Detalle" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src='~/Scripts/app.js'></script>
+<script src='~/Scripts/LabMedica/HistoriaClinica.js'></script>

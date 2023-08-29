@@ -1,0 +1,440 @@
+﻿@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+    <div class="content-header row">
+        <div class="content-header-left col-md-3 col-12 mb-2">
+            <h3 class="content-header-title mb-0">Programación</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">Labores Médicas</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Programación
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12 mb-2">
+            <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md col-md-12">
+                <button id="btnModalPacientes" type="button" class="btn btn-info btn-sm pr-2 pl-2">
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <input type="text" class="form-control col-md-10" id="txtPacientes" disabled/>
+                <a class="btn btn-outline-primary" title="Buscar" id="btnBuscar"><i class="fa fa-search"></i></a>
+            </div>
+        </div>
+            <div class="content-header-right col-md-3 col-12">
+                <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+                    <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo" id="btnMostrarDetalle"><i class="fa fa-plus"></i></a>
+                    <div role="group" class="btn-group">
+                        <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Vista</button>
+                        <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                            <a onclick="ccv(1);" class="dropdown-item">Mes</a>
+                            <a onclick="ccv(2);" class="dropdown-item">Semana</a>
+                            <a onclick="ccv(3);" class="dropdown-item">Día</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="row" id="rowTabla">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="datepicker col-12" id="dtPck">
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="card">
+            <div class="card-body">
+                <div id="dL" class="row">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body">
+                <div id='calendar' style="font-size:14px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowFrm" style="display:none;">
+    <div class="card col-sm-12" >
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Usuario</h4>
+                </div>
+                <div class="col-sm-6 pull-right">
+                    <button type='button' class='btn btn-purple pull-right waves-effect waves-light' id='btnEliminar' style="margin-left:10px; display:none">Eliminar</button>
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar" style="margin-left:10px;">Cancelar</button>
+                    <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnDuplicar' style="margin-left:10px;">Duplicar</button>
+                    <button type='button' class='btn btn-dropbox pull-right waves-effect waves-light' id='btnConfirmar' style="margin-left:10px;">Confirmar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10" id="cdb">
+            <div class="col-md-12">
+                <div class="container-fluid">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group-sm" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                        </div>
+                        <div class="row">
+                            <div class='col-md-6'>
+                                <div class='form-group row'>
+                                    <label class='col-sm-3 control-label' for='txtCodigo'>Código Cita</label>
+                                    <div class='col-sm-4'>
+                                        <input class='form-control cf form-control-sm' id='txtCodigo' type='text' placeholder="Autogenerado" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-3'>
+                                <div class='form-group row'>
+                                    <label class='col-sm-6 control-label' for='txtFechaCita'>Fecha Cita</label>
+                                    <div class='col-sm-6'>
+                                        <input class='form-control cf form-control-sm' id='txtFechaCita' type='text'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-3'>
+                                <div class='form-group row'>
+                                    <label class='col-sm-6 control-label' for='txtHoraCitaI'>Hora Inicio</label>
+                                    <div class='col-sm-6'>
+                                        <select class="form-control form-control-sm" id="txtHoraCitaI" style="height:26px;">
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-3'>
+                                <div class='form-group row'>
+                                    <label class='col-sm-6 control-label' for='txtHoraCitaF'>Hora Fin</label>
+                                    <div class='col-sm-6'>
+                                        <select class="form-control form-control-sm" id="txtHoraCitaF" style="height:26px;">
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <br />
+
+                        <div class="row">
+                            <div class='col-md-6'>
+                                <div class='form-group row'>
+                                    <label class='col-sm-3 control-label' for='txtPersonalOtros'>Tipo de evento</label>
+                                    <div class='col-sm-8'>
+                                          <select id="cboTipoEvento" class="form-control form-control-sm" style="height:26px;">
+                                              <option value="1">CITA</option>
+                                              <option value="2">OTRO</option>
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divOtro" style="display:none;">
+                            <div class="row">
+                                <div class='col-md-6'>
+                                    <div class='form-group row'>
+                                        <label class='col-sm-3 control-label' for='txtPersonalOtros'>Personal</label>
+                                        <div class='col-sm-9 row pr-0'>
+                                            <div class="col-10 pr-0">
+                                                <input id="txtPersonalOtros" type="text" class="form-control cfm form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalPersonalOtros" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divCita">
+                            <div class="row">
+                                <div class='col-md-6'>
+                                    <div class='form-group row'>
+                                        <label class='col-sm-3 control-label' for='txtPaciente'>Paciente</label>
+                                        <div class='col-sm-9 row pr-0'>
+                                            <div class="col-10 pr-0">
+                                                <input id="txtPaciente" type="text" class="form-control cfm form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalPaciente" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-md-6'>
+                                    <div class='form-group row'>
+                                        <label class='col-sm-3 control-label' for='txtPersonal'>Médico</label>
+                                        <div class='col-sm-9 row pr-0'>
+                                            <div class="col-10 pr-0">
+                                                <input id="txtPersonal" type="text" class="form-control cfm form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalPersonal" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class='form-group row'>
+                                        <label class='col-sm-3 control-label' for='txtObservaciones'>Tratamiento</label>
+                                        <div class='col-sm-8'>
+                                            <textarea rows="6" class='form-control form-control-sm text-uppercase' id="txtTratamiento" readonly ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class='form-group row'>
+                                        <label class='col-sm-3 control-label' for='txtObservaciones'>Observación</label>
+                                        <div class='col-sm-8'>
+                                            <textarea rows="6" class='form-control form-control-sm text-uppercase' id="txtObservaciones" style="resize:none;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-md-6' style="display:none">
+                                    <div class='form-group row'>
+                                        <label class="col-sm-4 control-label">Estado</label>
+                                        <div class="col-sm-8">
+                                            <div class="checkbox check-info">
+                                                <input type="checkbox" checked="checked" name="chkActivo" id="chkActivo">
+                                                <label for="chkActivo"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class='col-md-6'>
+                                    <div class='form-group row'>
+                                        <label class='col-sm-3 control-label' for='txtPago'>Pago: </label>
+                                        <div class='col-sm-8'>
+                                            <input class='form-control cf form-control-sm' id='txtPago' type='text' onkeypress="return IngresoNumero(event)" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr/>
+                        <div class="row">
+                            <div class='col-md-6'>
+                                <div class='form-group row'>
+                                    <label class='col-sm-3 control-label' for='txtServicio'>Tratamientos</label>
+                                    <div class='col-sm-9 row pr-0'>
+                                        <div class="col-10 pr-0">
+                                            <input id="txtServicio" type="text" class="form-control cfm form-control-sm" readonly>
+                                        </div>
+                                        <button id="btnModalServicio" type="button" class="btn btn-info btn-sm pr-1 pl-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div class='form-group row'>
+                                    <label class='col-sm-3 control-label' for='txtPago'>Monto </label>
+                                    <div class='col-sm-8'>
+                                        <input class='form-control cf form-control-sm' id='txtMonto' type='text' onkeypress="return IngresoNumero(event)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-md-2' style="padding:0px;padding-right:60px;">                                
+                                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnAgregarTratamiento">Agregar</button>
+                                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnActualizarTratamiento" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
+                                <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light col-md-6" id="btnCancelarTratamiento" style="display:none">Cancelar</button>
+                            </div>
+                        </div>
+                        <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" style="height:200px;">
+                            <div class="card-body">
+                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaTratamiento">
+                                    <div class="row panel bg-info" style="color:white;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                        <div class="col-12 col-md-2" style="display:none;">
+                                            <label>id</label>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <label>Item</label>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <label>Tratamiento</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Monto</label>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 table-responsive" id="divTablaTratamiento">
+                                    <div id="contentTratamiento" class="clusterize-content">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modal-Modal' class='modal stick-up show' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row" style="display:none;">
+                        <div class='col-sm-12' id="div_Frm_Modal">
+                            <!-- formulario del modal -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input id="txtFiltroMod" class="form-control input-sm" placeholder="Filtrar ... " />
+                        </div>
+                    </div>
+                    <div class="row" id="rowTabla" style="font-size:12px;">
+                        <div class="col-sm-12">
+                            <div class="col-md-12 m-t-10" id="divTablaCabecera_Modal"></div>
+                            <div class="col-md-12 table-responsive" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;background-color:#f2f2f2">
+                                <div id="contentArea" class="clusterize-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="div_Frm_Detalle" style="display:none">
+    <div class="form-horizontal">
+        <div class="form-group" style="display:none;">
+            <input placeholder="" id="txtId_Detalle" type="text" style="display:none;">
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtCodigo_Detalle" class="control-label col-sm-3">Código</label>
+                <div class="col-sm-3">
+                    <input placeholder="Autgenerado" readonly="" id="txtCodigo_Detalle" type="text" maxlength="3" disabled="" class="form-control input-sm" tabindex="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtDescripcion_Detalle" class="control-label col-sm-3">Descripción</label>
+                <div class="col-sm-9">
+                    <input id="txtDescripcion_Detalle" type="text" class="form-control input-sm" tabindex="3">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="chkActivo_Detalle" class="control-label col-sm-3">Activo</label>
+                <div class="col-sm-9">
+                    <input type="checkbox" id="chkActivo_Detalle" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Para Buscar Citas PAciente*@
+<div class="row" id="rowBusqueda" style="display:none;">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12 right" style="margin-bottom:2px;">
+                        <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelarBusqueda" style="margin-left:10px;">Cancelar</button>
+                    </div>
+                        <div class="row col-12" style="margin-bottom:2px;display:none;">
+                            <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                        </div>
+                        <div class="col-sm-12 d-none d-md-block" id="cabeTablaBusqueda"></div>
+                        <div class="col-sm-12 table-responsive" id="divTablaBusqueda">
+                            <div id="ContPrincipalBusqueda" class="clusterize-content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<script src='~/Scripts/app.js'></script>
+<script src="~/Scripts/LabMedica/Programacion.js"></script>

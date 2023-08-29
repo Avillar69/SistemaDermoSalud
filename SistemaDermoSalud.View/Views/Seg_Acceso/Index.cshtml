@@ -1,0 +1,79 @@
+﻿@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+<style>
+    .checkbox label::after {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        left: 2px;
+        top: 0px;
+        font-size: 11px;
+        transition: border 0.2s linear 0s, color 0.2s linear 0s;
+    }
+</style>
+<div class="row page-titles">
+    <div class="col-md-6 col-sm-12 align-self-center">
+        <h4 class="text-themecolor m-b-0 m-t-0">Accesos</h4>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Seguridad</a></li>
+            <li class="breadcrumb-item active">Accesos</li>
+        </ol>
+    </div><div class='clearfix'>
+    </div>
+</div>
+<div class="row" id="rowFilter" style="margin-bottom:10px;">
+    <div class="col-md-12">
+        <div class="card m-b-10">
+            <div class="card-body m-b-0">
+                <div class="container-fluid" id="frm">
+                    <div class="row">
+                        <div class="col-12 col-md-10">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for="cboRol" class="control-label col-sm-3">Rol de Usuario</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control form-control-sm" id="cboRol"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <button type="button" class="btn btn-info pull-right waves-effect waves-light" id="btnGuardar" style="margin-left:10px;">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='row' id="rowTabla">
+    <div class='col-sm-12'>
+        <div class="card">
+            <div class="card-body m-b-0">
+                <div id="divTabla" class="table-responsive" style="margin:0px;padding:0px;margin-top:-12px;overflow:scroll;z-index:1002;overflow-x:hidden;">
+                    <div id='tbDatos' style='width:100%;' class='row'>
+                        <div id="tbCabecera" class="col-12">
+                            <div class='bg-info row center d-none d-md-flex' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>
+                                <div class="col-md-3 col-12 center" style="display:none;text-align:center;"><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>idMenu</span></div>
+                                <div class="col-md-3 col-12 center" style="display:none;text-align:center;"><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>idMenuPadre</span></div>
+                                <div class="col-md-3 col-12 center" style='padding-bottom:3px;text-align:center;'><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>Menú</span></div>
+                                <div class="col-md-3 col-12 center" style='padding-bottom:3px;text-align:center;'><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>Sub Menú</span></div>
+                                <div class="col-md-3 col-12 center" style='padding-bottom:3px;text-align:center;'><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>Sub Menú 2</span></div>
+                                <div class="col-md-3 col-12 center" style="display:none;"><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>Nivel</span></div>
+                                <div class="col-md-3 col-12 center" style="display:none;"><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>Posicion</span></div>
+                                <div class="col-md-3 col-12 center" style='padding-bottom:3px;text-align:center;'><span href='#' style='color:white;font-weight:lighter;font-size:12px;'>Selección</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id='tbTabla'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/Seguridad/Acceso.js"></script>

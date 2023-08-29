@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{61CBDB37-4B81-4F58-9B55-A29025F214B5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SistemaDermoSalud.Business</RootNamespace>
+    <AssemblyName>SistemaDermoSalud.Bussiness</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AD_CuentaOrigenBL.cs" />
+    <Compile Include="AD_GuiaRemisionBL.cs" />
+    <Compile Include="AD_SocioNegocioBL.cs" />
+    <Compile Include="ALM_MovimientoBL.cs" />
+    <Compile Include="AtencionMedicaBL.cs" />
+    <Compile Include="Compras\COM_ListaPrecioBL.cs" />
+    <Compile Include="Compras\COM_PagaSocioBL.cs" />
+    <Compile Include="Compras\COM_DocumentoCompraBL.cs" />
+    <Compile Include="Compras\COM_OrdenCompraBL.cs" />
+    <Compile Include="CONF_Comision_MedicoBL.cs" />
+    <Compile Include="DashboardBL.cs" />
+    <Compile Include="Finanzas\FN_PagoBL.cs" />
+    <Compile Include="Finanzas\FN_TipoCambioBL.cs" />
+    <Compile Include="FN_CajaBL.cs" />
+    <Compile Include="FN_CajaDetalleBL.cs" />
+    <Compile Include="CargosBL.cs" />
+    <Compile Include="CitasBL.cs" />
+    <Compile Include="FN_ConceptosCajaBL.cs" />
+    <Compile Include="FN_PagosBL.cs" />
+    <Compile Include="FN_PagosDetalleBL.cs" />
+    <Compile Include="FN_ProyectoBL.cs" />
+    <Compile Include="HistoriaClinicaBL.cs" />
+    <Compile Include="Inventario\KardexBL.cs" />
+    <Compile Include="INV_StockBL.cs" />
+    <Compile Include="LaboratorioBL.cs" />
+    <Compile Include="Mantenimiento\Ma_AlmacenBL.cs" />
+    <Compile Include="Mantenimiento\Ma_ArticuloBL.cs" />
+    <Compile Include="Mantenimiento\Ma_CategoriaBL.cs" />
+    <Compile Include="Mantenimiento\Ma_EmpresaBL.cs" />
+    <Compile Include="Mantenimiento\Ma_LocalBL.cs" />
+    <Compile Include="Mantenimiento\Ma_MarcaBL.cs" />
+    <Compile Include="Mantenimiento\Ma_MotivoBL.cs" />
+    <Compile Include="Mantenimiento\Ma_SerieBL.cs" />
+    <Compile Include="Mantenimiento\Ma_TipoAfectacionBL.cs" />
+    <Compile Include="Ma_BancoBL.cs" />
+    <Compile Include="Ma_CargoBL.cs" />
+    <Compile Include="Ma_Clase_ArticuloBL.cs" />
+    <Compile Include="Ma_EstadoBL.cs" />
+    <Compile Include="Ma_FormaPagoBL.cs" />
+    <Compile Include="Ma_MonedaBL.cs" />
+    <Compile Include="Ma_PaisBL.cs" />
+    <Compile Include="Ma_TipoComprobanteBL.cs" />
+    <Compile Include="Ma_TipoDocumentoBL.cs" />
+    <Compile Include="Ma_TipoMovimientoBL.cs" />
+    <Compile Include="Ma_TipoPersonaBL.cs" />
+    <Compile Include="Ma_UbigeoBL.cs" />
+    <Compile Include="Ma_UnidadMedidaBL.cs" />
+    <Compile Include="MonedaBL.cs" />
+    <Compile Include="MedicamentoBL.cs" />
+    <Compile Include="PacientesBL.cs" />
+    <Compile Include="PersonalBL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RH_EmpleadoBL.cs" />
+    <Compile Include="Seguridad\Seg_AccesoBL.cs" />
+    <Compile Include="Seguridad\Seg_MenuBL.cs" />
+    <Compile Include="Seguridad\Seg_RolBL.cs" />
+    <Compile Include="Seguridad\Seg_UsuarioBL.cs" />
+    <Compile Include="ServiciosBL.cs" />
+    <Compile Include="TipoServicioBL.cs" />
+    <Compile Include="Ventas\VEN_DocumentoVentaBL.cs" />
+    <Compile Include="Ventas\VEN_DocVentaBL.cs" />
+    <Compile Include="Ventas\VEN_NotaCreditoBL.cs" />
+    <Compile Include="Ventas\VN_DocumentoVentaBL.cs" />
+    <Compile Include="Ventas\VN_PedidosBL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaDermoSalud.DataAccess\SistemaDermoSalud.DataAccess.csproj">
+      <Project>{dc3b5987-b297-4986-8e15-ad4dd7b229fc}</Project>
+      <Name>SistemaDermoSalud.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SistemaDermoSalud.Entities\SistemaDermoSalud.Entities.csproj">
+      <Project>{0769488e-48df-4b10-ab48-18e13bd74db6}</Project>
+      <Name>SistemaDermoSalud.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

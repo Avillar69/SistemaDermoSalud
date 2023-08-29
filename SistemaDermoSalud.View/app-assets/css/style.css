@@ -1,0 +1,155 @@
+
+.salt {
+    background-color: #fff;
+    text-transform:uppercase;
+}
+.rowDet {
+    background-color: #fff;
+}
+    .salt:hover {
+        background-color: #ccebff;
+    }
+    .rowDet:hover {
+        background-color: #ccebff;
+    }
+
+.saltactive {
+    background-color: #ccebff;
+}
+
+.saltbtn {
+    display: none;
+}
+
+.salt:hover .saltbtn {
+    display: inherit;
+}
+.rowDetactive {
+    background-color: #ccebff;
+}
+
+.rowDetbtn {
+    display: none;
+}
+
+.rowDet:hover .rowDetbtn {
+    display: inherit;
+}
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+#divTabla, #tb_DetalleF {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #f2f2f2;
+}
+
+.right-side-toggle {
+    z-index: 10000000000000;
+}
+
+#btnGrabar_Modal {
+    display: none;
+}
+
+.btn-circle {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+}
+
+    .btn-circle.btn-sm {
+        width: 35px;
+        height: 35px;
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+    .btn-circle.btn-lg {
+        width: 50px;
+        height: 50px;
+        padding: 14px 15px;
+        font-size: 18px;
+    }
+
+    .btn-circle.btn-xl {
+        width: 70px;
+        height: 70px;
+        padding: 14px 15px;
+        font-size: 24px;
+    }
+
+.waves-effect {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    vertical-align: middle;
+    z-index: 1;
+    will-change: opacity, transform;
+    -webkit-transition: all 0.1s ease-out;
+    -moz-transition: all 0.1s ease-out;
+    -o-transition: all 0.1s ease-out;
+    -ms-transition: all 0.1s ease-out;
+    transition: all 0.1s ease-out;
+}
+
+    .waves-effect .waves-ripple {
+        position: absolute;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        margin-top: -10px;
+        margin-left: -10px;
+        opacity: 0;
+        background: rgba(0,0,0,0.2);
+        -webkit-transition: all 0.7s ease-out;
+        -moz-transition: all 0.7s ease-out;
+        -o-transition: all 0.7s ease-out;
+        -ms-transition: all 0.7s ease-out;
+        transition: all 0.7s ease-out;
+        -webkit-transition-property: -webkit-transform, opacity;
+        -moz-transition-property: -moz-transform, opacity;
+        -o-transition-property: -o-transform, opacity;
+        transition-property: transform, opacity;
+        -webkit-transform: scale(0);
+        -moz-transform: scale(0);
+        -ms-transform: scale(0);
+        -o-transform: scale(0);
+        transform: scale(0);
+        pointer-events: none;
+    }
+
+    .waves-effect.waves-light .waves-ripple {
+        background-color: rgba(255,255,255,0.45);
+    }
+
+input{
+    text-transform:uppercase;
+}
+
+.rowDetServicio {
+    background-color: #fff;
+}
+    .salt:hover {
+        background-color: #ccebff;
+    }
+    .rowDetServicio:hover {
+        background-color: #ccebff;
+    }
+.rowDetServiciobtn {
+    display: none;
+}
+
+.rowDetServicio:hover .rowDetServiciobtn {
+    display: inherit;
+}

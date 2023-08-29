@@ -1,0 +1,290 @@
+﻿@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+        @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+        @Html.Raw("</script>");
+    }
+}
+<style>
+    .floatThead-wrapper {
+        margin-top: 10px;
+    }
+</style>
+
+
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Recetas</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Farmacia</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Recetas
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+            <a onclick="imprimirVentaPorCliente()" class="btn btn-outline-primary" title="Reporte por Cliente"><i class="ft-file-text" id="btnImprimirPorCliente"></i></a>
+            <a onclick="imprimirRegistroVentas()" class="btn btn-outline-primary" title="Reporte de Ventas"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
+            <div role="group" class="btn-group">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="error"></div>
+</div>
+<div class="card" id="rowFilter" style="margin-bottom:10px;">
+    <div class="card-header" id="headingOne">
+        <div class="row">
+            <div class="col-sm-12">
+                <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title" id="lblTi">Parámetros de Búsqueda</h4>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div class="col-12" id="frm">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-4 col-12 p-0">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for="txtFilFecIn" class="control-label col-md-3 m-t-5">Fecha</label>
+                                <div class="col-12 col-md-9">
+                                    <div class="input-daterange input-group" id="datepicker-range">
+                                        <input type="text" id="txtFilFecIn" class="form-control-sm form-control" name="start">
+                                        <div class="input-group-addon">
+                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                        </div>
+                                        <input type="text" id="txtFilFecFn" class="form-control-sm form-control" name="end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 p-0">
+                            <button type='button' class='btn btn-success float-right waves-effect waves-light' id='btnBuscar'><i class="fa fa-search"></i> <span class="bold">Buscar</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12 m-b-5 m-t-5">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                        <div class="col-md-8">
+                            <div class="btn-toolbar flex-wrap float-right" role="toolbar">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 hidden-sm-down" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="rowFrm" style="display:none;">
+    <div class="card m-b-10">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nueva Receta</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar" style="margin-left:10px;">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class='form-horizontal'>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtNumReceta">N° Receta</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtNumReceta" type="text" class="form-control form-control-sm" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtMedicamento">Medicamento</label>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtMedicamento" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtDosis">Dosis</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtDosis" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtVia">Via</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtVia" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtFrecuencia">Frecuencia</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtFrecuencia" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtDuracion">Duración</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtDuracion" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-2 control-label" for="txtPresentacion">Presentación</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtPresentacion" type="text" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-2 text-right">
+                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnAgregar">Agregar</button>
+                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnActualizar" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
+                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelar" style="display:none">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card m-b-10">
+        <div class="card-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card m-b-10" id="tablaDeDetalles">
+                            <div class="card-body">
+                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+                                </div>
+                                <div class="table-responsive" style="height:150px;">
+                                    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                        <div class="col-12 col-md-1" style="display:none;">
+                                            <label></label>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <label>Item</label>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label>Medicamento</label>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <label>Dosis</label>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <label>Via</label>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <label>Frecuencia</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Duracion</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Representacion</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                        </div>
+                                    </div>
+                                    <div class="" id="tb_DetalleF">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/LabMedica/Recetas.js"></script>
+
+

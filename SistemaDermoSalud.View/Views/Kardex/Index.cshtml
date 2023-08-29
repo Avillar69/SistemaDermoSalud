@@ -1,0 +1,288 @@
+﻿@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+
+<div class="content-header row" id="rowHeadP">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Kardex Mov.</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Farmacia</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Kardex Mov.
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="" class="float-md-right">
+            @* <button onclick="mostrarDetalle(1)" class="btn btn-primary btn-icon" title="Nuevo"><i class="fas fa-plus"></i></button>*@
+            <button class="btn btn-primary btn-icon" title="Imprimir"><i class="fa fa-print" value="imprimir" id="btnImprimir"></i></button>
+            <button id="btnImprimirPDF" class="btn btn-primary btn-icon" title="Descargar PDF"><i class="fa fa-file-pdf-o"></i></button>
+            <button id="btnImprimirExcel" class="btn btn-primary btn-icon" title="Descargar Excel"><i class="fa fa-file-excel-o"></i></button>
+        </div>
+    </div>
+</div>
+
+
+<div class="card" id="rowFilter" style="margin-bottom:10px;">
+    <div class="card-header" id="headingOne">
+        <div class="row">
+            <div class="col-sm-12">
+                <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="panel-title" id="lblTi">Parámetros de Búsqueda</h4>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div class="col-12" id="frm">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-12 col-md-3">
+                            <div class="form-group row m-b-5 p-l-10">
+                                <label class="col-md-4 control-label" for="txtCategoria">Categoría</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtCategoria" type="text" class="form-control form-control-sm" readonly="">
+                                        </div>
+                                        <button id="btnModalCategoria" type="button" class="btn btn-info btn-sm pr-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <div class="form-group row m-b-5 p-l-10">
+                                <label class="col-md-4 control-label" for="txtArticulo">Artículo</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id="txtArticulo" type="text" class="form-control form-control-sm" readonly="">
+                                        </div>
+                                        <button id="btnModalArticulo" type="button" class="btn btn-info btn-sm pr-1">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for="txtFilFecIn" class="control-label col-md-3">Fecha</label>
+                                <div class="col-12 col-md-9">
+                                    <div class="input-daterange input-group input-group-sm" id="datepicker-range">
+                                        <input type="text" id="txtFilFecIn" class="form-control form-control-sm" name="start">
+                                        <div class="input-group-addon">
+                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                                        </div>
+                                        <input type="text" id="txtFilFecFn" class="form-control form-control-sm" name="end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-12">
+                            <div class="col-md-6 p-0">
+                                <button type='button' class='btn btn-success float-right waves-effect waves-light' id='btnBuscar'><i class="fa fa-search"></i> <span class="bold">Buscar</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12" id="divTabla">
+                        <iframe id="ifrmReport" style="width:100%;height:100%; min-height:400px;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modal-Modal' class='modal stick-up show' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row" style="display:none;">
+                        <div class='col-sm-12' id="div_Frm_Modal">
+                            <!-- formulario del modal -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
+                        </div>
+                    </div>
+                    <div class="row" id="rowTabla">
+                        <div class="col-sm-12">
+                            <div class="col-md-12 m-t-10" id="divTablaCabecera_Modal"></div>
+                            <div class="col-md-12 table-responsive" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;background-color:#f2f2f2">
+                                <div id="contentArea" class="clusterize-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="div_Frm_Detalle" style="display:none">
+    <div class="form-horizontal">
+        <div class="form-group" style="display:none;">
+            <input placeholder="" id="txtId_Detalle" type="text" style="display:none;">
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtCodigo_Detalle" class="control-label col-sm-3">Código</label>
+                <div class="col-sm-3">
+                    <input placeholder="Autgenerado" readonly="" id="txtCodigo_Detalle" type="text" maxlength="3" disabled="" class="form-control form-control-sm" tabindex="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="txtDescripcion_Detalle" class="control-label col-sm-3">Descripción</label>
+                <div class="col-sm-9">
+                    <input id="txtDescripcion_Detalle" type="text" class="form-control form-control-sm" tabindex="3">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="chkActivo_Detalle" class="control-label col-sm-3">Activo</label>
+                <div class="col-sm-9">
+                    <input type="checkbox" id="chkActivo_Detalle" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='modalPago' class='modal stick-up show lg' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Registrar Pago Detalle</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <br />
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class='col-sm-12' id="div_Frm_Modal">
+                            <!-- formulario del modal -->
+                        </div>
+                        <div class="col-12 col-md-10">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label class="col-md-4 control-label" for="txtTipoOperacion">TipoOperacion</label>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0" id="cbxTipoOperacion">
+                                            <select class="form-control form-control-sm" onchange="buscarXCombo()" id="txtTipoOperacion">
+                                                <option value="" disabled selected>seleccione...</option>
+                                                <option value="1" name="1">Transferencia</option>
+                                                <option value="2" name="2">Cheque</option>
+                                                <option value="3" name="3">Deposito</option>
+                                                <option value="4" name="4">Efectivo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10" id="divBanco">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='cboBanco' class="control-label col-sm-4">Banco</label>
+                                <div class="col-sm-8">
+                                    <select id='cboBanco' class="form-control form-control-sm"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10" id="divCuentaOrigen" style="display:none">
+
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='cboOrigen' class="control-label col-sm-4">Cuenta Origen</label>
+                                <div class="col-sm-8">
+                                    <select id='cboOrigen' class="form-control form-control-sm"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10" id="divCuentaDestino" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='cboDestino' class="control-label col-sm-4">Cuenta Destino</label>
+                                <div class="col-sm-8">
+                                    <select id='cboDestino' class="form-control form-control-sm"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-10" id="divOperacion" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtNOperacion' class="control-label col-md-4" id="lblOperacion">Nro Operacion</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtNOperacion' type='text' class="form-control form-control-sm">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10" id="divFCC" style="display:none">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtFechaCobroCheque' class="control-label col-md-4">Apartir de</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <input id='txtFechaCobroCheque' type='text' class="form-control form-control-sm">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabarPago" data-grabar="">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/Inventario/Kardex.js"></script>

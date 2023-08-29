@@ -1,0 +1,166 @@
+﻿@{
+    if (Session["Config"] == null)
+    {
+        @Html.Raw("<script>");
+        @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+        @Html.Raw("</script>");
+    }
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Cuentas Bancarias</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Configuraciones</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Ctas.Bancarias
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-header-right col-md-6 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
+            <a class="btn btn-outline-primary hidden" title="Imprimir"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
+            <div role="group" class="btn-group hidden">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowTabla">
+    <div class="col-md-12">
+        <div class="card p-l-20 p-r-20 m-b-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="row col-12" style="margin-bottom:2px;">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                    </div>
+                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
+                    <div class="col-sm-12 table-responsive" id="divTabla">
+                        <div id="contentPrincipal" class="clusterize-content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="rowFrm" style="display:none;">
+    <div class="card col-sm-12">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Usuario</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class="container-fluid">
+                    <div class='form-horizontal'>
+                        <div class="form-group row m-b-5 p-l-10">
+                            <label class="control-label col-md-4" for="txtNombreCuenta">Nombre Cuenta</label>
+                            <div class="col-12 col-sm-4">
+                                <input id="txtNombreCuenta" type="text" class="form-control form-control-sm" tabindex="1">
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-5 p-l-10">
+                            <label class="control-label col-md-4" for="txtBanco">Banco</label>
+                            <div class="col-sm-4">
+                                <div class="row">
+                                    <div class="col-10 p-0 pl-1">
+                                        <input id='txtBanco' type='text' class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <button id="btnModalBanco" type="button" class="btn btn-info btn-sm pr-1 pl-1" tabindex="2">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-5 p-l-10">
+                            <div class="form-group" style="display:none;">
+                                <input placeholder='' id='txtID' type='text' style="display:none;">
+                            </div>
+                            <label class="control-label col-md-4" for="txtNombreCuenta">Moneda</label>
+                            <div class="col-12 col-sm-4">
+                                <select id='cboMoneda' class="form-control form-control-sm" tabindex="3"></select>
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-5 p-l-10">
+                            <label class="control-label col-md-4" for="txtNombreCuenta">Numero Cuenta</label>
+                            <div class="col-12 col-sm-4">
+                                <input id='txtNroCuenta' type='text' class="form-control form-control-sm" tabindex="4">
+                            </div>
+                        </div>
+                        <div class="form-group row m-b-5 p-l-10">
+                            <label class="control-label col-md-4" for="chkEstado">Estado</label>
+                            <div class="col-12 col-sm-4">
+                                <div class="checkbox check-info">
+                                    <input type="checkbox" checked="checked" id="chkEstado" tabindex="5" >
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='modal-Modal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+        <div class='modal-dialog' role='document' style="max-width:800px">
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div class="row" style="display:none;">
+                            <div class='col-sm-12' id="div_Frm_Modal">
+                                <!-- formulario del modal -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
+                            </div>
+                        </div>
+                        <div class="row" id="rowTabla" style="font-size:12px;">
+                            <div class="col-sm-12">
+                                <div class="col-md-12 m-t-10" id="divTablaCabecera_Modal"></div>
+                                <div class="col-md-12 table-responsive" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;background-color:#f2f2f2">
+                                    <div id="contentArea" class="clusterize-content">
+                                        <!--Aca es la chamba donde se guardara todo los datos del modal-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='~/Scripts/app.js'></script>
+<script src="~/Scripts/Configuraciones/CtasBancarias.js"></script>
