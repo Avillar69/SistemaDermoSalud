@@ -1,9 +1,13 @@
-﻿
+﻿@using System.Web.Optimization;
 @{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
     @Html.Raw("</script>");
 }
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
 }
 <style>
     .floatThead-wrapper {
@@ -903,8 +907,7 @@
     </div>
 </div>
 
-
-<script src="~/Scripts/app.js"></script>
+@Scripts.Render("~/bundles/basics")
 <script src="~/Scripts/logos.js"></script>
 <script src="~/Scripts/Ventas/NotaCredito.js"></script>
 

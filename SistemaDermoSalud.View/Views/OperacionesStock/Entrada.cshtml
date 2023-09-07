@@ -1,10 +1,15 @@
-﻿@{if (Session["Config"] == null)
+﻿@using System.Web.Optimization;
+@{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
     @Html.Raw("</script>");
 }
 }
 
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
 <div class="content-header row">
     <div class="content-header-left col-md-6 col-12 mb-2">
         <h3 class="content-header-title mb-0">Nota de Ingreso</h3>
@@ -449,7 +454,5 @@
     </div>
 </div>
 
-@*<link href="~/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">*@
-@*<script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>*@
-<script src="~/Scripts/app.js"></script>
+@Scripts.Render("~/bundles/basics")
 <script src="~/Scripts/Inventario/OperacionStock_Entrada.js"></script>

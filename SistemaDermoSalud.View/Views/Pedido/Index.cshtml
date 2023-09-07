@@ -1,9 +1,13 @@
-﻿
+﻿@using System.Web.Optimization;
 @{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
     @Html.Raw("</script>");
 }
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
 }
 <style>
     .floatThead-wrapper {
@@ -35,7 +39,7 @@
                 <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
                 <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
                     <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
-                    <a  class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
                 </div>
             </div>
         </div>
@@ -94,7 +98,7 @@
                         <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
                         <div class="col-md-8">
                             <div class="btn-toolbar flex-wrap float-right" role="toolbar">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -580,5 +584,5 @@
         </div>
     </div>
 </div>
-<script src="~/Scripts/app.js"></script>
+@Scripts.Render("~/bundles/basics")
 <script src="~/Scripts/Ventas/Pedido.js"></script>

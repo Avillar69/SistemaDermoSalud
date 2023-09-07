@@ -18,7 +18,7 @@ var txtValor;//input para obtener el valor
 
 //Inicializando
 var Tipo = "TRANSFERENCIA_SALIDA";//Transferencia
-var url = "OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
+var url = "/ObtenerDatos?Tipo=" + Tipo;
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 reziseTabla();

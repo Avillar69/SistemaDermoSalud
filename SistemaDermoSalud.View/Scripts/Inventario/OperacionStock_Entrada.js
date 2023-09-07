@@ -22,7 +22,7 @@ var txtValor;//input para obtener el valor
 var precioMedicamento = 0;
 //Inicializando
 var Tipo = "ENTRADA";//Entrada
-var url = "OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
+var url = "/OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 reziseTabla();
@@ -256,14 +256,14 @@ function mostrarDetalle(opcion, id) {
 }
 function TraerDetalle(id) {
     //if (confirm("¿Está seguro que desea eliminar?") == false) return false;
-    var url = "OperacionesStock/ObtenerDatosxID/?id=" + id;
+    var url = "/OperacionesStock/ObtenerDatosxID/?id=" + id;
     enviarServidor(url, CargarDetalles);
 }
 function configurarBotonesModal() {
     var btnGrabar = document.getElementById("btnGrabar");
     btnGrabar.onclick = function () {
         if (validarFormulario()) {
-            var url = "OperacionesStock/Grabar";
+            var url = "/OperacionesStock/Grabar";
             var frm = new FormData();
             frm.append("idMovimiento", txtID.value.length == 0 ? "0" : txtID.value);
             frm.append("idLocal", gbi("txtLocalDet").dataset.id);
@@ -429,7 +429,7 @@ function validarFormulario() {
     return error;
 }
 function BuscarxFecha(f1, f2) {
-    var url = 'OperacionesStock/ObtenerPorFecha?Tipo=' + Tipo + '&fechaInicio=' + f1 + '&fechaFin=' + f2;
+    var url = '/OperacionesStock/ObtenerPorFecha?Tipo=' + Tipo + '&fechaInicio=' + f1 + '&fechaFin=' + f2;
     enviarServidor(url, mostrarBusqueda);
 }
 function mostrarBusqueda(rpta) {
@@ -455,7 +455,7 @@ function eliminar(id) {
     },
         function (isConfirm) {
             if (isConfirm) {
-                var url = "OperacionesStock/Eliminar?idMovimiento=" + id + "&TipoMovimiento=" + Tipo;
+                var url = "/OperacionesStock/Eliminar?idMovimiento=" + id + "&TipoMovimiento=" + Tipo;
                 enviarServidor(url, eliminarListar);
             } else {
                 swal("Cancelado", "No se eliminó la Entrada de Mercancia.", "error");
@@ -783,7 +783,7 @@ function funcionModal(tr) {
         case "tipoMovimiento": tipoMovimientoId = id; MostrarxTipoMovimiento(); break;
         case "estadoMovimiento": estadoMovimientoId = id; break;
         case "Medicamento": MedicamentoId = id; document.getElementById("txtMarca").value = gbi("md" + num + "-3").innerHTML; 
-            var url_2 = "OperacionesStock/cargarStock?idMedicamento=" + MedicamentoId + "&idAlmacenO=" + almacenId;
+            var url_2 = "/OperacionesStock/cargarStock?idMedicamento=" + MedicamentoId + "&idAlmacenO=" + almacenId;
             enviarServidor(url_2, cargarStock); break;
     }
 
@@ -818,19 +818,19 @@ function accionModal2(url, tr, id) {
             break;
         case "txtCompra":
             var idCompra = gbi("txtCompra").dataset.id;
-            var url = 'OperacionesStock/cargarDetalleCompras?idCompras=' + idCompra;
+            var url = '/OperacionesStock/cargarDetalleCompras?idCompras=' + idCompra;
             enviarServidor(url, CargarDetalleCompra);
             return gbi("txtEstadoMovimiento");
             break;
         case "txtGuia":
             var idGuia = gbi("txtGuia").dataset.id;
-            var urlG = 'OperacionesStock/cargarDetalleGuias?idGuias=' + idGuia;
+            var urlG = '/OperacionesStock/cargarDetalleGuias?idGuias=' + idGuia;
             enviarServidor(urlG, CargarDetalleCompra);
             return gbi("txtEstadoMovimiento");
             break;
         case "txtArticulo":
             var txtArt = gbi("txtArticulo").dataset.id;
-            var url = 'Medicamento/ObtenerDatosxID?id=' + txtArt;
+            var url = '/Medicamento/ObtenerDatosxID?id=' + txtArt;
             enviarServidor(url, cLP);
             break;
     }

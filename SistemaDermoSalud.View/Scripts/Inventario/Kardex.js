@@ -53,7 +53,7 @@ function configBM() {
         if (validarControl("txtFilFecFn")) error = false;
         //if (validarControl("txtCategoria")) error = false;
         if (!error) return;
-        var url = "Kardex/BuscarKardex?fI=" + gvt("txtFilFecIn") + "&fF=" + gvt("txtFilFecFn") + "&iC=0" + "&iA=" + (gbi("txtArticulo").dataset.id == undefined ? "0" : gbi("txtArticulo").dataset.id);
+        var url = "/Kardex/BuscarKardex?fI=" + gvt("txtFilFecIn") + "&fF=" + gvt("txtFilFecFn") + "&iC=0" + "&iA=" + (gbi("txtArticulo").dataset.id == undefined ? "0" : gbi("txtArticulo").dataset.id);
         enviarServidor(url, MostrarBusqueda)
     };
     //var btnModalArticulo = document.getElementById("btnModalArticulo");
@@ -83,7 +83,7 @@ function configBM() {
 function mostrarExcel(r) {
     console.log(r);
 }
-function crearMatriz(listaDatos) {
+function crearMatrizKardex(listaDatos) {
     var nRegistros = listaDatos.length;
     var nCampos;
     var campos;
@@ -114,7 +114,7 @@ function MostrarBusqueda(r) {
         var mensaje = datos[1];
         var lista = datos[2].split("▼");;
         if (resultado == "OK") {
-            ImprimirKardex(crearMatriz(lista));
+            ImprimirKardex(crearMatrizKardex(lista));
         }
         else {
             mostrarRespuesta("Error", mensaje, "error");
@@ -218,20 +218,6 @@ function ImprimirKardex(matriz) {
     var xid = 140;
     var xad = 14;
     var xan = 12;
-    //doc.setFontType("bold");
-    //doc.setFontSize(7);
-    //doc.text("CÓDIGO", 30, xid);
-    //doc.text("DESCRIPCIÓN", 90, xid);
-    //doc.text("U.M.", width - 235, xid);
-    //doc.text("CANTIDAD", width - 180, xid, 'right');
-    //doc.text("PRECIO", width - 135, xid, 'right');
-    //doc.text("DESCUENTO", width - 85, xid, 'right');
-    //doc.text("TOTAL", width - 40, xid, 'right');
-    //doc.line(30, xid + 3, width - 30, xid + 1);
-    //doc.setFontType("normal");
-    //doc.setFontSize(6.5);
-    //Crear Detalle
-    //var x = document.querySelectorAll(".rowDet");
     var artActual = "";
     var n = 0;
     var Stock = 0;

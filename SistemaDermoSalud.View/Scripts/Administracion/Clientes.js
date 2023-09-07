@@ -11,7 +11,7 @@ var txtValor;//input para obtener el valor
 var idUsuario;
 configBM();
 //Inicializando
-var url = "SocioNegocio/ObtenerDatosCliente";
+var url = "/SocioNegocio/ObtenerDatosCliente";
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 reziseTabla();
@@ -166,7 +166,7 @@ function configurarUbigeo() {
 }
 function TraerDetalle(id) {
     //if (confirm("¿Está seguro que desea eliminar?") == false) return false;
-    var url = "SocioNegocio/ObtenerDatosxID/?id=" + id;
+    var url = "/SocioNegocio/ObtenerDatosxID/?id=" + id;
     enviarServidor(url, CargarDetalles);
 }
 function actualizarListar(rpta) { //rpta es mi lista de colores
@@ -217,7 +217,7 @@ function configurarBotonesModal() {
     var btnGrabar = document.getElementById("btnGrabar");
     btnGrabar.onclick = function () {
         if (validarFormulario()) {
-            var url = "SocioNegocio/GrabarCliente";
+            var url = "/SocioNegocio/GrabarCliente";
             var frm = new FormData();
             frm.append("idSocioNegocio", txtID.value.length == 0 ? "0" : txtID.value);
             frm.append("idTipoPersona", cboTipoPersona.value);
@@ -378,7 +378,7 @@ function Buscar() {
     if (txtNroDocumento.value.trim().length == 11) {
         var d = txtNroDocumento.value;
         //var url = "SocioNegocio/bsn?r=" + d;
-        var url = "SocioNegocio/ConsultaRUC?r=" + d;
+        var url = "/SocioNegocio/ConsultaRUC?r=" + d;
         $("#divLoader").fadeIn(0);
         enviarServidorPost(url, cargarBusqueda);
         gbi("txtNroDocumento").value = d;
@@ -647,7 +647,7 @@ function eliminar(id) {
         function (isConfirm) {
             if (isConfirm) {
                 btnCancelar
-                var url = "SocioNEgocio/EliminarCliente?idSocioNegocio=" + id;
+                var url = "/SocioNEgocio/EliminarCliente?idSocioNegocio=" + id;
                 enviarServidor(url, eliminarListar);
             } else {
                 swal("Cancelado", "No se eliminó el Socio de Negocio.", "error");

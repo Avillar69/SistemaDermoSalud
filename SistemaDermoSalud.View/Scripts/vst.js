@@ -7,7 +7,7 @@
 }
 $(document).ready(function () {
     $(document).everyTime(5000, function () {
-        enviarServidor("Home/KeepActiveSession", VerifySessionState);
+        enviarServidor("/Home/KeepActiveSession", VerifySessionState);
     });
 
 });

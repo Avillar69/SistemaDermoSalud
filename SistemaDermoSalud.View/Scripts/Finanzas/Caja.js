@@ -44,7 +44,7 @@ $('#collapseOne-2').on('hidden.bs.collapse', function () {
     reziseTabla();
 })
 //Inicializando    = 
-var url = "Caja/ObtenerDatos";
+var url = "/Caja/ObtenerDatos";
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 function mostrarLista(rpta) {

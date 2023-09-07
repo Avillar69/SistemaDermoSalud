@@ -1,48 +1,53 @@
-﻿@{if (Session["Config"] == null)
+﻿@using System.Web.Optimization;
+@{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
     @Html.Raw("</script>");
 }
 }
-    <div class="content-header row">
-        <div class="content-header-left col-md-3 col-12 mb-2">
-            <h3 class="content-header-title mb-0">Programación</h3>
-            <div class="row breadcrumbs-top">
-                <div class="breadcrumb-wrapper col-12">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="#">Labores Médicas</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            Programación
-                        </li>
-                    </ol>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-3 col-12 mb-2">
+        <h3 class="content-header-title mb-0">Programación</h3>
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Labores Médicas</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Programación
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="content-header-left col-md-6 col-12 mb-2">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md col-md-12">
+            <button id="btnModalPacientes" type="button" class="btn btn-info btn-sm pr-2 pl-2">
+                <i class="fa fa-ellipsis-v"></i>
+            </button>
+            <input type="text" class="form-control col-md-10" id="txtPacientes" disabled />
+            <a class="btn btn-outline-primary" title="Buscar" id="btnBuscar"><i class="fa fa-search"></i></a>
+        </div>
+    </div>
+    <div class="content-header-right col-md-3 col-12">
+        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo" id="btnMostrarDetalle"><i class="fa fa-plus"></i></a>
+            <div role="group" class="btn-group">
+                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Vista</button>
+                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
+                    <a onclick="ccv(1);" class="dropdown-item">Mes</a>
+                    <a onclick="ccv(2);" class="dropdown-item">Semana</a>
+                    <a onclick="ccv(3);" class="dropdown-item">Día</a>
                 </div>
             </div>
         </div>
-        <div class="content-header-left col-md-6 col-12 mb-2">
-            <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md col-md-12">
-                <button id="btnModalPacientes" type="button" class="btn btn-info btn-sm pr-2 pl-2">
-                    <i class="fa fa-ellipsis-v"></i>
-                </button>
-                <input type="text" class="form-control col-md-10" id="txtPacientes" disabled/>
-                <a class="btn btn-outline-primary" title="Buscar" id="btnBuscar"><i class="fa fa-search"></i></a>
-            </div>
-        </div>
-            <div class="content-header-right col-md-3 col-12">
-                <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-                    <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo" id="btnMostrarDetalle"><i class="fa fa-plus"></i></a>
-                    <div role="group" class="btn-group">
-                        <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Vista</button>
-                        <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
-                            <a onclick="ccv(1);" class="dropdown-item">Mes</a>
-                            <a onclick="ccv(2);" class="dropdown-item">Semana</a>
-                            <a onclick="ccv(3);" class="dropdown-item">Día</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+</div>
 <div class="row" id="rowTabla">
     <div class="col-md-3">
         <div class="card">
@@ -69,7 +74,7 @@
     </div>
 </div>
 <div class="row" id="rowFrm" style="display:none;">
-    <div class="card col-sm-12" >
+    <div class="card col-sm-12">
         <div class="card-header p-b-0">
             <div class="row">
                 <div class="col-sm-6">
@@ -181,10 +186,10 @@
                                 <div class='form-group row'>
                                     <label class='col-sm-3 control-label' for='txtPersonalOtros'>Tipo de evento</label>
                                     <div class='col-sm-8'>
-                                          <select id="cboTipoEvento" class="form-control form-control-sm" style="height:26px;">
-                                              <option value="1">CITA</option>
-                                              <option value="2">OTRO</option>
-                                          </select>
+                                        <select id="cboTipoEvento" class="form-control form-control-sm" style="height:26px;">
+                                            <option value="1">CITA</option>
+                                            <option value="2">OTRO</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +248,7 @@
                                     <div class='form-group row'>
                                         <label class='col-sm-3 control-label' for='txtObservaciones'>Tratamiento</label>
                                         <div class='col-sm-8'>
-                                            <textarea rows="6" class='form-control form-control-sm text-uppercase' id="txtTratamiento" readonly ></textarea>
+                                            <textarea rows="6" class='form-control form-control-sm text-uppercase' id="txtTratamiento" readonly></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -281,7 +286,7 @@
                             </div>
                         </div>
 
-                        <hr/>
+                        <hr />
                         <div class="row">
                             <div class='col-md-6'>
                                 <div class='form-group row'>
@@ -304,7 +309,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='col-md-2' style="padding:0px;padding-right:60px;">                                
+                            <div class='col-md-2' style="padding:0px;padding-right:60px;">
                                 <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnAgregarTratamiento">Agregar</button>
                                 <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnActualizarTratamiento" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
                                 <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light col-md-6" id="btnCancelarTratamiento" style="display:none">Cancelar</button>
@@ -325,7 +330,7 @@
                                         </div>
                                         <div class="col-12 col-md-2">
                                             <label>Monto</label>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 table-responsive" id="divTablaTratamiento">
@@ -421,20 +426,20 @@
                     <div class="row col-12 right" style="margin-bottom:2px;">
                         <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelarBusqueda" style="margin-left:10px;">Cancelar</button>
                     </div>
-                        <div class="row col-12" style="margin-bottom:2px;display:none;">
-                            <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
-                        </div>
-                        <div class="col-sm-12 d-none d-md-block" id="cabeTablaBusqueda"></div>
-                        <div class="col-sm-12 table-responsive" id="divTablaBusqueda">
-                            <div id="ContPrincipalBusqueda" class="clusterize-content">
-                            </div>
+                    <div class="row col-12" style="margin-bottom:2px;display:none;">
+                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+                    </div>
+                    <div class="col-sm-12 d-none d-md-block" id="cabeTablaBusqueda"></div>
+                    <div class="col-sm-12 table-responsive" id="divTablaBusqueda">
+                        <div id="ContPrincipalBusqueda" class="clusterize-content">
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 </div>
 
 
-<script src='~/Scripts/app.js'></script>
+@Scripts.Render("~/bundles/basics")
 <script src="~/Scripts/LabMedica/Programacion.js"></script>

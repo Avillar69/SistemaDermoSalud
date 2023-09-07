@@ -15,7 +15,7 @@ console.log("entrarar?");
 var cboLocal = document.getElementById("cboLocal");
 var cboAlmacen = document.getElementById("cboAlmacen");
 //Inicializando Url = Controlador / Action
-var url = 'ConsultaStock/ObtenerDatos';
+var url = '/ConsultaStock/ObtenerDatos';
 enviarServidor(url, mostrarLista);
 //configurarBotonesModal();
 function mostrarLista(rpta) {
@@ -25,14 +25,14 @@ function mostrarLista(rpta) {
         var listas = rpta.split('↔');
         listaLocales = listas[0].split("▼");
         llenarCombo(listaLocales, "cboLocal", "Seleccione");
-        var urlC = 'ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
+        var urlC = '/ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
         enviarServidor(urlC, cargarAlmacen);
         configLocal();
     }
 }
 function configLocal() {
     cboLocal.onchange = function () {
-        var urlC = 'ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
+        var urlC = '/ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
         enviarServidor(urlC, cargarAlmacen);
     }
 }
@@ -139,10 +139,10 @@ btnExcel.onclick = function () {
 
 function configAlmacen() {
     console.log("INGRESO STOCK X ALMACEN");
-    var urlA = 'ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
+    var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
     enviarServidor(urlA, mostrarArticulos);
     cboAlmacen.onchange = function () {
-        var urlA = 'ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
+        var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
         enviarServidor(urlA, mostrarArticulos);
     }
 }

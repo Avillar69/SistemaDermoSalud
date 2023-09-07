@@ -1,4 +1,4 @@
-
+@using System.Web.Optimization;
 @{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
@@ -6,6 +6,10 @@
 }
 }
 
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
 <div class="content-header row">
     <div class="content-header-left col-md-6 col-12 mb-2">
         <h3 class="content-header-title mb-0">MEDICAMENTO</h3>
@@ -121,5 +125,5 @@
         </div>
     </div>
 </div>
-<script src='~/Scripts/app.js'></script>
+@Scripts.Render("~/bundles/basics")
 <script src="~/Scripts/Farmacia/Medicamento.js"></script>

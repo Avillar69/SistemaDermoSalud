@@ -51,7 +51,6 @@ function crearTablaServicio(cabeceras, div) {
     divTabla.innerHTML = contenido;
 }
 function listar() {
-    ;
     matriz = crearMatriz(listaDatos);
     configurarFiltro(cabeceras);
     mostrarMatrizServicio(matriz, cabeceras, "divTabla", "contentPrincipal");

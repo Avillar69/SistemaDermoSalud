@@ -1,10 +1,15 @@
-﻿@{if (Session["Config"] == null)
+﻿@using System.Web.Optimization;
+@{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
     @Html.Raw("</script>");
 }
 }
 
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
 <div class="content-header row" id="rowHeadP">
     <div class="content-header-left col-md-6 col-12 mb-2">
         <h3 class="content-header-title mb-0">Kardex Mov.</h3>
@@ -284,5 +289,5 @@
     </div>
 </div>
 
-<script src="~/Scripts/app.js"></script>
+@Scripts.Render("~/bundles/basics")
 <script src="~/Scripts/Inventario/Kardex.js"></script>

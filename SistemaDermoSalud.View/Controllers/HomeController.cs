@@ -28,7 +28,7 @@ namespace SistemaDermoSalud.View.Controllers
         public ActionResult Login()
         {
             if (Session["Config"] != null) return RedirectToAction("Index", "Home"); ;
-            return PartialView();
+            return View();
         }
         public bool KeepActiveSession()
         {

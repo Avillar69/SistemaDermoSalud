@@ -2,7 +2,7 @@
 var posiciones = [0, 1, 2, 3];
 var listaDatos;
 var matriz = [];
-var url = "Personal/ObtenerDatosPorc";
+var url = "/Personal/ObtenerDatosPorc";
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 console.log("Porcentaje Medico");
@@ -150,7 +150,7 @@ function mostrarMatrizPersonal(matriz, cabeceras, tabId, contentID) {
     }
 }
 function TraerDetalle(id) {
-    var url = "Personal/ObtenerDatosxID/?id=" + id;
+    var url = "/Personal/ObtenerDatosxID/?id=" + id;
     enviarServidor(url, CargarDetalles);
 }
 function actualizarListar(rpta) {
@@ -179,7 +179,7 @@ function configurarBotonesModal() {
     var btnGrabar = document.getElementById("btnGrabar");
     btnGrabar.onclick = function () {
         if (validarFormulario()) {
-            var url = "Personal/Grabar";
+            var url = "/Personal/Grabar";
             var frm = new FormData();
             frm.append("idPersonal", txtID.value.length == 0 ? "0" : txtID.value);
             frm.append("FechaIngreso", txtFechaIngreso.value);

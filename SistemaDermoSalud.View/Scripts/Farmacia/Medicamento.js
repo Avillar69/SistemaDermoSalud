@@ -20,7 +20,7 @@ function cfgKP(l, m) {
 }
 //Inicializando
 //Punto 1
-var url = "Medicamento/ObtenerDatos";
+var url = "/Medicamento/ObtenerDatos";
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 

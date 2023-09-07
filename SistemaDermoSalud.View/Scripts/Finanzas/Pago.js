@@ -40,7 +40,7 @@ jQuery("#txtFecha").datepicker({
 
 
 //////////////txtOrdenCompra "txtPrecio", "txtTotal",
-var url = "Pago/ObtenerDatos";
+var url = "/Pago/ObtenerDatos";
 
 enviarServidor(url, mostrarLista);
 configBM();

@@ -1,4 +1,5 @@
-﻿@{if (Session["Config"] == null)
+﻿@using System.Web.Optimization;
+@{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
     @Html.Raw("</script>");
@@ -170,9 +171,6 @@
     </div>
 </div>
 
-
-
-
+@Scripts.Render("~/bundles/basics")
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.2/dist/Chart.bundle.min.js"></script>
-<script src="~/Scripts/app.js"></script>
 <script src="~/Scripts/Dashboard.js"></script>

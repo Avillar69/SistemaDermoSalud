@@ -1,8 +1,13 @@
+@using System.Web.Optimization;
 @{if (Session["Config"] == null)
     { @Html.Raw("<script>");
-        @Html.Raw("location.href=window.location.origin+'/Home/Login';");
-        @Html.Raw("</script>");
-    }
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
 }
 <div class="content-header row">
     <div class="content-header-left col-md-6 col-12 mb-2">
@@ -28,7 +33,7 @@
                 <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
                 <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
                     <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
-                    <a  class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
                 </div>
             </div>
         </div>
@@ -122,9 +127,9 @@
                                 </div>
                                 <div class='form-group row' style="display:none;">
                                     <label class='col-sm-3 control-label' for='txtIDCita'>idCita</label>
-                                        <div class='col-sm-9'>
-                                            <input class='form-control  form-control-sm' id='txtIDCita' type='text' readonly>
-                                        </div>
+                                    <div class='col-sm-9'>
+                                        <input class='form-control  form-control-sm' id='txtIDCita' type='text' readonly>
+                                    </div>
                                 </div>
                                 <div class='form-group row'>
                                     <label class="col-md-3 control-label" for="txtCitaAtencion">N° Cita</label>
@@ -161,12 +166,12 @@
                     <hr />
                     <div class="card-body p-t-5 p-b-5">
                         <div class="row">
-                            <h5>RECETA MEDICA</h5> 
+                            <h5>RECETA MEDICA</h5>
                             <div class="col-md-2" style="padding-left:10px;">
                                 <button type='button' class='btn btn-cyan waves-effect waves-light' id='btnNuevaReceta' style="padding-top:0px;height:20px;"><i class='fa fa-plus'></i></button>
                             </div>
                         </div>
-                        
+
                         <div class="row" style="padding-left:35px;">
                             <div class="col-md-6 col-12">
                                 <div class="col-12 col-md-12" id="tablaRecetaCabecera">
@@ -195,93 +200,93 @@
                                 @*<div class='row'>*@
                                 @*<div class='col-md-6'>*@
                                 <div style="display:none" id="divRecetas">
-                                <div class='form-group row'>
-                                    <label class='col-md-3 control-label' for='txtNroReceta'>N° Receta</label>
-                                    <div class='col-md-3'>
-                                        <div class="row">
-                                            <div class="col-11 p-0">
-                                                <input id="txtNroReceta" type="text" class="form-control form-control-sm" readonly>
-                                                <input id="txtIDReceta" type="text" class="form-control form-control-sm" style="display:none" readonly>
+                                    <div class='form-group row'>
+                                        <label class='col-md-3 control-label' for='txtNroReceta'>N° Receta</label>
+                                        <div class='col-md-3'>
+                                            <div class="row">
+                                                <div class="col-11 p-0">
+                                                    <input id="txtNroReceta" type="text" class="form-control form-control-sm" readonly>
+                                                    <input id="txtIDReceta" type="text" class="form-control form-control-sm" style="display:none" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class='col-md-3'>
+                                                <div class="row">
+                                                    <div class="col-11 p-0">
+                                                        <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnNuevaReceta'><i class='fa fa-plus'></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                    <div class='form-group row'>
+                                        <label class='col-md-3 control-label' for='txtMedicamentoReceta'>Medicamento</label>
+                                        <div class='col-md-9'>
+                                            <div class="row">
+                                                <div class="col-11 p-0">
+                                                    <input id="txtMedicamentoReceta" type="text" class="form-control form-control-sm">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    @*<div class='col-md-3'>
-                                        <div class="row">
-                                            <div class="col-11 p-0">
-                                                <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnNuevaReceta'><i class='fa fa-plus'></i></button>
-                                            </div>
-                                        </div>
-                                    </div>*@
-                                </div>
-                                <div class='form-group row'>
-                                    <label class='col-md-3 control-label' for='txtMedicamentoReceta'>Medicamento</label>
-                                    <div class='col-md-9'>
-                                        <div class="row">
-                                            <div class="col-11 p-0">
-                                                <input id="txtMedicamentoReceta" type="text" class="form-control form-control-sm">
+                                    @*</div>*@
+                                    @*<div class='col-md-3'>*@
+                                    <div class='form-group row'>
+                                        <label class='col-md-3 control-label' for='txtDosisReceta'>Dosis</label>
+                                        <div class='col-md-9'>
+                                            <div class="row">
+                                                <div class="col-11 p-0">
+                                                    <input class='form-control  form-control-sm' placeholder='' id='txtDosisReceta' type='text'>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                @*</div>*@
-                                @*<div class='col-md-3'>*@
-                                <div class='form-group row'>
-                                    <label class='col-md-3 control-label' for='txtDosisReceta'>Dosis</label>
-                                    <div class='col-md-9'>
-                                        <div class="row">
-                                            <div class="col-11 p-0">
-                                                <input class='form-control  form-control-sm' placeholder='' id='txtDosisReceta' type='text'>
+                                    @*</div>
+                                        <div class='col-md-3'>*@
+                                    <div class='form-group row'>
+                                        <label class='col-md-3 control-label' for='txtViaReceta'>Via</label>
+                                        <div class='col-md-9'>
+                                            <div class="row">
+                                                <div class="col-11 p-0">
+                                                    <input class='form-control  form-control-sm' placeholder='' id='txtViaReceta' type='text'>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                @*</div>
-                <div class='col-md-3'>*@
-                                <div class='form-group row'>
-                                    <label class='col-md-3 control-label' for='txtViaReceta'>Via</label>
-                                    <div class='col-md-9'>
-                                        <div class="row">
-                                            <div class="col-11 p-0">
-                                                <input class='form-control  form-control-sm' placeholder='' id='txtViaReceta' type='text'>
+                                    @*</div>*@
+                                    @*</div>*@
+                                    @*<div class='row'>*@
+                                    @*<div class='col-md-6'>*@
+                                    <div class='form-group row'>
+                                        <label class='col-md-3 control-label' for='txtFrecuenciaReceta'>Frecuencia</label>
+                                        <div class='col-md-9'>
+                                            <div class="row">
+                                                <div class="col-11 p-0">
+                                                    <input id="txtFrecuenciaReceta" type="text" class="form-control form-control-sm">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                @*</div>*@
-                                @*</div>*@
-                                @*<div class='row'>*@
-                                @*<div class='col-md-6'>*@
-                                <div class='form-group row'>
-                                    <label class='col-md-3 control-label' for='txtFrecuenciaReceta'>Frecuencia</label>
-                                    <div class='col-md-9'>
-                                        <div class="row">
-                                            <div class="col-11 p-0">
-                                                <input id="txtFrecuenciaReceta" type="text" class="form-control form-control-sm">
+                                    @*</div>
+                                        <div class='col-md-3'>*@
+                                    <div class='form-group row'>
+                                        <label class='col-md-3 control-label' for='txtDuracionReceta'>Duracion</label>
+                                        <div class='col-md-9'>
+                                            <div class="row">
+                                                <div class="col-11 p-0">
+                                                    <input class='form-control  form-control-sm' placeholder='' id='txtDuracionReceta' type='text'>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    @*</div>
+                                        <div class='col-md-3'>*@
+                                    <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnCancelarReceta'>Cancelar</button>
+                                    <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarReceta'>Agregar</button>
+                                    @*<button type='button' class='btn btn-info pull-right waves-effect waves-light' id='btnImprimirReceta'>Imprimir</button>*@
+                                    @*</div>*@
+                                    @*</div>*@
                                 </div>
-                                @*</div>
-                <div class='col-md-3'>*@
-                                <div class='form-group row'>
-                                    <label class='col-md-3 control-label' for='txtDuracionReceta'>Duracion</label>
-                                    <div class='col-md-9'>
-                                        <div class="row">
-                                            <div class="col-11 p-0">
-                                                <input class='form-control  form-control-sm' placeholder='' id='txtDuracionReceta' type='text'>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @*</div>
-                <div class='col-md-3'>*@
-                                <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnCancelarReceta'>Cancelar</button>
-                                <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarReceta'>Agregar</button>
-                                @*<button type='button' class='btn btn-info pull-right waves-effect waves-light' id='btnImprimirReceta'>Imprimir</button>*@
-                                @*</div>*@
-                                @*</div>*@
                             </div>
-                        </div>
                             <div class="col-md-6">
                                 <div class="col-12 col-md-12" id="tablaReceta">
                                     <div class="card-body">
@@ -471,16 +476,16 @@
             </div>
         </div>
         @*<hr />
-        <div class="row">
-        <h5 style="padding-left:30px;">MOTIVO DE CONSULTA</h5>
-        <div class="col-md-12" style="padding-left:30px;">
-        <div class="row">
-        <div class='col-md-12'>
-        <textarea class='form-control  form-control-sm vald' placeholder='' id='txtMotivoConsulta' rows="4"></textarea>
-        </div>
-        </div>
-        </div>
-        </div>*@
+            <div class="row">
+            <h5 style="padding-left:30px;">MOTIVO DE CONSULTA</h5>
+            <div class="col-md-12" style="padding-left:30px;">
+            <div class="row">
+            <div class='col-md-12'>
+            <textarea class='form-control  form-control-sm vald' placeholder='' id='txtMotivoConsulta' rows="4"></textarea>
+            </div>
+            </div>
+            </div>
+            </div>*@
         <hr />
         <div class="row">
             <div class='col-md-12'>
@@ -1223,191 +1228,191 @@
         </div>
     </div>
     @*<div class="card col-sm-12">
-    <div class="card-body p-t-5 p-b-5">
-    <h5>ATENCION MEDICA</h5>
-    <div class='row'>
-    <div class='col-md-4'>
-    <div class='form-group row' style="display:none;">
-    <label class='col-sm-3 control-label' for='txtID'>idAtencion</label>
-    <div class='col-sm-9'>
-    <input class='form-control  form-control-sm' placeholder='' id='txtID' type='text'>
-    </div>
-    </div>
-    <div class='form-group row'>
-    <label class="col-md-2 control-label" for="txtCita">Cita</label>
-    <div class="col-md-8 row">
-    <input id="txtCita" type="text" class="form-control form-control-sm" readonly>
-    </div>
-    <button id="btnModalCita" type="button" class="btn btn-info btn-sm pr-2 pr-2">
-    <i class="pg-arrow_down"></i>
-    </button>
-    </div>
-    </div>
-    <div class='col-md-8'>
-    <div class='form-group row'>
-    <label class='col-md-2 control-label' for='txtMedico'>Medico</label>
-    <div class='col-md-10'>
-    <div class="row">
-    <div class="col-11 p-0">
-    <input id="txtMedico" type="text" class="form-control form-control-sm" readonly>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <hr />
-    <div class="row">
-    <h5 style="padding-left:30px;">PLAN TERAPEUTICO</h5>
-    <div class="col-md-12" style="padding-left:30px;">
-    <div class="row">
-    <div class='col-md-12'>
-    <textarea class='form-control  form-control-sm vald' placeholder='' id='txtMotivoConsulta' rows="4"></textarea>
-    </div>
-    </div>
-    </div>
-    </div>
-    <hr />
-    <div class="card-body p-t-5 p-b-5">
-    <h5>RECETA MEDICA</h5>
-    <div class='row'>
-    <div class='col-md-6'>
-    <div class='form-group row'>
-    <label class='col-md-3 control-label' for='txtMedicamento'>Medicamento</label>
-    <div class='col-md-9'>
-    <div class="row">
-    <div class="col-11 p-0">
-    <input id="txtMedicamento" type="text" class="form-control form-control-sm">
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class='col-md-3'>
-    <div class='form-group row'>
-    <label class='col-md-4 control-label' for='txtDosis'>Dosis</label>
-    <div class='col-md-8'>
-    <input class='form-control  form-control-sm' placeholder='' id='txtDosis' type='text'>
-    </div>
-    </div>
-    </div>
-    <div class='col-md-3'>
-    <div class='form-group row'>
-    <label class='col-md-4 control-label' for='txtVia'>Via</label>
-    <div class='col-md-8'>
-    <input class='form-control  form-control-sm' placeholder='' id='txtVia' type='text'>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class='row'>
-    <div class='col-md-6'>
-    <div class='form-group row'>
-    <label class='col-md-3 control-label' for='txtFrecuencia'>Frecuencia</label>
-    <div class='col-md-3'>
-    <div class="row">
-    <div class="col-11 p-0">
-    <input id="txtFrecuencia" type="text" class="form-control form-control-sm">
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class='col-md-3'>
-    <div class='form-group row'>
-    <label class='col-md-4 control-label' for='txtDuracion'>Duracion</label>
-    <div class='col-md-8'>
-    <input class='form-control  form-control-sm' placeholder='' id='txtDuracion' type='text'>
-    </div>
-    </div>
-    </div>
-    <div class='col-md-3'>
-    <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarReceta'>Agregar</button>
-    </div>
-    </div>
-    <div class="col-12 col-md-12" id="tablaReceta">
-    <div class="card-body">
-    <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
-    </div>
-    <div class="table-responsive" style="height:150px;">
-    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
-    <div class="col-12 col-md-1" style="display:none;">
-    <label></label>
-    </div>
-    <div class="col-md-4">
-    <label>Medicamento</label>
-    </div>
-    <div class="col-md-2">
-    <label>Dosis</label>
-    </div>
-    <div class="col-md-2">
-    <label>Via</label>
-    </div>
-    <div class="col-md-2">
-    <label>Frecuencia</label>
-    </div>
-    <div class="col-md-2">
-    <label>Duracion</label>
-    </div>
-    </div>
-    <div class="" id="tb_DetalleReceta">
+        <div class="card-body p-t-5 p-b-5">
+        <h5>ATENCION MEDICA</h5>
+        <div class='row'>
+        <div class='col-md-4'>
+        <div class='form-group row' style="display:none;">
+        <label class='col-sm-3 control-label' for='txtID'>idAtencion</label>
+        <div class='col-sm-9'>
+        <input class='form-control  form-control-sm' placeholder='' id='txtID' type='text'>
+        </div>
+        </div>
+        <div class='form-group row'>
+        <label class="col-md-2 control-label" for="txtCita">Cita</label>
+        <div class="col-md-8 row">
+        <input id="txtCita" type="text" class="form-control form-control-sm" readonly>
+        </div>
+        <button id="btnModalCita" type="button" class="btn btn-info btn-sm pr-2 pr-2">
+        <i class="pg-arrow_down"></i>
+        </button>
+        </div>
+        </div>
+        <div class='col-md-8'>
+        <div class='form-group row'>
+        <label class='col-md-2 control-label' for='txtMedico'>Medico</label>
+        <div class='col-md-10'>
+        <div class="row">
+        <div class="col-11 p-0">
+        <input id="txtMedico" type="text" class="form-control form-control-sm" readonly>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <hr />
+        <div class="row">
+        <h5 style="padding-left:30px;">PLAN TERAPEUTICO</h5>
+        <div class="col-md-12" style="padding-left:30px;">
+        <div class="row">
+        <div class='col-md-12'>
+        <textarea class='form-control  form-control-sm vald' placeholder='' id='txtMotivoConsulta' rows="4"></textarea>
+        </div>
+        </div>
+        </div>
+        </div>
+        <hr />
+        <div class="card-body p-t-5 p-b-5">
+        <h5>RECETA MEDICA</h5>
+        <div class='row'>
+        <div class='col-md-6'>
+        <div class='form-group row'>
+        <label class='col-md-3 control-label' for='txtMedicamento'>Medicamento</label>
+        <div class='col-md-9'>
+        <div class="row">
+        <div class="col-11 p-0">
+        <input id="txtMedicamento" type="text" class="form-control form-control-sm">
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class='col-md-3'>
+        <div class='form-group row'>
+        <label class='col-md-4 control-label' for='txtDosis'>Dosis</label>
+        <div class='col-md-8'>
+        <input class='form-control  form-control-sm' placeholder='' id='txtDosis' type='text'>
+        </div>
+        </div>
+        </div>
+        <div class='col-md-3'>
+        <div class='form-group row'>
+        <label class='col-md-4 control-label' for='txtVia'>Via</label>
+        <div class='col-md-8'>
+        <input class='form-control  form-control-sm' placeholder='' id='txtVia' type='text'>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class='row'>
+        <div class='col-md-6'>
+        <div class='form-group row'>
+        <label class='col-md-3 control-label' for='txtFrecuencia'>Frecuencia</label>
+        <div class='col-md-3'>
+        <div class="row">
+        <div class="col-11 p-0">
+        <input id="txtFrecuencia" type="text" class="form-control form-control-sm">
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class='col-md-3'>
+        <div class='form-group row'>
+        <label class='col-md-4 control-label' for='txtDuracion'>Duracion</label>
+        <div class='col-md-8'>
+        <input class='form-control  form-control-sm' placeholder='' id='txtDuracion' type='text'>
+        </div>
+        </div>
+        </div>
+        <div class='col-md-3'>
+        <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarReceta'>Agregar</button>
+        </div>
+        </div>
+        <div class="col-12 col-md-12" id="tablaReceta">
+        <div class="card-body">
+        <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+        </div>
+        <div class="table-responsive" style="height:150px;">
+        <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+        <div class="col-12 col-md-1" style="display:none;">
+        <label></label>
+        </div>
+        <div class="col-md-4">
+        <label>Medicamento</label>
+        </div>
+        <div class="col-md-2">
+        <label>Dosis</label>
+        </div>
+        <div class="col-md-2">
+        <label>Via</label>
+        </div>
+        <div class="col-md-2">
+        <label>Frecuencia</label>
+        </div>
+        <div class="col-md-2">
+        <label>Duracion</label>
+        </div>
+        </div>
+        <div class="" id="tb_DetalleReceta">
 
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <hr />
-    <div class="card-body p-t-5 p-b-5">
-    <h5 style="padding-left:0px;">EVOLUCION</h5>
-    <div class='row'>
-    <div class="col-md-4">
-    <div class='form-group row'>
-    <label class='col-md-5 control-label' for='txtFechaEvolucion'>Fecha </label>
-    <div class='col-md-7'>
-    <input class='form-control cf form-control-sm' placeholder='' id='txtFechaEvolucion' type='text'>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class='row'>
-    <div class="col-md-10">
-    <div class='form-group row'>
-    <label class='col-md-2 control-label' for='txtEvolucion'>Descripcion</label>
-    <div class='col-md-10'>
-    <textarea class='form-control  form-control-sm' placeholder='' id='txtDescripcionEvolucion' rows="2"></textarea>
-    </div>
-    </div>
-    </div>
-    <div class='col-md-2'>
-    <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarEvolucion'>Agregar</button>
-    </div>
-    </div>
-    <div class="col-12 col-md-12" id="tablaEvolucion">
-    <div class="card-body">
-    <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
-    </div>
-    <div class="table-responsive" style="height:150px;">
-    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
-    <div class="col-12 col-md-1" style="display:none;">
-    <label></label>
-    </div>
-    <div class="col-md-2">
-    <label>Fecha</label>
-    </div>
-    <div class="col-md-10">
-    <label>Evolucion</label>
-    </div>
-    </div>
-    <div class="" id="tb_HC_Evolucion">
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <hr />
+        <div class="card-body p-t-5 p-b-5">
+        <h5 style="padding-left:0px;">EVOLUCION</h5>
+        <div class='row'>
+        <div class="col-md-4">
+        <div class='form-group row'>
+        <label class='col-md-5 control-label' for='txtFechaEvolucion'>Fecha </label>
+        <div class='col-md-7'>
+        <input class='form-control cf form-control-sm' placeholder='' id='txtFechaEvolucion' type='text'>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class='row'>
+        <div class="col-md-10">
+        <div class='form-group row'>
+        <label class='col-md-2 control-label' for='txtEvolucion'>Descripcion</label>
+        <div class='col-md-10'>
+        <textarea class='form-control  form-control-sm' placeholder='' id='txtDescripcionEvolucion' rows="2"></textarea>
+        </div>
+        </div>
+        </div>
+        <div class='col-md-2'>
+        <button type='button' class='btn btn-cyan pull-right waves-effect waves-light' id='btnAgregarEvolucion'>Agregar</button>
+        </div>
+        </div>
+        <div class="col-12 col-md-12" id="tablaEvolucion">
+        <div class="card-body">
+        <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
+        </div>
+        <div class="table-responsive" style="height:150px;">
+        <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
+        <div class="col-12 col-md-1" style="display:none;">
+        <label></label>
+        </div>
+        <div class="col-md-2">
+        <label>Fecha</label>
+        </div>
+        <div class="col-md-10">
+        <label>Evolucion</label>
+        </div>
+        </div>
+        <div class="" id="tb_HC_Evolucion">
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
 
-    </div>*@
+        </div>*@
 </div>
 
 <!---->
@@ -1441,7 +1446,7 @@
                         </div>
                         @*<div id="scrollArea" class="clusterize-scroll">
 
-                        </div>*@
+                            </div>*@
                     </div>
                 </div>
             </div>
@@ -1484,5 +1489,5 @@
     </div>
 </div>
 
-<script src='~/Scripts/app.js'></script>
+@Scripts.Render("~/bundles/basics")
 <script src='~/Scripts/LabMedica/HistoriaClinica.js'></script>

@@ -4,6 +4,10 @@
     @Html.Raw("</script>");
 }
 }
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
 <div class="content-header row">
     <div class="content-header-left col-md-6 col-12 mb-2">
         <h3 class="content-header-title mb-0">Citas</h3>
@@ -28,7 +32,7 @@
                 <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
                 <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
                     <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
-                    <a  class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
                 </div>
             </div>
         </div>

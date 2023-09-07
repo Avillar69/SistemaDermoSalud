@@ -1,8 +1,13 @@
-﻿@{if (Session["Config"] == null)
+﻿@using System.Web.Optimization;
+@{if (Session["Config"] == null)
     { @Html.Raw("<script>");
-        @Html.Raw("location.href=window.location.origin+'/Home/Login';");
-        @Html.Raw("</script>");
-    }
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
 }
 <style>
     .floatThead-wrapper {
@@ -80,14 +85,14 @@
                         <div class="col-md-1">
                         </div>
                         <div class="col-md-4 col-12 p-0">
-                            <div class='form-group row m-b-5 p-l-10'>                                
+                            <div class='form-group row m-b-5 p-l-10'>
                                 <div class="col-12 col-md-9">
                                     <label for="chkFacturas" class="control-label col-md-3 m-t-5">Ticket</label>
                                     <input type="checkbox" id="chkTicket" class="input-group-sm" />
                                     @*<label for="chkBoletas" class="control-label col-md-3 m-t-5">Sin Ticket</label>
-                                    <input type="checkbox" id="chkSinTicket" class="input-group-sm"/>*@
+                                        <input type="checkbox" id="chkSinTicket" class="input-group-sm"/>*@
                                     @*<label for="chkTickets" class="control-label col-md-3 m-t-5">Tickets</label>
-                                    <input type="checkbox" id="chkTickets" class="input-group-sm"/>*@
+                                        <input type="checkbox" id="chkTickets" class="input-group-sm"/>*@
                                 </div>
                             </div>
                         </div>
@@ -122,6 +127,7 @@
     </div>
 </div>
 
-<script src="~/Scripts/app.js"></script>
+
+@Scripts.Render("~/bundles/basics")
 <script src='~/Scripts/Reportes/RegistroVentas.js'></script>
 

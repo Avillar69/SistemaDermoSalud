@@ -20,7 +20,7 @@ var txtValor;//input para obtener el valor
 console.log("ingresando a aaaar");
 //Inicializando
 var Tipo = "TRANSFERENCIA_ENTRADA";//Transferencia
-var url = "OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
+var url = "/ObtenerDatos?Tipo=" + Tipo;
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 reziseTabla();

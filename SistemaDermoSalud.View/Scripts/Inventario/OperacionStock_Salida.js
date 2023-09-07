@@ -19,7 +19,7 @@ var txtValor;//input para obtener el valor
 
 //Inicializando
 var Tipo = "SALIDA";//Salida
-var url = "OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
+var url = "/ObtenerDatos?Tipo=" + Tipo;
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 reziseTabla();

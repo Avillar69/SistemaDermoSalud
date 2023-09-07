@@ -1,8 +1,13 @@
-﻿@{if (Session["Config"] == null)
+﻿@using System.Web.Optimization;
+@{if (Session["Config"] == null)
     { @Html.Raw("<script>");
     @Html.Raw("location.href=window.location.origin+'/Home/Login';");
     @Html.Raw("</script>");
 }
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
 }
 <style>
     .floatThead-wrapper {
@@ -279,7 +284,7 @@
                                 <div class="col-md-10">
                                     <div class="row">
                                         <div class="col-11 p-0">
-                                            <input id="txtDireccion" type="text" class="form-control form-control-sm" >
+                                            <input id="txtDireccion" type="text" class="form-control form-control-sm">
                                         </div>
                                         <button id="btnModalDireccion" type="button" tabindex="9" class="btn btn-info btn-sm pr-1 pl-1">
                                             <i class="fa fa-ellipsis-v"></i>
@@ -402,7 +407,7 @@
                                 <div class="col-md-10">
                                     <div class="row">
                                         <div class="col-12 p-0">
-                                            <input id="txtOtroServicio" type="text" class="form-control form-control-sm" >
+                                            <input id="txtOtroServicio" type="text" class="form-control form-control-sm">
                                         </div>
                                     </div>
                                 </div>
@@ -412,7 +417,7 @@
                             <div class='form-group row m-b-5 p-l-10'>
                                 <label for='txtTotalOtroServicio' class="control-label col-sm-6">Total</label>
                                 <div class="col-sm-6 p-0">
-                                    <input id='txtTotalOtroServicio' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)" >
+                                    <input id='txtTotalOtroServicio' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
                                 </div>
                             </div>
                         </div>
@@ -720,21 +725,21 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>      
-                        
-                            <div class="col-12 col-md-10" id="divObservacionCaja">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label for='txtObservacionCaja' class="control-label col-md-4">Observación</label>
-                                    <div class="col-sm-8">
-                                        <div class="row">
-                                            <div class="col-10 p-0">
-                                                <textarea rows="2" class="form-control form-control-sm" id="txtObservacionCaja"></textarea>
-                                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-10" id="divObservacionCaja">
+                            <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtObservacionCaja' class="control-label col-md-4">Observación</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-10 p-0">
+                                            <textarea rows="2" class="form-control form-control-sm" id="txtObservacionCaja"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                                          
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -746,8 +751,7 @@
     </div>
 </div>
 
-
-<script src="~/Scripts/app.js"></script>
+@Scripts.Render("~/bundles/basics")
 <script src="~/Scripts/Ventas/DocVenta.js"></script>
 
 
