@@ -16,7 +16,11 @@ namespace SistemaDermoSalud.View.Controllers.Mantenimiento
         // GET: Articulo
         public ActionResult Index()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
 
         public string ObtenerDatos(string Activo = "")

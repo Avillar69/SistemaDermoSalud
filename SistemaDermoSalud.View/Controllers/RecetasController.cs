@@ -14,7 +14,11 @@ namespace SistemaDermoSalud.View.Controllers
         // GET: Recetas
         public ActionResult Index()
         {
-            return View();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
         public string ObtenerDatos()
         {

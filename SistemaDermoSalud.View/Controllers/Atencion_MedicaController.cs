@@ -14,7 +14,11 @@ namespace SistemaDermoSalud.View.Controllers
         // GET: Atencion_Medica
         public ActionResult Index()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
         public string ListaCitas(int idPaciente)
         {

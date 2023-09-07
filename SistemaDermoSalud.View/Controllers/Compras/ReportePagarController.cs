@@ -16,7 +16,11 @@ namespace SistemaDermoSalud.View.Controllers.Compras
         // GET: ReportePagar
         public ActionResult Index()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
 
 

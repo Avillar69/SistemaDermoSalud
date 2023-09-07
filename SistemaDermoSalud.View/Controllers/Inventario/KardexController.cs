@@ -17,7 +17,11 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
         // GET: Kardex
         public ActionResult Index()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
         public string BuscarKardex(string fI, string fF, int iC, int iA)
         {

@@ -15,7 +15,11 @@ namespace SistemaDermoSalud.View.Controllers.Finanzas
         // GET: TipoCambio
         public ActionResult Index()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
 
         public string ObtenerDatos()

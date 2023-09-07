@@ -23,7 +23,11 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
         // GET: CuentaCobrar
         public ActionResult Index()
         {
-            return View();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
 
 
