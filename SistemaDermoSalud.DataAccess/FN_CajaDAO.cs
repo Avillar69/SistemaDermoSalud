@@ -380,7 +380,23 @@ namespace SistemaDermoSalud.DataAccess
             return oResultDTO;
         }
 
-
+        public int ValidarCajaAperturada()
+        {
+            using (SqlConnection cn = new Conexion().conectar())
+            {
+                try
+                {
+                    cn.Open();
+                    SqlDataAdapter da = new SqlDataAdapter("SP_COM_Validar_Caja_Aperturada", cn);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;               
+                    var nrocaja = da.SelectCommand.ExecuteScalar();
+                    return Convert.ToInt32(nrocaja);                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
 
     }
 }

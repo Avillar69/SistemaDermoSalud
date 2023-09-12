@@ -117,30 +117,38 @@ function listar() {
         }
     }
 }
+function rptaValidacion(m) {
+    if (m == 1) {
+        show_hidden_Formulario(true);
+        lblTituloPanel.innerHTML = "Nuevo Documento de Venta";
+        gbi("txtTipoVenta").focus();
+        gbi("cboNroSerie").style.display = "";
+        gbi("txtNroSerie").style.display = "none";
+        gbi("divArticulos").style.display = "";
+        gbi("btnGrabar").style.display = "";
+        gbi("tb_DetalleF").innerHTML = "";
+        gbi("tb_DetalleServicio").innerHTML = "";
+        var url = 'TipoCambio/ObtenerDatosTipoCambio?fecha=' + gbi("txtFecha").value;
+        enviarServidor(url, CargarTipoCambio);
+        gbi("txtTipoCambio").readOnly = false;
+        gbi("txtDescuentoPrincipal").readOnly = false;
+        gbi("txtFecha").readOnly = false;
+        gbi("cboTipoAfectacion").disabled = false;
+        gbi("txtObservacion").readOnly = false;
+        adc(listaMoneda, 1, "txtMoneda", 1);
+        adc(listaFormaPago, 2, "txtFormaPago", 1);
+        gbi("btnEnviarSunat").style.display = "none";
+    } else {
+        swal('Error', 'Debe aperturar una caja para ingresar ventas', 'error');
+    }
+}
 function mostrarDetalle(opcion, id) {
     var lblTituloPanel = document.getElementById('lblTituloPanel');
     limpiarTodo();
     switch (opcion) {
         case 1:
-            show_hidden_Formulario(true);
-            lblTituloPanel.innerHTML = "Nuevo Documento de Venta";
-            gbi("txtTipoVenta").focus();
-            gbi("cboNroSerie").style.display = "";
-            gbi("txtNroSerie").style.display = "none";
-            gbi("divArticulos").style.display = "";
-            gbi("btnGrabar").style.display = "";
-            gbi("tb_DetalleF").innerHTML = "";
-            gbi("tb_DetalleServicio").innerHTML = "";
-            var url = 'TipoCambio/ObtenerDatosTipoCambio?fecha=' + gbi("txtFecha").value;
-            enviarServidor(url, CargarTipoCambio);
-            gbi("txtTipoCambio").readOnly = false;
-            gbi("txtDescuentoPrincipal").readOnly = false;
-            gbi("txtFecha").readOnly = false;
-            gbi("cboTipoAfectacion").disabled = false;
-            gbi("txtObservacion").readOnly = false;
-            adc(listaMoneda, 1, "txtMoneda", 1);
-            adc(listaFormaPago, 2, "txtFormaPago", 1);
-            gbi("btnEnviarSunat").style.display = "none";
+            enviarServidorPost("caja/ValidarCajaAperturada", rptaValidacion);
+            
             break;
         case 2:
             lblTituloPanel.innerHTML = "Editar Documento de Venta";//Titulo Modificar

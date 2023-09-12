@@ -50,6 +50,9 @@ namespace SistemaDermoSalud.Business
         {
             return oFN_CajaDAO.CerrarCaja(oFN_CajaDTO);
         }
-
+        public int ValidarCajaAperturada()
+        {
+            return oFN_CajaDAO.ValidarCajaAperturada();
+        }
     }
 }

@@ -62,8 +62,8 @@ namespace SistemaDermoSalud.DataAccess
                     cn.Open();
                     SqlDataAdapter da = new SqlDataAdapter("SP_INV_Stock_ListarxAlmacen", cn);
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
-                    da.SelectCommand.Parameters.AddWithValue("@idAlmacen", idAlmacen);
-                    da.SelectCommand.Parameters.AddWithValue("@idEmpresa", idEmpresa);
+                    //da.SelectCommand.Parameters.AddWithValue("@idAlmacen", idAlmacen);
+                    //da.SelectCommand.Parameters.AddWithValue("@idEmpresa", idEmpresa);
                     SqlDataReader dr = da.SelectCommand.ExecuteReader();
                     while (dr.Read())
                     {

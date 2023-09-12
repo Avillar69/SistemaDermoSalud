@@ -250,6 +250,10 @@ namespace MubaplastERP.Controllers.Finanzas
             string listaBancos = Serializador.rSerializado(lbeMa_BancoDTO.ListaResultado, new string[] { "idBanco", "Descripcion" });
             return String.Format("{0}↔{1}↔{2}↔{3}↔{4}↔{5}", lbeFN_CajaDetalleDTO.Resultado, lbeFN_CajaDetalleDTO.MensajeError, listaCaja_Detalle, listaConceptos, listaEmpleados, listaBancos);
         }
-
+        public int ValidarCajaAperturada()
+        {
+            FN_CajaBL oFN_CajaBL=new FN_CajaBL();
+           return oFN_CajaBL.ValidarCajaAperturada();
+        }
     }
 }

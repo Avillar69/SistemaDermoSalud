@@ -40,7 +40,7 @@ var url = "Compras/ObtenerDatos";
 enviarServidor(url, mostrarLista);
 configBM();
 reziseTabla();
-cfgKP(["txtMoneda", "txtDireccion", "txtRazonSocial", "txtFormaPago", "txtTipoDocumento", "txtTipoCompra"], cfgTMKP);//"txtArticulo",
+cfgKP(["txtMoneda", "txtDireccion", "txtRazonSocial", "txtFormaPago", "txtTipoDocumento", "txtTipoCompra","txtArticulo"], cfgTMKP);
 cfgKP(["txtArticulo", "txtCantidad", "txtPrecio", "txtTotal", "txtNroSerie", "txtNroSerie", "txtNroDocumento", "txtObservacion", "txtDescuento", "txtDescuentoPrincipal", "txtNroComprobante", "txtNroComprobante", "txtFecha", "txtOC"], cfgTKP);
 //configNav();
 function cfgKP(l, m) {
@@ -462,11 +462,11 @@ function cbm(ds, t, tM, tM2, cab, dat, m) {
 }
 //Configurar botones de Modal
 function configBM() {
-    //var btnModalArticulo = document.getElementById("btnModalArticulo");
-    //btnModalArticulo.onclick = function () {
-    //    cbmu("Medicamento", "Medicamento", "txtArticulo", null,
-    //        ["idMedicamentos", "Codigo", "Descripcion", "Laboratorio", "Precio"], ' /OperacionesStock/cargarMedicamento', cargarListaArticulo);
-    //}
+    var btnModalArticulo = document.getElementById("btnModalArticulo");
+    btnModalArticulo.onclick = function () {
+        cbmu("Medicamento", "Medicamento", "txtArticulo", null,
+            ["idMedicamentos", "Codigo", "Descripcion", "Laboratorio", "Precio"], ' /OperacionesStock/cargarMedicamento', cargarListaArticulo);
+    }
 
     var btnFormaPago = document.getElementById("btnModalFormaPago");
     btnFormaPago.onclick = function () {
