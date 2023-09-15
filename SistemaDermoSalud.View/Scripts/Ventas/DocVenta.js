@@ -304,7 +304,7 @@ function configBM() {
             return;
         bDM("txtDireccion");
         cbmu("socio", "Clientes", "txtRazonSocial", "txtNroDocumento",
-            ["idSocioNegocio", "Documento", "Razón Social"], `/SocioNegocio/ObtenerSocioxTipo?tipo=C&idTipoComprobante=${gbi("txtTipoDocumento").dataset.id}`, cargarLista);
+            ["idSocioNegocio", "Documento", "Razón Social","direccion"], `/SocioNegocio/ObtenerSocioxTipo?tipo=C&idTipoComprobante=${gbi("txtTipoDocumento").dataset.id}`, cargarLista);
     }
     var btnMoneda = document.getElementById("btnModalMoneda");
     btnMoneda.onclick = function () {
