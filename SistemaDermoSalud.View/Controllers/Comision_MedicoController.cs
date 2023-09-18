@@ -1,4 +1,4 @@
-﻿using ClosedXML.Excel;
+﻿
 using SistemaDermoSalud.Business;
 using SistemaDermoSalud.Entities;
 using SistemaDermoSalud.Helpers;
@@ -156,78 +156,77 @@ namespace SistemaDermoSalud.View.Controllers
                 return ex.Message;
             }
         }
-        public ActionResult ExportarExcel(string fechaIni, string fechaFin, string med)
-        {
-            try
-            {
-                string temp = Session["listaCM"].ToString();
-                var lista = temp.Split('~');
-                var workbook = new XLWorkbook();
-                //string[] header = cabecera.Split(',');
-                //foreach (var item in ld)
-                //{
-                //    var ldd = DetraccionBE.Where(obj => obj.Articulo == item);
-                //}
-                var worksheet = workbook.Worksheets.Add("Pagina1");
+        //public ActionResult ExportarExcel(string fechaIni, string fechaFin, string med)
+        //{
+        //    try
+        //    {
+        //        string temp = Session["listaCM"].ToString();
+        //        var lista = temp.Split('~');
+        //        var workbook = new XLWorkbook();
+        //        //string[] header = cabecera.Split(',');
+        //        //foreach (var item in ld)
+        //        //{
+        //        //    var ldd = DetraccionBE.Where(obj => obj.Articulo == item);
+        //        //}
+        //        var worksheet = workbook.Worksheets.Add("Pagina1");
 
-                //worksheet.Cell("N12").Value = DetraccionBE[0].StockInicial;
-                int startx = 4;
-                int starty = 0;
-                //worksheet.Cell()
-                //decimal ac = DetraccionBE[0].StockInicial;
-                worksheet.Cell(1, 1).Value = "Doctor(a):";
-                worksheet.Cell(1, 2).Value = med;
-                worksheet.Cell(1, 2).Style.Font.Bold = true;
-                worksheet.Cell("B3").Value = "SERVICIO";
-                worksheet.Cell("C3").Value = "N°";
-                worksheet.Cell("D3").Value = "COSTO";
-                worksheet.Cell("E3").Value = "GASTOS";
-                worksheet.Cell("F3").Value = "DIFERENCIA";
-                worksheet.Cell("G3").Value = "PORCENTAJE";
-                worksheet.Cell("H3").Value = "COMISION";
-                //worksheet.Cell("D3:J3").Style.Font.Bold = true;
-                worksheet.Range("B3", "H3").Style.Font.Bold = true;
+        //        //worksheet.Cell("N12").Value = DetraccionBE[0].StockInicial;
+        //        int startx = 4;
+        //        int starty = 0;
+        //        //worksheet.Cell()
+        //        //decimal ac = DetraccionBE[0].StockInicial;
+        //        worksheet.Cell(1, 1).Value = "Doctor(a):";
+        //        worksheet.Cell(1, 2).Value = med;
+        //        worksheet.Cell(1, 2).Style.Font.Bold = true;
+        //        worksheet.Cell("B3").Value = "SERVICIO";
+        //        worksheet.Cell("C3").Value = "N°";
+        //        worksheet.Cell("D3").Value = "COSTO";
+        //        worksheet.Cell("E3").Value = "GASTOS";
+        //        worksheet.Cell("F3").Value = "DIFERENCIA";
+        //        worksheet.Cell("G3").Value = "PORCENTAJE";
+        //        worksheet.Cell("H3").Value = "COMISION";
+        //        //worksheet.Cell("D3:J3").Style.Font.Bold = true;
+        //        worksheet.Range("B3", "H3").Style.Font.Bold = true;
 
 
-                for (int i = 0; i < lista.Length - 1; i++)
-                {
-                    var obj = lista[i].Split('®');
-                    for (int j = 0; j < obj.Length - 1; j++)
-                    {
-                        if (j == 0 || j == 1)
-                        {
+        //        for (int i = 0; i < lista.Length - 1; i++)
+        //        {
+        //            var obj = lista[i].Split('®');
+        //            for (int j = 0; j < obj.Length - 1; j++)
+        //            {
+        //                if (j == 0 || j == 1)
+        //                {
                            
-                        }
-                        else 
-                        {
-                            worksheet.Cell(i + startx, j + starty).Value = "'" + obj[j];
-                        }                     
-                    }
-                }
+        //                }
+        //                else 
+        //                {
+        //                    worksheet.Cell(i + startx, j + starty).Value = "'" + obj[j];
+        //                }                     
+        //            }
+        //        }
 
+        //        worksheet.Columns().AdjustToContents();
+        //        worksheet.Columns().CellsUsed().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+        //        worksheet.Columns().CellsUsed().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
 
-                worksheet.Columns().AdjustToContents();
-                worksheet.Columns().CellsUsed().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                worksheet.Columns().CellsUsed().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+        //        Response.Clear();
+        //        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        //        Response.AddHeader("content-disposition", "attachment;filename=Comision Medico"+med+" Fecha" + fechaIni +
+        //                           " al " + fechaFin + ".xlsx");
 
-                Response.Clear();
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=Comision Medico"+med+" Fecha" + fechaIni +
-                                   " al " + fechaFin + ".xlsx");
-
-                using (var memoryStream = new MemoryStream())
-                {
-                    workbook.SaveAs(memoryStream);
-                    memoryStream.WriteTo(Response.OutputStream);
-                }
-                Response.End();
-                return View(Response);
-            }
-            catch (Exception ex)
-            {
-                return View(ex.Message);
-            }
-        }
+        //        using (var memoryStream = new MemoryStream())
+        //        {
+        //            workbook.SaveAs(memoryStream);
+        //            memoryStream.WriteTo(Response.OutputStream);
+        //        }
+        //        Response.End();
+        //        return View(Response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return View(ex.Message);
+        //    }
+        //}
 
     }
 }
