@@ -22,7 +22,7 @@ var url = "DocumentoVenta/ObtenerDatos";
 enviarServidor(url, mostrarLista);
 configBM();
 reziseTabla();
-cfgKP(["txtTipoDocumento", "txtTipoVenta", "txtRazonSocial", "txtDireccion", "txtMoneda", "txtFormaPago", "txtArticulo", "txtCita"], cfgTMKP);//"txtCategoria", solo para los q tienen boton
+cfgKP(["txtTipoDocumento", "txtRazonSocial", "txtDireccion", "txtMoneda", "txtFormaPago", "txtArticulo", "txtCita"], cfgTMKP);//"txtCategoria", solo para los q tienen boton
 cfgKP(["txtCantidad", "txtPrecio", "txtTotal", "txtNroDocumento", "txtObservacion", "txtDescuento", "txtNroComprobante", "txtFecha", "txtTipoCambio", "txtDescuentoPrincipal"], cfgTKP);
 //configNav();
 function cfgKP(l, m) {
@@ -82,11 +82,7 @@ function mostrarLista(rpta) {
                 cbm("tipodocumento", "Tipo de Documento", "txtTipoDocumento", null,
                     ["idTipoComprobante", "Descripción"], listaComprobantes, cargarSinXR);
             }
-            var btnTipoVenta = document.getElementById("btnModalTipoVenta");
-            btnTipoVenta.onclick = function () {
-                cbm("tipoventa", "Tipo de Venta", "txtTipoVenta", null,
-                    ["id", "Código", "Descripción"], listaTipoVenta, cargarSinXR);
-            }
+      
 
         }
         else {
@@ -138,19 +134,26 @@ function rptaValidacion(m) {
         adc(listaMoneda, 1, "txtMoneda", 1);
         adc(listaFormaPago, 2, "txtFormaPago", 1);
         gbi("btnEnviarSunat").style.display = "none";
+        console.log("si entro");
+        gbi("txtTipoVenta").value = "PRODUCTOS";
+        gbi("txtTipoVenta").dataset.id = "1";
+        gbi("txtRazonSocial").value = "CLIENTES VARIOS";
+        gbi("txtRazonSocial").dataset.id == "131351";
+        gb("txtNroDocumento").value = "00000000";
+        gb("txtDireccionA").value = "-";
     } else {
         swal('Error', 'Debe aperturar una caja para ingresar ventas', 'error');
     }
 }
 function mostrarDetalle(opcion, id) {
     var lblTituloPanel = document.getElementById('lblTituloPanel');
-    limpiarTodo();
     switch (opcion) {
         case 1:
+            limpiarTodo();
             enviarServidorPost("caja/ValidarCajaAperturada", rptaValidacion);
-            
             break;
         case 2:
+            limpiarTodo();
             lblTituloPanel.innerHTML = "Editar Documento de Venta";//Titulo Modificar
             TraerDetalle(id);
             BloquearDetalle();
@@ -1344,12 +1347,11 @@ function limpiarTodo() {
     bDM("txtID");
     bDM("txtTipoCambio");
     bDM("txtCita");
-    bDM("txtTipoVenta");
+
     bDM("txtTipoDocumento");
     gbi("cboNroSerie").value = "";
     bDM("txtNroComprobante");
     bDM("txtRazonSocial");
-    limpiarControl("txtNroDocumento");
     limpiarControl("txtNroDocumento");
     bDM("txtDireccion");
     bDM("txtMoneda");

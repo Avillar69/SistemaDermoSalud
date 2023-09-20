@@ -247,7 +247,6 @@
     <Content Include="app-assets\images\gallery\9.jpg" />
     <Content Include="app-assets\images\ico\apple-icon-120.png" />
     <Content Include="app-assets\images\logo\logo-dark.png" />
-    <Content Include="app-assets\images\logo\logo-dark22.png" />
     <Content Include="app-assets\images\logo\stack-80x80.png" />
     <Content Include="app-assets\images\logo\stack-logo-dark-big.png" />
     <Content Include="app-assets\images\logo\stack-logo-dark.png" />
