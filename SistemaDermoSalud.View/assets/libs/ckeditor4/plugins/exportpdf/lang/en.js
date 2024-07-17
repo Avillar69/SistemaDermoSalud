@@ -1,0 +1,1 @@
+CKEDITOR.plugins.setLang("exportpdf", "en", { documentReady: "El documento esta listo!", error: "Se produjo un error.", processingDocument: "Procesando documento PDF...", toolbar:"Exportar a PDF"});
