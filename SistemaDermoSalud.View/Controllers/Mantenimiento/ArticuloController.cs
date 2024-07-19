@@ -5,8 +5,6 @@ using SistemaDermoSalud.Entities.Mantenimiento;
 using SistemaDermoSalud.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SistemaDermoSalud.View.Controllers.Mantenimiento
@@ -35,7 +33,7 @@ namespace SistemaDermoSalud.View.Controllers.Mantenimiento
             ResultDTO<Ma_ArticuloDTO> oResultDTO = oMa_ArticuloBL.ListarTodo(eSEGUsuario.idEmpresa, Activo);
             ResultDTO<Ma_AlmacenDTO> oResultDTO_Almacen = oMa_AlmacenBL.ListarTodo(eSEGUsuario.idEmpresa, "A");
 
-            ResultDTO<Ma_MarcaDTO> oResultDTO_Marca = oMa_MarcaBL.ListarTodo(eSEGUsuario.idEmpresa, "A");
+            ResultDTO<Ma_MarcaDTO> oResultDTO_Marca = oMa_MarcaBL.ListarTodo(eSEGUsuario.idEmpresa);
             ResultDTO<Ma_CategoriaDTO> oResultDTO_Categoria = oMa_CategoriaBL.ListarTodo(eSEGUsuario.idEmpresa, "A");
             ResultDTO<Ma_UnidadMedidaDTO> oResultDTO_UnidadMedida = oMa_UnidadMedidaBL.ListarTodo(eSEGUsuario.idEmpresa, "A");
             ResultDTO<Ma_Clase_ArticuloDTO> oResultDTO_ClaseArticulo = oMa_Clase_ArticuloBL.ListarTodo(eSEGUsuario.idEmpresa, "A");

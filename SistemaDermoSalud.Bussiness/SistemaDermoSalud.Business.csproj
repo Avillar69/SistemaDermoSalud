@@ -68,13 +68,12 @@
     <Compile Include="HistoriaClinicaBL.cs" />
     <Compile Include="Inventario\KardexBL.cs" />
     <Compile Include="INV_StockBL.cs" />
-    <Compile Include="LaboratorioBL.cs" />
+    <Compile Include="Mantenimiento\Ma_MarcaBL.cs" />
     <Compile Include="Mantenimiento\Ma_AlmacenBL.cs" />
     <Compile Include="Mantenimiento\Ma_ArticuloBL.cs" />
     <Compile Include="Mantenimiento\Ma_CategoriaBL.cs" />
     <Compile Include="Mantenimiento\Ma_EmpresaBL.cs" />
     <Compile Include="Mantenimiento\Ma_LocalBL.cs" />
-    <Compile Include="Mantenimiento\Ma_MarcaBL.cs" />
     <Compile Include="Mantenimiento\Ma_MotivoBL.cs" />
     <Compile Include="Mantenimiento\Ma_SerieBL.cs" />
     <Compile Include="Mantenimiento\Ma_TipoAfectacionBL.cs" />
@@ -92,7 +91,7 @@
     <Compile Include="Ma_UbigeoBL.cs" />
     <Compile Include="Ma_UnidadMedidaBL.cs" />
     <Compile Include="MonedaBL.cs" />
-    <Compile Include="MedicamentoBL.cs" />
+    <Compile Include="Mantenimiento\Ma_ProductoBL.cs" />
     <Compile Include="PacientesBL.cs" />
     <Compile Include="PersonalBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

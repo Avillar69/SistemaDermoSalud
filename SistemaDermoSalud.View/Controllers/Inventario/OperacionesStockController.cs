@@ -193,8 +193,8 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
         {
             string rpta = "";
             string listaMedicamento = "";
-            MedicamentoBL oMedicamentoBL = new MedicamentoBL();
-            ResultDTO<MedicamentoDTO> oResultDTO = new ResultDTO<MedicamentoDTO>();
+            Ma_ProductoBL oMedicamentoBL = new Ma_ProductoBL();
+            ResultDTO<Ma_ProductoDTO> oResultDTO = new ResultDTO<Ma_ProductoDTO>();
             oResultDTO = oMedicamentoBL.ListarTodo(1);
             listaMedicamento = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idMedicamentos", "CodigoMedicamento", "Descripcion", "Laboratorio", "PagoMedicamento" });
             rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMedicamento);
@@ -204,9 +204,9 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
         {
             string rpta = "";
             string listaMedicamento = "";
-            MedicamentoBL oMedicamentoBL = new MedicamentoBL();
-            ResultDTO<MedicamentoDTO> oResultDTO = new ResultDTO<MedicamentoDTO>();
-            oResultDTO = oMedicamentoBL.ListarporLaboratorio(idLab);
+            Ma_ProductoBL oMedicamentoBL = new Ma_ProductoBL();
+            ResultDTO<Ma_ProductoDTO> oResultDTO = new ResultDTO<Ma_ProductoDTO>();
+            oResultDTO = oMedicamentoBL.ListarporMarca(idLab);
             listaMedicamento = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idMedicamentos", "Descripcion" });
             rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMedicamento);
             return rpta;

@@ -4532,7 +4532,7 @@
     <Content Include="Scripts\Configuraciones\Servicios.js" />
     <Content Include="Scripts\Dashboard.js" />
     <Content Include="Scripts\ejem.js" />
-    <Content Include="Scripts\Farmacia\Laboratorio.js" />
+    <Content Include="Scripts\Inventario\Marca.js" />
     <Content Include="Scripts\Farmacia\Medicamento.js" />
     <Content Include="assets\css\app-rtl.min.css.map" />
     <Content Include="assets\css\app.min.css.map" />
@@ -5156,13 +5156,13 @@
     <Compile Include="Controllers\Inventario\ConsultaStockController.cs" />
     <Compile Include="Controllers\Inventario\KardexController.cs" />
     <Compile Include="Controllers\Inventario\OperacionesStockController.cs" />
-    <Compile Include="Controllers\LaboratorioController.cs" />
+    <Compile Include="Controllers\MarcaController.cs" />
     <Compile Include="Controllers\Mantenimiento\ArticuloController.cs" />
     <Compile Include="Controllers\Mantenimiento\CategoriaController.cs" />
     <Compile Include="Controllers\Mantenimiento\FormaPagoController.cs" />
     <Compile Include="Controllers\Mantenimiento\SerieController.cs" />
     <Compile Include="Controllers\MonedaController.cs" />
-    <Compile Include="Controllers\MedicamentoController.cs" />
+    <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\PacientesController.cs" />
     <Compile Include="Controllers\PersonalController.cs" />
     <Compile Include="Controllers\RecetasController.cs" />
@@ -5217,7 +5217,7 @@
     <Content Include="Views\TipoServicio\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Laboratorio\Index.cshtml" />
+    <Content Include="Views\Marca\Index.cshtml" />
     <Content Include="Views\Caja\Index.cshtml" />
     <Content Include="Views\Comision_Medico\Index.cshtml" />
     <Content Include="Views\Compras\Index.cshtml" />

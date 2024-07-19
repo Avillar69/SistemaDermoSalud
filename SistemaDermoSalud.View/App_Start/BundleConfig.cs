@@ -20,8 +20,6 @@ namespace SistemaDermoSalud.View.App_Start
                      "~/app-assets/js/clusterize.min.js",
                      "~/app-assets/vendors/js/extensions/fullcalendar.min.js",
                      "~/app-assets/vendors/js/extensions/locale-all.js",
-                     "~/app-assets/swal/sweetalert.min.js",
-                     "~/app-assets/swal/jquery.sweet-alert.custom.js",
                      "~/app-assets/js/bootstrap-colorpicker.min.js",
                      "~/app-assets/js/jspdf.min.js",
                      "~/app-assets/js/jspdf.plugin.autotable.min.js",

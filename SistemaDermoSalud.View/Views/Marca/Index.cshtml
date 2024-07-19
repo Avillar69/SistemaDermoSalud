@@ -1,0 +1,134 @@
+﻿@using System.Web.Optimization;
+@{if (Session["Config"] == null)
+    { @Html.Raw("<script>");
+    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
+    @Html.Raw("</script>");
+}
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
+<div class="row" id="rowTabla">
+    <div class="col-lg-12">
+        <div class="card" id="orderList">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h3 class="content-header-title mb-0">Marcas</h3>
+                        <div class="row breadcrumbs-top">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="#">Inventario</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Marcas
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-auto">
+                        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+                            <a onclick="mostrarDetalle(1,0)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
+                            <a onclick="LabDescargarPDF('i')" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
+
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right material-shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Exportar
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                    <a onclick="LabDescargarPDF('e')" class="btn dropdown-item"><i class="ri-file-pdf-fill"></i> Pdf</a>
+                                    <a class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0 pt-0">
+                <div class="row">
+                    <div class="table-responsive mt-3 mb-1 col-12" style="min-height:450px;">
+                        <table class="table table-condensed table-bordered table-hover" id="tbDatos">
+                            <thead class="text-muted table-light">
+                                <tr class="">
+                                    @*<th class="sort" data-sort="idMarca">idMarca</th>*@
+                                    <th class="sort" data-sort="marca">Marca</th>
+                                    <th class="sort" data-sort="fecha">Fecha</th>
+                                    <th class="sort" data-sort="estado">Estado</th>
+                                    <th class="sort" data-sort="actions"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--end col-->
+</div>
+
+<div class="row" id="rowFrm" style="display:none;">
+    <div class="card col-sm-12">
+        <div class="card-header p-b-0">
+            <div class="row">
+                <div class="col-sm-9 mt-2">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nueva Marca</h4>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
+                    <button type='button' class='btn btn-danger pull-right waves-effect waves-light' id="btnCancelar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-10 p-b-10">
+            <div class="col-md-12">
+                <div class="container-fluid">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group-sm" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                        </div>
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Codigo</span>
+                                </div>
+                                <input type="text" class="form-control" id="txtCodigo" disabled readonly autocomplete="off" placeholder="Autogenerado">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Marca</span>
+                                </div>
+                                <input type="text" class="form-control" id="txtMarca" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="form-check form-switch form-switch-lg" dir="ltr">
+                                <input type="checkbox" class="form-check-input" id="chkActivo" checked="">
+                                <label class="form-check-label" for="chkActivo">Estado</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/basics")
+<script src="~/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+<script src="~/Scripts/Inventario/Marca.js"></script>
+
+

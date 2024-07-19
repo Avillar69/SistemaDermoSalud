@@ -5,21 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SistemaDermoSalud.Entities
+namespace SistemaDermoSalud.Entities.Mantenimiento
 {
-    public class MedicamentoDTO
+    public class Ma_ProductoDTO
     {
-        public int idMedicamentos { get; set; }
+        public int idProducto { get; set; }
         public string Descripcion { get; set; }
-        public int idLaboratorio { get; set; }
-        public string Laboratorio { get; set; }
+        public int idMarca { get; set; }
+        public string Marca { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
         public int UsuarioCreacion { get; set; }
         public int UsuarioModificacion { get; set; }
         public bool Estado { get; set; }
-        public decimal PagoMedicamento { get; set; }
-        public string CodigoMedicamento { get; set; }
+        public decimal PagoProducto { get; set; }
+        public string CodigoProducto { get; set; }
         public string CodigoAutogenerado { get; set; }
     }
 }

@@ -1,36 +1,36 @@
-﻿using SistemaDermoSalud.DataAccess.Mantenimiento;
-using SistemaDermoSalud.Entities;
-using SistemaDermoSalud.Entities.Mantenimiento;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SistemaDermoSalud.Entities.Mantenimiento;
+using SistemaDermoSalud.DataAccess.Mantenimiento;
+using SistemaDermoSalud.Entities;
 
 namespace SistemaDermoSalud.Business.Mantenimiento
 {
     public class Ma_MarcaBL
     {
+        Ma_MarcaDAO oMarcaDAO = new Ma_MarcaDAO();
 
-        Ma_MarcaDAO oMa_MarcaDAO = new Ma_MarcaDAO();
-        public ResultDTO<Ma_MarcaDTO> ListarTodo(int idEmpresa, string Activo = "")
+        public ResultDTO<Ma_MarcaDTO>ListarTodo(int p)
         {
-            return oMa_MarcaDAO.ListarTodo(idEmpresa, Activo);
+            return oMarcaDAO.ListarTodo(p);
         }
+
         public ResultDTO<Ma_MarcaDTO> ListarxID(int idMarca)
         {
-            return oMa_MarcaDAO.ListarxID(idMarca);
+            return oMarcaDAO.ListarxID(idMarca);
         }
-        public ResultDTO<Ma_MarcaDTO> UpdateInsert(Ma_MarcaDTO oMa_MarcaDTO)
+        public ResultDTO<Ma_MarcaDTO> UpdateInsert(Ma_MarcaDTO oMarcaDTO)
         {
-            ResultDTO<Ma_MarcaDTO> oResultDTO = oMa_MarcaDAO.UpdateInsert(oMa_MarcaDTO);
-            return oResultDTO;
-        }
-        public ResultDTO<Ma_MarcaDTO> Delete(Ma_MarcaDTO oMa_MarcaDTO)
-        {
-            ResultDTO<Ma_MarcaDTO> oResultDTO = oMa_MarcaDAO.Delete(oMa_MarcaDTO);
-            return oResultDTO;
+            return oMarcaDAO.UpdateInsert(oMarcaDTO);
         }
 
+        public ResultDTO<Ma_MarcaDTO> Delete(Ma_MarcaDTO oMarca)
+        {
+            return oMarcaDAO.Delete(oMarca);
+        }
     }
 }

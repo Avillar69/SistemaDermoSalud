@@ -78,13 +78,12 @@
     <Compile Include="HistoriaClinicaDTO.cs" />
     <Compile Include="Inventario\KardexDTO.cs" />
     <Compile Include="INV_StockDTO.cs" />
-    <Compile Include="LaboratorioDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_MarcaDTO.cs" />
     <Compile Include="Mantenimiento\Ma_AlmacenDTO.cs" />
     <Compile Include="Mantenimiento\Ma_ArticuloDisenoDTO.cs" />
     <Compile Include="Mantenimiento\Ma_ArticuloDTO.cs" />
     <Compile Include="Mantenimiento\Ma_CategoriaDTO.cs" />
     <Compile Include="Mantenimiento\Ma_EmpresaDTO.cs" />
-    <Compile Include="Mantenimiento\Ma_MarcaDTO.cs" />
     <Compile Include="Mantenimiento\Ma_MotivoDTO.cs" />
     <Compile Include="Mantenimiento\Ma_SerieDTO.cs" />
     <Compile Include="Mantenimiento\Ma_TipoAfectacionDTO.cs" />
@@ -103,7 +102,7 @@
     <Compile Include="Mantenimiento\Ma_TipoPersonaDTO.cs" />
     <Compile Include="Mantenimiento\Ma_UbigeoDTO.cs" />
     <Compile Include="MonedaDTO.cs" />
-    <Compile Include="MedicamentoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_ProductoDTO.cs" />
     <Compile Include="Nubefact\Guias.cs" />
     <Compile Include="Nubefact\Invoice.cs" />
     <Compile Include="Nubefact\Items.cs" />

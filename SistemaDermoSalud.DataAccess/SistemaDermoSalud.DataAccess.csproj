@@ -70,13 +70,12 @@
     <Compile Include="HistoriaClinicaDAO.cs" />
     <Compile Include="Inventario\KardexDAO.cs" />
     <Compile Include="INV_StockDAO.cs" />
-    <Compile Include="LaboratorioDAO.cs" />
+    <Compile Include="Mantenimiento\Ma_MarcaDAO.cs" />
     <Compile Include="Mantenimiento\Ma_AlmacenDAO.cs" />
     <Compile Include="Mantenimiento\Ma_ArticuloDAO.cs" />
     <Compile Include="Mantenimiento\Ma_CategoriaDAO.cs" />
     <Compile Include="Mantenimiento\Ma_EmpresaDAO.cs" />
     <Compile Include="Mantenimiento\Ma_LocalDAO.cs" />
-    <Compile Include="Mantenimiento\Ma_MarcaDAO.cs" />
     <Compile Include="Mantenimiento\Ma_MotivoDAO.cs" />
     <Compile Include="Mantenimiento\Ma_SerieDAO.cs" />
     <Compile Include="Mantenimiento\Ma_TipoAfectacionDAO.cs" />
@@ -94,7 +93,7 @@
     <Compile Include="Ma_TipoPersonaDAO.cs" />
     <Compile Include="Ma_UbigeoDAO.cs" />
     <Compile Include="MonedaDAO.cs" />
-    <Compile Include="MedicamentoDAO.cs" />
+    <Compile Include="Mantenimiento\Ma_ProductoDAO.cs" />
     <Compile Include="PacientesDAO.cs" />
     <Compile Include="PersonalDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
