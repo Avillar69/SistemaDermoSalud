@@ -9,50 +9,149 @@ var indiceActualBloque = 0;
 var indicePagina = 0;
 var textoExportar;
 var excelExportar;
-var listaLocales;
-var listaAlmacenes;
-console.log("entrarar?");
+console.log("consulta stock");
 var cboLocal = document.getElementById("cboLocal");
 var cboAlmacen = document.getElementById("cboAlmacen");
-//Inicializando Url = Controlador / Action
-var url = '/ConsultaStock/ObtenerDatos';
-enviarServidor(url, mostrarLista);
-//configurarBotonesModal();
+
+$(function () {
+    var url = 'ConsultaStock/ObtenerDatos';
+    enviarServidor(url, mostrarLista);
+    configurarBotonesModal();
+});
 function mostrarLista(rpta) {
-    crearTablaModal(cabeceras, "cabeTabla");
-    //crearTablaStock(cabeceras, "cabeTabla");
     if (rpta != '') {
-        var listas = rpta.split('↔');
-        listaLocales = listas[0].split("▼");
-        llenarCombo(listaLocales, "cboLocal", "Seleccione");
-        var urlC = '/ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
-        enviarServidor(urlC, cargarAlmacen);
-        configLocal();
+        let listas = rpta.split('↔');
+        let listaLocales = listas[0].split("▼");
+        cargarDatosLocal(listaLocales);
+        var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=1';
+        enviarServidor(urlA, mostrarProductosStock);
     }
 }
-function configLocal() {
-    cboLocal.onchange = function () {
-        var urlC = '/ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
-        enviarServidor(urlC, cargarAlmacen);
+function cargarDatosLocal(r) {
+    let locales = r
+    $("#cboLocal").empty();
+    $("#cboLocal").append(`<option value="">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        locales.forEach(element => {
+            $("#cboLocal").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
     }
+    $("#cboLocal").change(function () {
+        var selectedValue = $(this).val();
+        if (selectedValue !== "") {
+            var urlC = '/ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
+            enviarServidor(urlC, cargarDatosAlmacen);
+        } else {
+            $("#cboLocal").empty();
+            $("#cboLocal").append(`<option value="">Seleccione</option>`);
+        }
+    });
 }
-function cargarAlmacen(rpta) {
+function cargarDatosAlmacen(rpta) {
     if (rpta.split('↔')[0] == "OK") {
-        var listas = rpta.split('↔');
-        listaAlmacenes = listas[2].split("▼");
-        llenarCombo(listaAlmacenes, "cboAlmacen", "Seleccione");
-        configAlmacen();
-        gbi("cboAlmacen").value = "";
+        let listas = rpta.split('↔');
+        let listaAlmacenes = listas[2].split("▼");
+
+        $("#cboAlmacen").empty();
+        $("#cboAlmacen").append(`<option value="">Seleccione</option>`);
+
+        if (listaAlmacenes && listaAlmacenes.length > 0) {
+            listaAlmacenes.forEach(element => {
+                $("#cboAlmacen").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+            });
+        }
     }
 }
-function listar() {
-    configurarFiltro();
-    matriz = crearMatriz(listaDatos);
-    configurarFiltro(cabeceras);
-    mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
+
+function configurarBotonesModal() {
+    var btnConsultar = gbi("btnConsultar");
+    btnConsultar.onclick = function () {
+        var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
+        enviarServidor(urlA, mostrarProductosStock);
+    }
+}
+function mostrarProductosStock(rpta) {
+    if (rpta != '') {
+        var listasArt = rpta.split('↔');
+        if (listasArt[0] == "OK") {
+            listaDatos = listasArt[2].split("▼");
+            listar(listaDatos);
+        }
+    }
+}
+function listar(r) {
+    console.log(r);
+    if (r[0] !== '') {
+        let newDatos = [];
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idStock: valor[0],
+                codigo: valor[1],
+                marca: valor[2],
+                producto: valor[3],
+                stock: valor[4]
+            })
+        });
+        let cols = ["codigo", "marca", "producto", "stock"];
+        loadDataTable(cols, newDatos, "idStock", "tbDatos", "", false);
+    }
+}
+function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
+    var columnas = [];
+    for (var i = 0; i < cols.length; i++) {
+        let item = {
+            data: cols[i]
+        };
+        columnas.push(item);
+    }
+    tbDatos = $('#' + tid).DataTable({
+        data: datos,
+        columns: columnas,
+        rowId: rid,
+        order: arrOrder,
+        columnDefs:
+            [
+                {
+                    "targets": 0,
+                    "visible": showFirstField,
+                },
+                {
+                    "targets": columnas.length - 1,
+                    "width": "10%"
+                }],
+        searching: !0,
+        bLengthChange: !0,
+        destroy: !0,
+        pagingType: "full_numbers",
+        info: !1,
+        paging: !0,
+        pageLength: 25,
+        responsive: !0,
+        footer: false,
+        deferRender: !1,
+        language: {
+            "decimal": "",
+            "emptyTable": "No existen registros a mostrar.",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            search: "_INPUT_",
+            searchPlaceholder: "Buscar ",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "<<",
+                "last": ">>",
+                "next": ">",
+                "previous": "<"
+            }
+        }
     });
 }
 
@@ -123,19 +222,19 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
 }
 
 
-var btnPDF = gbi("btnImprimirPDF");
-btnPDF.onclick = function () {
-    ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "e");
-}
-var btnImprimir = document.getElementById("btnImprimir");
-btnImprimir.onclick = function () {
-    ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "i");
-}
+//var btnPDF = gbi("btnImprimirPDF");
+//btnPDF.onclick = function () {
+//    ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "e");
+//}
+//var btnImprimir = document.getElementById("btnImprimir");
+//btnImprimir.onclick = function () {
+//    ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "i");
+//}
 
-var btnExcel = gbi("btnImprimirExcel");
-btnExcel.onclick = function () {
-    fnExcelReport(cabeceras, matriz);
-}
+//var btnExcel = gbi("btnImprimirExcel");
+//btnExcel.onclick = function () {
+//    fnExcelReport(cabeceras, matriz);
+//}
 
 function configAlmacen() {
     console.log("INGRESO STOCK X ALMACEN");
@@ -146,15 +245,7 @@ function configAlmacen() {
         enviarServidor(urlA, mostrarArticulos);
     }
 }
-function mostrarArticulos(rpta) {
-    if (rpta != '') {
-        var listasArt = rpta.split('↔');
-        if (listasArt[0] == "OK") {
-            listaDatos = listasArt[2].split("▼");
-            listar();
-        }
-    }
-}
+
 function crearTablaModal(cabeceras, div) {
     var contenido = "";
     nCampos = cabeceras.length;

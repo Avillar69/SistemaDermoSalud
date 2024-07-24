@@ -18,30 +18,15 @@ var ListaPago = [];
 /*ingrese una variable global para capturar los datos del documento por el id */
 //configNav();
 var datosDelDocumento = [];
-var url = "PagarSocio/ObtenerDatosPagoDetalle?id=1";
-enviarServidor(url, mostrarLista);
-$("#txtFilFecIn").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
-$("#txtFilFecFn").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
-$("#txtFechaPago").datetimepicker({
-    format: 'DD-MM-YYYY',
 
+$(function () {
+    var url = "PagarSocio/ObtenerDatosPagoDetalle?id=1";
+    enviarServidor(url, mostrarLista);
+    configurarBotonesModal();
 });
-$("#txtFechaCobroCheque").datetimepicker({
-    format: 'DD-MM-YYYY',
 
-});
-$("#txtFilFecIn").datetimepicker({
-    format: 'DD-MM-YYYY',
 
-});
-$("#date-range").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
-$('#datepicker-range').datetimepicker({ format: 'DD-MM-YYYY' });
+
 configBM();
 reziseTabla();
 cfgKP(["txtDocumento", "txtRazonSocial", "txtCuentaDestino", "txtCuentaOrigen", "txtTipoOperacion"], cfgTMKP);
@@ -53,7 +38,7 @@ function cfgKP(l, m) {
 }
 
 function mostrarLista(rpta) {
-    crearTablaCompras(cabeceras, "cabeTabla");
+    //crearTablaCompras(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         var Resultado = listas[0];
@@ -259,8 +244,8 @@ function mostrarDetalle(opcion, id) {
     limpiarTodo();
     switch (opcion) {
         case 1:
-            show_hidden_Formulario(true);//true es cuando tiene filtro
-            lblTituloPanel.innerHTML = "Nuevo Pago";//Titulo Insertar
+            show_hidden_Formulario();
+            lblTituloPanel.innerHTML = "Nuevo Pago";
             document.getElementById("btnModalDocumento").disabled = false;
             gbi("txtFechaPago").value = FechaActual;
             gbi("txtFechaCobroCheque").value = FechaActual;
@@ -321,15 +306,15 @@ function crearTablaCompras(cabeceras, div) {
     divTabla.innerHTML = contenido;
 }
 function listar() {
-    configurarFiltrok();
-    matriz = crearMatrizReporte(listaDatos);
-    configurarFiltrok(cabeceras);
-    mostrarMatrizOC(matriz, cabeceras, "divTabla", "contentPrincipal");
-    //configurarBotonesModal();
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
+    //configurarFiltrok();
+    //matriz = crearMatrizReporte(listaDatos);
+    //configurarFiltrok(cabeceras);
+    //mostrarMatrizOC(matriz, cabeceras, "divTabla", "contentPrincipal");
+    ////configurarBotonesModal();
+    //reziseTabla();
+    //$(window).resize(function () {
+    //    reziseTabla();
+    //});
 
 }
 function mostrarMatriz(matriz, cabeceras, tabId, contentID) {

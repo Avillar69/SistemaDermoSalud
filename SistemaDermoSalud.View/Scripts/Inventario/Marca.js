@@ -23,10 +23,8 @@ function mostrarLista(rpta) {
     }
 }
 function listar(r) {
-    let newDatos = [];
-    console.log(r);
-    console.log(r.length);
     if (r[0] !== '') {
+        let newDatos = [];
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
@@ -38,8 +36,7 @@ function listar(r) {
         });
         let cols = ["marca", "fechaCreacion", "estado"];
         loadDataTable(cols, newDatos, "idMarca", "tbDatos", cadButtonOptions(), false);
-    }
-    
+    }    
 }
 function cadButtonOptions() {
     let cad = "";
@@ -248,7 +245,7 @@ function actualizarListar(rpta) {
                 show_hidden_Formulario(true);
                 listaDatos = data[2].split("▼");
                 listar(listaDatos);
-            }, 1800);           
+            }, 1000);           
         }       
     }
 }

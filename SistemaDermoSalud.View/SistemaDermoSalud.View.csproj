@@ -4533,7 +4533,7 @@
     <Content Include="Scripts\Dashboard.js" />
     <Content Include="Scripts\ejem.js" />
     <Content Include="Scripts\Inventario\Marca.js" />
-    <Content Include="Scripts\Farmacia\Medicamento.js" />
+    <Content Include="Scripts\Inventario\Producto.js" />
     <Content Include="assets\css\app-rtl.min.css.map" />
     <Content Include="assets\css\app.min.css.map" />
     <Content Include="assets\css\bootstrap-rtl.min.css.map" />
@@ -5201,7 +5201,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Citas\Index.cshtml" />
     <Content Include="Views\HistoriaClinica\Listar.cshtml" />
-    <Content Include="Views\Medicamento\Index.cshtml" />
+    <Content Include="Views\Producto\Index.cshtml" />
     <Content Include="Views\Pacientes\Index.cshtml" />
     <Content Include="Views\Personal\Index.cshtml" />
     <Content Include="Views\Seg_Acceso\Listar.cshtml" />
@@ -5253,6 +5253,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Scripts\Farmacia\" />
     <Folder Include="Views\Articulo\" />
     <Folder Include="Views\Banco\" />
     <Folder Include="Views\Categoria\" />

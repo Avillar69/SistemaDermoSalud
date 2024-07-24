@@ -20,42 +20,239 @@ var cabecera_Modal = [];
 var txtModal;//input para poner el valor
 var txtValor;//input para obtener el valor
 var precioMedicamento = 0;
-//Inicializando
-var Tipo = "ENTRADA";//Entrada
-var url = "/OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
-enviarServidor(url, mostrarLista);
-configurarBotonesModal();
-reziseTabla();
-configBM();
-var txtID = document.getElementById("txtID");
-var txtObservacion = document.getElementById("txtObservacion");
-var txtFecha = document.getElementById("txtFecha");
-var contentArticulo = gbi("contentArticulo").querySelectorAll(".art");
-var divArticulo = document.getElementById("contentArticulo");
-var txtArticulo = document.getElementById("txtArticulo");
-var txtMarca = document.getElementById("txtMarca");
-var txtUnidadMedida = document.getElementById("txtUnidadMedida");
-var txtCantidad = document.getElementById("txtCantidad");
-var txtPrecio = document.getElementById("txtPrecio");
-var txtStock = document.getElementById("txtStock");
-var txtStockTotal = document.getElementById("txtStockTotal");
-var txtAlmacen = document.getElementById("txtAlmacen");
-var localId; var almacenId; var articuloId; var movimientoId; var tipoMovimientoId; var estadoMovimientoId;
-var combox;
 
-cfgKP(["txtLocalDet", "txtTipoMovimiento", "txtEstadoMovimiento", "txtArticulo", "txtCompra", "txtGuia"], cfgTMKP);
-cfgKP(["txtFecha", "txtObservacion", "txtCantidad", "txtPrecio"], cfgTKP);
-//$('#datepicker-range').datepicker({ format: 'dd-mm-yyyy', autoclose: true });
+$(function () {
+    var Tipo = "ENTRADA";
+    var url = "/OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
+    enviarServidor(url, mostrarLista);
+    configurarBotonesModal();
+    configBM();
+});
 
-$("#txtFecha").datetimepicker({
-    format: 'DD-MM-YYYY',
-}); 
-$("#txtFilFecIn").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
-$("#txtFilFecFn").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
+//Listar Stock Entrada
+function mostrarLista(rpta) {
+    crearTablaCompras(cabeceras, "cabeTabla");
+    if (rpta != "") {
+        var listas = rpta.split("↔");
+        var Resultado = listas[0];
+        var mensaje = listas[1];
+        if (Resultado == "OK") {
+            listaDatos = listas[2].split("▼");
+            listaLocales = listas[3].split("▼");
+            listaTipoMovimiento = listas[5].split("▼");
+            listaEstado = listas[6].split("▼");
+            var Fecha = listas[7];
+            listaGuias = listas[8].split("▼");
+            txtFecha.value = Fecha;
+            //if (listaLocales.length > 0 && listaLocales[0] != "") {
+            //    var btnModalLocalDet = document.getElementById("btnModalLocalDet");
+            //    btnModalLocalDet.onclick = function () {
+            //        cbm("local", "Locales", "txtLocalDet", null,
+            //            ["idLocal", "Descripcion"], listaLocales, cargarSinXR);
+            //        CambioLocal();
+            //    }
+            //}
+
+            //if (listaTipoMovimiento.length > 0 && listaTipoMovimiento[0] != "")
+            //    var btnModalTipoMovimiento = document.getElementById("btnModalTipoMovimiento");
+            //btnModalTipoMovimiento.onclick = function () {
+            //    cbm("tipoMovimiento", "Tipo Movimiento", "txtTipoMovimiento", null,
+            //        ["idTipo", "Descripcion"], listaTipoMovimiento, cargarSinXR);
+            //}
+
+            var Estados = [];
+            for (var i = 0; i < listaEstado.length; i++) {
+                var item = listaEstado[i].split("▲");
+                var tipo = item[2].split("-");
+                for (var j = 0; j < tipo.length; j++) {
+                    // E : enrtada
+                    if (tipo[j] == "E") {
+                        Estados.push(listaEstado[i]);
+                    }
+                }
+            }
+            //if (Estados.length > 0 && Estados[0] != "") {
+            //    var btnModalEstadoMovimiento = document.getElementById("btnModalEstadoMovimiento");
+            //    btnModalEstadoMovimiento.onclick = function () {
+            //        cbm("estadoMovimiento", "Estado Movimiento", "txtEstadoMovimiento", null,
+            //            ["idEstado", "Descripcion"], Estados, cargarSinXR);
+            //    }
+            //}
+            listar(listaDatos);
+        }
+        else {
+            Swal.fire(Resultado, mensaje, "error");
+        }
+    }
+}
+function listar() {
+    if (r[0] !== '') {
+        let newDatos = [];
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            ["idMovimiento", "Local", "Observacion", "Fecha", "Estado"];
+            newDatos.push({
+                idMovimiento: valor[0],
+                local: valor[1],
+                observacion: valor[2],
+                fecha: valor[3],
+                estado: valor[4]
+            })
+        });
+        let cols = ["local", "observacion", "fecha", "estado"];
+        loadDataTable(cols, newDatos, "idMovimiento", "tbDatos", cadButtonOptions(), false);
+    }
+}
+function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
+    var columnas = [];
+    for (var i = 0; i < cols.length; i++) {
+        let item = {
+            data: cols[i]
+        };
+        columnas.push(item);
+    }
+    let itemBtn = {
+        "data": null,
+        "defaultContent": "<center>" + btns + "</center>"
+    };
+    columnas.push(itemBtn);
+    tbDatos = $('#' + tid).DataTable({
+        data: datos,
+        columns: columnas,
+        rowId: rid,
+        order: arrOrder,
+        columnDefs:
+            [
+                {
+                    "targets": 0,
+                    "visible": showFirstField,
+                },
+                {
+                    "targets": columnas.length - 1,
+                    "width": "10%"
+                }],
+        searching: !0,
+        bLengthChange: !0,
+        destroy: !0,
+        pagingType: "full_numbers",
+        info: !1,
+        paging: !0,
+        pageLength: 25,
+        responsive: !0,
+        footer: false,
+        deferRender: !1,
+        language: {
+            "decimal": "",
+            "emptyTable": "No existen registros a mostrar.",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            search: "_INPUT_",
+            searchPlaceholder: "Buscar ",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "<<",
+                "last": ">>",
+                "next": ">",
+                "previous": "<"
+            }
+        }
+    });
+}
+function mostrarDetalle(opcion, id) {
+    var lblTituloPanel = document.getElementById('lblTituloPanel');
+    //limpiarTodo();
+    switch (opcion) {
+        case 1:
+            show_hidden_Formulario();
+            lblTituloPanel.innerHTML = "Nueva Entrada de Mercancia";//Titulo Insertar
+            //gbi("btnGrabar").style.display = "";
+            //gbi("btnGrabar").style.disabled = true;
+            //gbi("art").style.display = "";
+            //gbi("art2").style.display = "";
+            //gbi("art3").style.display = "";
+            //gbi("btnGrabar").style.display = "";
+            //adc(listaEstado, "2", "txtEstadoMovimiento", 1);
+            //adc(listaLocales, "1", "txtLocalDet", 1);
+            //gbi("rowFrm").querySelectorAll("input, button:not(#btnCancelar)").forEach(item => { item.disabled = false; });
+            //gbi("txtTipoMovimiento").focus();
+            break;
+        case 2:
+            lblTituloPanel.innerHTML = "Entrada de Mercancia";//Titulo Modificar
+            TraerDetalle(id);
+            show_hidden_Formulario(true);
+            break;
+    }
+}
+function configurarBotonesModal() {
+    var btnGrabar = document.getElementById("btnGrabar");
+    btnGrabar.onclick = function () {
+        if (validarFormulario()) {
+            var url = "/OperacionesStock/Grabar";
+            var frm = new FormData();
+            frm.append("idMovimiento", txtID.value.length == 0 ? "0" : txtID.value);
+            frm.append("idLocal", gbi("txtLocalDet").dataset.id);
+            frm.append("Observaciones", txtObservacion.value.length == 0 ? "-" : txtObservacion.value);
+            frm.append("Estado", true);
+            frm.append("idTipoMovimiento", gbi("txtTipoMovimiento").dataset.id);
+            frm.append("TipoMovimiento", Tipo);
+            frm.append("idEstado", gbi("txtEstadoMovimiento").dataset.id);
+            frm.append("idDocumento", gbi("txtCompra").value.length == 0 ? "0" : gbi("txtCompra").dataset.id);
+            frm.append("idGuiaRemision", gbi("txtGuia").value.length == 0 ? "0" : gbi("txtGuia").dataset.id);
+            frm.append("Lista_Articulo", lista_Articulo());
+            swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
+            enviarServidorPost(url, actualizarListar, frm);
+        }
+    };
+    var btnCancelar = document.getElementById("btnCancelar");
+    btnCancelar.onclick = function () {
+        show_hidden_Formulario(true);
+    }
+
+    btnBuscar.onclick = function () {
+        BuscarxFecha(gbi("txtFilFecIn").value, gbi("txtFilFecFn").value);
+    }
+    //Detalle de Articulo
+
+    var btnModalArticulo = document.getElementById("btnModalArticulo");
+    btnModalArticulo.onclick = function () {
+        cbmu("Medicamento", "Medicamento", "txtArticulo", null,
+            ["idMedicamentos", "Codigo", "Descripcion", "Laboratorio", "Precio Base"], ' /OperacionesStock/cargarMedicamento', cargarListaArticulo);
+    }
+
+    var btnAgregarArticulo = document.getElementById("btnAgregarArticulo");
+    btnAgregarArticulo.onclick = function () {
+        var error = true;
+        error = validarAddArticulo();
+        if (error) {
+            if (parseFloat(gbi("txtPrecio").value) < parseFloat(precioMedicamento)) {
+                mostrarRespuesta("Error", "El precio a ingresar no puede ser menor al precio base del Medicamento", "error");
+            } else {
+                addItem();
+            }
+        }
+    }
+
+    var btnCancelarArticulo = document.getElementById("btnCancelarArticulo");
+    btnCancelarArticulo.onclick = function () { cancel_AddArticulo(); }
+
+    var btnModalGuia = document.getElementById("btnModalGuia");
+    btnModalGuia.onclick = function () {
+        cbmu("guia", "Guias", "txtGuia", null,
+            ["idGuia", "Fecha", "Numero", "Razon Social"], ' /OperacionesStock/cargarGuias', cargarListaArticulo);
+    }
+    var btnModalCompra = document.getElementById("btnModalCompra");
+    btnModalCompra.onclick = function () {
+        cbmu("compra", "Compras", "txtCompra", null,
+            ["idCompra", "Fecha", "Numero", "Razon Social", "Total"], ' /OperacionesStock/cargarCompras', cargarListaArticulo);
+    }
+
+}
 function configBM() {
     var btnPDF = gbi("btnImprimirPDF");
     btnPDF.onclick = function () {
@@ -70,6 +267,28 @@ function configBM() {
         fnExcelReport(cabeceras, matriz);
     }
 }
+//
+
+//var txtID = document.getElementById("txtID");
+//var txtObservacion = document.getElementById("txtObservacion");
+//var txtFecha = document.getElementById("txtFecha");
+//var contentArticulo = gbi("contentArticulo").querySelectorAll(".art");
+//var divArticulo = document.getElementById("contentArticulo");
+//var txtArticulo = document.getElementById("txtArticulo");
+//var txtMarca = document.getElementById("txtMarca");
+//var txtUnidadMedida = document.getElementById("txtUnidadMedida");
+//var txtCantidad = document.getElementById("txtCantidad");
+//var txtPrecio = document.getElementById("txtPrecio");
+//var txtStock = document.getElementById("txtStock");
+//var txtStockTotal = document.getElementById("txtStockTotal");
+//var txtAlmacen = document.getElementById("txtAlmacen");
+//var localId; var almacenId; var articuloId; var movimientoId; var tipoMovimientoId; var estadoMovimientoId;
+//var combox;
+
+//cfgKP(["txtLocalDet", "txtTipoMovimiento", "txtEstadoMovimiento", "txtArticulo", "txtCompra", "txtGuia"], cfgTMKP);
+//cfgKP(["txtFecha", "txtObservacion", "txtCantidad", "txtPrecio"], cfgTKP);
+
+
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
     var columns = [];
@@ -135,61 +354,7 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
         iframe.src = doc.output('dataurlstring');
     }
 }
-function mostrarLista(rpta) {
-    crearTablaCompras(cabeceras, "cabeTabla");
-    if (rpta != "") {
-        var listas = rpta.split("↔");
-        var Resultado = listas[0];
-        var mensaje = listas[1];
-        if (Resultado == "OK") {
-            listaDatos = listas[2].split("▼");
-            listaLocales = listas[3].split("▼");
-            listaTipoMovimiento = listas[5].split("▼");
-            listaEstado = listas[6].split("▼");
-            var Fecha = listas[7];
-            listaGuias = listas[8].split("▼");
-            txtFecha.value = Fecha;
-            if (listaLocales.length > 0 && listaLocales[0] != "") {
-                var btnModalLocalDet = document.getElementById("btnModalLocalDet");
-                btnModalLocalDet.onclick = function () {
-                    cbm("local", "Locales", "txtLocalDet", null,
-                        ["idLocal", "Descripcion"], listaLocales, cargarSinXR);
-                    CambioLocal();
-                }
-            }
-            
-            if (listaTipoMovimiento.length > 0 && listaTipoMovimiento[0] != "")
-                var btnModalTipoMovimiento = document.getElementById("btnModalTipoMovimiento");
-            btnModalTipoMovimiento.onclick = function () {
-                cbm("tipoMovimiento", "Tipo Movimiento", "txtTipoMovimiento", null,
-                    ["idTipo", "Descripcion"], listaTipoMovimiento, cargarSinXR);
-            }
 
-            var Estados = [];
-            for (var i = 0; i < listaEstado.length; i++) {
-                var item = listaEstado[i].split("▲");
-                var tipo = item[2].split("-");
-                for (var j = 0; j < tipo.length; j++) {
-                    // E : enrtada
-                    if (tipo[j] == "E") {
-                        Estados.push(listaEstado[i]);
-                    }
-                }
-            }
-            if (Estados.length > 0 && Estados[0] != "") {
-                var btnModalEstadoMovimiento = document.getElementById("btnModalEstadoMovimiento");
-                btnModalEstadoMovimiento.onclick = function () {
-                    cbm("estadoMovimiento", "Estado Movimiento", "txtEstadoMovimiento", null,
-                        ["idEstado", "Descripcion"], Estados, cargarSinXR);
-                }
-            }
-            listar();
-        }
-        else {
-            mostrarRespuesta(Resultado, mensaje, "error");
-        }
-    }
-}
 function crearTablaCompras(cabeceras, div) {
     var contenido = "";
     nCampos = cabeceras.length;
@@ -218,111 +383,14 @@ function crearTablaCompras(cabeceras, div) {
     var divTabla = gbi(div);
     divTabla.innerHTML = contenido;
 }
-function listar() {
-    configurarFiltro();
-    matriz = crearMatriz(listaDatos);
-    configurarFiltro(cabeceras);
-    mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-    configurarBotonesModal();
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
-}
-function mostrarDetalle(opcion, id) {
-    var lblTituloPanel = document.getElementById('lblTituloPanel');
-    limpiarTodo();
-    switch (opcion) {
-        case 1:
-            show_hidden_Formulario(true);
-            lblTituloPanel.innerHTML = "Nueva Entrada de Mercancia";//Titulo Insertar
-            gbi("btnGrabar").style.display = "";
-            gbi("btnGrabar").style.disabled = true;
-            gbi("art").style.display = "";
-            gbi("art2").style.display = "";
-            gbi("art3").style.display = "";
-            gbi("btnGrabar").style.display = "";
-            adc(listaEstado, "2", "txtEstadoMovimiento", 1);
-            adc(listaLocales, "1", "txtLocalDet", 1);
-            gbi("rowFrm").querySelectorAll("input, button:not(#btnCancelar)").forEach(item => { item.disabled = false; });
-            gbi("txtTipoMovimiento").focus();
-            break;
-        case 2:
-            lblTituloPanel.innerHTML = "Entrada de Mercancia";//Titulo Modificar
-            TraerDetalle(id);
-            show_hidden_Formulario(true);
-            break;
-    }
-}
+
+
 function TraerDetalle(id) {
     //if (confirm("¿Está seguro que desea eliminar?") == false) return false;
     var url = "/OperacionesStock/ObtenerDatosxID/?id=" + id;
     enviarServidor(url, CargarDetalles);
 }
-function configurarBotonesModal() {
-    var btnGrabar = document.getElementById("btnGrabar");
-    btnGrabar.onclick = function () {
-        if (validarFormulario()) {
-            var url = "/OperacionesStock/Grabar";
-            var frm = new FormData();
-            frm.append("idMovimiento", txtID.value.length == 0 ? "0" : txtID.value);
-            frm.append("idLocal", gbi("txtLocalDet").dataset.id);
-            frm.append("Observaciones",  txtObservacion.value.length == 0 ? "-" : txtObservacion.value);
-            frm.append("Estado", true);
-            frm.append("idTipoMovimiento", gbi("txtTipoMovimiento").dataset.id);
-            frm.append("TipoMovimiento", Tipo);
-            frm.append("idEstado", gbi("txtEstadoMovimiento").dataset.id);
-            frm.append("idDocumento", gbi("txtCompra").value.length == 0 ? "0" : gbi("txtCompra").dataset.id);
-            frm.append("idGuiaRemision", gbi("txtGuia").value.length == 0 ? "0" : gbi("txtGuia").dataset.id);
-            frm.append("Lista_Articulo", lista_Articulo());
-            swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
-            enviarServidorPost(url, actualizarListar, frm);
-        }
-    };
-    var btnCancelar = document.getElementById("btnCancelar");
-    btnCancelar.onclick = function () {
-        show_hidden_Formulario(true);
-    }
 
-    btnBuscar.onclick = function () {
-        BuscarxFecha(gbi("txtFilFecIn").value, gbi("txtFilFecFn").value);
-    }
-    //Detalle de Articulo
-
-    var btnModalArticulo = document.getElementById("btnModalArticulo");
-    btnModalArticulo.onclick = function () {
-        cbmu("Medicamento", "Medicamento", "txtArticulo", null,
-            ["idMedicamentos", "Codigo", "Descripcion", "Laboratorio", "Precio Base"], ' /OperacionesStock/cargarMedicamento',cargarListaArticulo);
-    }
-
-    var btnAgregarArticulo = document.getElementById("btnAgregarArticulo");
-    btnAgregarArticulo.onclick = function () {
-        var error = true;
-        error = validarAddArticulo();        
-        if (error) {
-            if (parseFloat(gbi("txtPrecio").value) < parseFloat(precioMedicamento) ) {
-                mostrarRespuesta("Error", "El precio a ingresar no puede ser menor al precio base del Medicamento", "error");
-            } else {
-                addItem();
-            }            
-        }
-    }
-
-    var btnCancelarArticulo = document.getElementById("btnCancelarArticulo");
-    btnCancelarArticulo.onclick = function () { cancel_AddArticulo(); }
-
-    var btnModalGuia = document.getElementById("btnModalGuia");
-    btnModalGuia.onclick = function () {
-        cbmu("guia", "Guias", "txtGuia", null,
-            ["idGuia", "Fecha", "Numero", "Razon Social"], ' /OperacionesStock/cargarGuias', cargarListaArticulo);
-    }
-    var btnModalCompra = document.getElementById("btnModalCompra");
-    btnModalCompra.onclick = function () {
-        cbmu("compra", "Compras", "txtCompra", null,
-            ["idCompra", "Fecha", "Numero", "Razon Social", "Total"], ' /OperacionesStock/cargarCompras', cargarListaArticulo);
-    }
-
-}
 function actualizarListar(rpta) { //rpta es mi lista de colores
     if (rpta != "") { //validar cuando respuesta sea vacio
         var data = rpta.split("↔");

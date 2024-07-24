@@ -18,7 +18,7 @@ namespace SistemaDermoSalud.Entities.Mantenimiento
         public int UsuarioCreacion { get; set; }
         public int UsuarioModificacion { get; set; }
         public bool Estado { get; set; }
-        public decimal PagoProducto { get; set; }
+        public decimal Precio { get; set; }
         public string CodigoProducto { get; set; }
         public string CodigoAutogenerado { get; set; }
     }

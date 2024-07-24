@@ -5,43 +5,99 @@
     @Html.Raw("</script>");
 }
 }
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Entrada";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
-<div class="content-header row">
-    <div class="content-header-left col-md-6 col-12 mb-2">
-        <h3 class="content-header-title mb-0">Nota de Ingreso</h3>
-        <div class="row breadcrumbs-top">
-            <div class="breadcrumb-wrapper col-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="#">FARMACIA</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        Movimientos
-                    </li>
-                    <li class="breadcrumb-item active">
-                        Nota de Ingreso
-                    </li>
-                </ol>
+
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+
+<div class="row" id="rowTabla">
+    <div class="col-lg-12">
+        <div class="card" id="orderList">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h3 class="content-header-title mb-0">Nota de Ingreso</h3>
+                        <div class="row breadcrumbs-top">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="#">Inventario</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Movimientos
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Nota de Ingreso
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-auto">
+                        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+                            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
+                            <a id="btnImprimir" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right material-shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Exportar
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                    <a id="btnImprimirPDF" class="btn dropdown-item"><i class="ri-file-pdf-fill"></i> Pdf</a>
+                                    <a id="btnImprimirExcel" class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Fecha</span>
+                            </div>
+                            <input type="text" class="form-control flatpickr flatpickr-input" id="txtFilFecIn" data-provider="flatpickr" data-date-format="d/m/Y" autocomplete="off" />
+                            <div class="input-group-text bg-primary border-primary text-white">
+                                <i class="ri-calendar-2-line"></i>
+                            </div>
+                            <input type="text" class="form-control flatpickr flatpickr-input" id="txtFilFecFn" data-provider="flatpickr" data-date-format="d/m/Y" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 col-lg-2 mb-2">
+                        <div>
+                            <button class="btn btn-primary w-100" id="btnBuscar" type="button">
+                                <i class="ri-equalizer-fill me-1 align-bottom"></i>Buscar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="content-header-right col-md-6 col-12">
-        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
-            <a class="btn btn-outline-primary" title="Imprimir"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
-            <div role="group" class="btn-group">
-                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
-                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
-                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
-                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
+            <div class="card-body border border-dashed border-end-0 border-start-0 pt-0">
+                <div class="row">
+                    <div class="table-responsive mt-3 mb-1 col-12" style="min-height:450px;">
+                        <table class="table table-condensed table-bordered table-hover" id="tbDatos">
+                            <thead class="text-muted table-light">
+                                <tr class="">
+                                    <th class="sort" data-sort="local">Local</th>
+                                    <th class="sort" data-sort="observacion">Observación</th>
+                                    <th class="sort" data-sort="fecha">Fecha</th>
+                                    <th class="sort" data-sort="estado">Estado</th>
+                                    <th class="sort" data-sort="action"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--end col-->
 </div>
 
 <div id="rowFrm" style="display:none;">
@@ -58,110 +114,177 @@
             </div>
         </div>
         <div class="card-body p-t-10 p-b-10">
-            <div class="col-md-12">
-                <div class='form-horizontal'>
-                    <div class="form-group row m-b-5 p-l-10" style="display:none;">
-                        <input placeholder='' id='txtID' type='text' style="display:none;">
+            <div class="row">
+                <div class="col-lg-4 col-sm-6 mb-2 d-none">
+                    <input placeholder='' id='txtID' type='text' style="display:none;">
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Local</span>
+                        </div>
+                        <select class="form-control" id="cboLocalDet">
+                        </select>
                     </div>
-                    <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtLocalDet">Local</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtLocalDet" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalLocalDet" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Fecha Movimiento</span>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtFecha">Fecha Mov.</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtFecha" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <input type="text" class="form-control flatpickr flatpickr-input" id="txtFecha" data-provider="flatpickr" data-date-format="d/m/Y" />
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Tipo Movimiento</span>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtTipoMovimiento">Tipo Mov.</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtTipoMovimiento" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalTipoMovimiento" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                        <select class="form-control" id="cboTipoMovimiento">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2" id="TGuia" style="display:none">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">N° Guia</span>
                         </div>
-                        <div class="col-12 col-md-4" id="TGuia" style="display:none">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtGuia">Nro Guia</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtGuia" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalGuia" type="button" class="btn waves-effect waves-light btn-info btn-xs" tabindex="14">
-                                            <i class="pg-arrow_down"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                        <select class="form-control" id="cboGuia">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2" id="TCompra" style="display:none">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">N° Compra</span>
                         </div>
-                        <div class="col-12 col-md-4" id="TCompra" style="display:none">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtCompra">Nro Compra</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtCompra" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalCompra" type="button" class="btn btn-info btn-sm pr-1 pl-1" tabindex="14">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                        <select class="form-control" id="cboCompra">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Estado Movimiento</span>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtEstadoMovimiento">Estado Movimiento</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtEstadoMovimiento" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalEstadoMovimiento" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                        <select class="form-control" id="cboEstadoMovimiento">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Observaciones</span>
                         </div>
-                        <div class="col-12 col-md-8" style="padding-left:0px;">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtObservacion' class="control-label col-md-2">Observaciones</label>
-                                <div class="col-md-10">
-                                    <input id='txtObservacion' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div>
+                        <input type="text" class="form-control" id="txtObservacion" name="Observaciones" autocomplete="off">
                     </div>
                 </div>
             </div>
+
+            @*<div class="col-md-12">
+                    <div class='form-horizontal'>
+                        <div class="form-group row m-b-5 p-l-10" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtLocalDet">Local</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtLocalDet" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalLocalDet" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtFecha">Fecha Mov.</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtFecha" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtTipoMovimiento">Tipo Mov.</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtTipoMovimiento" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalTipoMovimiento" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4" id="TGuia" style="display:none">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtGuia">Nro Guia</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtGuia" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalGuia" type="button" class="btn waves-effect waves-light btn-info btn-xs" tabindex="14">
+                                                <i class="pg-arrow_down"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4" id="TCompra" style="display:none">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtCompra">Nro Compra</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtCompra" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalCompra" type="button" class="btn btn-info btn-sm pr-1 pl-1" tabindex="14">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtEstadoMovimiento">Estado Movimiento</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtEstadoMovimiento" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalEstadoMovimiento" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-8" style="padding-left:0px;">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label for='txtObservacion' class="control-label col-md-2">Observaciones</label>
+                                    <div class="col-md-10">
+                                        <input id='txtObservacion' type='text' class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
         </div>
     </div>
 
@@ -169,7 +292,7 @@
         <div class="card-header" id="headingOne">
             <h4 class="mb-0">
                 <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
-                    Datos de Medicamento
+                    Datos de Producto
                 </a>
             </h4>
         </div>
@@ -318,66 +441,6 @@
         </div>
     </div>
 </div>
-<div class="card" id="rowFilter" style="margin-bottom:10px;">
-    <div class="card-header" id="headingOne">
-        <div class="row">
-            <div class="col-sm-12">
-                <a data-toggle="collapse" href="#collapseOne-2" role="button" aria-expanded="true" aria-controls="collapseOne">
-                    <h4 class="panel-title" id="lblTi">Parámetros de Búsqueda</h4>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
-        <div class="card-body">
-            <div class="col-12" id="frm">
-                <div class="form-horizontal">
-                    <div class="row">
-                        <div class="col-md-6 col-12 p-0">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for="txtFilFecIn" class="control-label col-md-2">Fecha</label>
-                                <div class="col-12 col-md-8">
-                                    <div class="input-daterange input-group" id="datepicker-range">
-                                        <input type="text" id="txtFilFecIn" class="form-control form-control-sm" name="start">
-                                        <div class="input-group-addon">
-                                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                                        </div>
-                                        <input type="text" id="txtFilFecFn" class="form-control form-control-sm" " name="end">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 p-0">
-                            <button type='button' class='btn btn-success float-right waves-effect waves-light' id='btnBuscar'><i class="fa fa-search"></i> <span class="bold">Buscar</span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row" id="rowTabla">
-    <div class="col-md-12">
-        <div class="card p-l-20 p-r-20 m-b-0">
-            <div class="card-body">
-                <div class="row">
-                    <div class="row col-12 m-b-5 m-t-5" style="display:none">
-                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
-                        <div class="col-md-8">
-                            <div class="btn-toolbar flex-wrap float-right" role="toolbar">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 hidden-sm-down" id="cabeTabla"></div>
-                    <div class="col-sm-12 table-responsive" id="divTabla">
-                        <div id="contentPrincipal" class="clusterize-content">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -455,4 +518,11 @@
 </div>
 
 @Scripts.Render("~/bundles/basics")
+<script src="/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/assets/libs/list.js/list.min.js"></script>
+<script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 <script src="~/Scripts/Inventario/OperacionStock_Entrada.js"></script>

@@ -67,7 +67,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioCreacion"].ToString()));
                         oProductoDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioModificacion"].ToString()));
                         oProductoDTO.Estado = Convert.ToBoolean(dr["Estado"] == null ? false : Convert.ToBoolean(dr["Estado"].ToString()));
-                        oProductoDTO.PagoProducto = Convert.ToDecimal(dr["PagoProducto"].ToString());
+                        oProductoDTO.Precio = Convert.ToDecimal(dr["Precio"].ToString());
                         oProductoDTO.CodigoProducto = dr["CodigoProducto"] == null ? "" : dr["CodigoProducto"].ToString();
                         oResultDTO.ListaResultado.Add(oProductoDTO);
                     }
@@ -107,7 +107,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"].ToString());
                         oProductoDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"].ToString());
                         oProductoDTO.Estado = Convert.ToBoolean(dr["Estado"].ToString());
-                        oProductoDTO.PagoProducto = Convert.ToDecimal(dr["PagoProducto"].ToString());
+                        oProductoDTO.Precio = Convert.ToDecimal(dr["Precio"].ToString());
                         oProductoDTO.CodigoProducto = dr["CodigoProducto"].ToString();
                         oProductoDTO.CodigoAutogenerado = dr["CodigoAutogenerado"].ToString();
                         oResultDTO.ListaResultado.Add(oProductoDTO);
@@ -147,7 +147,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         da.SelectCommand.Parameters.AddWithValue("@UsuarioCreacion", oProducto.UsuarioCreacion);
                         da.SelectCommand.Parameters.AddWithValue("@UsuarioModificacion", oProducto.UsuarioModificacion);
                         da.SelectCommand.Parameters.AddWithValue("@Estado", oProducto.Estado);
-                        da.SelectCommand.Parameters.AddWithValue("@PagoProducto", oProducto.PagoProducto);
+                        da.SelectCommand.Parameters.AddWithValue("@Precio", oProducto.Precio);
                         da.SelectCommand.Parameters.AddWithValue("@CodigoProducto", oProducto.CodigoProducto);
 
                         int rpta = da.SelectCommand.ExecuteNonQuery();

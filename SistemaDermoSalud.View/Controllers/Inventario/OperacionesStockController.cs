@@ -1,13 +1,12 @@
-﻿using SistemaDermoSalud.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using SistemaDermoSalud.Business;
 using SistemaDermoSalud.Business.Mantenimiento;
 using SistemaDermoSalud.Entities;
 using SistemaDermoSalud.Entities.Mantenimiento;
 using SistemaDermoSalud.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+
 
 namespace SistemaDermoSalud.View.Controllers.Inventario
 {
@@ -189,26 +188,26 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
             }
             return rpta;
         }
-        public string cargarMedicamento()//cargar medicamentos
+        public string cargarProductos()//cargar Productos
         {
             string rpta = "";
-            string listaMedicamento = "";
-            Ma_ProductoBL oMedicamentoBL = new Ma_ProductoBL();
+            string listaProducto = "";
+            Ma_ProductoBL oProductoBL = new Ma_ProductoBL();
             ResultDTO<Ma_ProductoDTO> oResultDTO = new ResultDTO<Ma_ProductoDTO>();
-            oResultDTO = oMedicamentoBL.ListarTodo(1);
-            listaMedicamento = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idMedicamentos", "CodigoMedicamento", "Descripcion", "Laboratorio", "PagoMedicamento" });
-            rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMedicamento);
+            oResultDTO = oProductoBL.ListarTodo(1);
+            listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProducto", "CodigoProducto", "Descripcion", "Marca", "Precio" });
+            rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
             return rpta;
         }
-        public string cargarMedicamentoxLaboratorio(int idLab)//cargar medicamentos
+        public string cargarProductoxLaboratorio(int idLab)//cargar Productos
         {
             string rpta = "";
-            string listaMedicamento = "";
-            Ma_ProductoBL oMedicamentoBL = new Ma_ProductoBL();
+            string listaProducto = "";
+            Ma_ProductoBL oProductoBL = new Ma_ProductoBL();
             ResultDTO<Ma_ProductoDTO> oResultDTO = new ResultDTO<Ma_ProductoDTO>();
-            oResultDTO = oMedicamentoBL.ListarporMarca(idLab);
-            listaMedicamento = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idMedicamentos", "Descripcion" });
-            rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMedicamento);
+            oResultDTO = oProductoBL.ListarporMarca(idLab);
+            listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProductos", "Descripcion" });
+            rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
             return rpta;
         }
         public string cargarTransferenciaSalida(int idLocal, int idAlmacen)
@@ -238,12 +237,12 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
             rpta = string.Format("{0}↔{1}", listaTransferencia, listaDetalle);
             return rpta;
         }
-        public string cargarStock(int idMedicamento, int idAlmacenO = 0, int idAlmacenD = 0)
+        public string cargarStock(int idProducto, int idAlmacenO = 0, int idAlmacenD = 0)
         {
             string rpta = "";
             Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
             INV_StockBL oINV_StockBL = new INV_StockBL();
-            rpta = oINV_StockBL.ItemStock(eSEGUsuario.idEmpresa, idMedicamento, idAlmacenO, idAlmacenD);
+            rpta = oINV_StockBL.ItemStock(eSEGUsuario.idEmpresa, idProducto, idAlmacenO, idAlmacenD);
             return rpta;
         }
         public string cargarCompras()

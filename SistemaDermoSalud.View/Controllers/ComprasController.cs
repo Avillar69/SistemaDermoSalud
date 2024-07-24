@@ -66,7 +66,7 @@ namespace SistemaDermoSalud.View.Controllers
             {"idCuentaOrigen", "NumeroCuenta"});
 
             return String.Format("{0}↔{1}↔{2}↔{3}↔{4}↔{5}↔{6}↔{7}↔{8}↔{9}↔{10}", "OK", listaSocios, listaMoneda,
-                listaFormaPago, listaComprobantes, listaTipoCompra, listaDocumentoCompra, fechaInicio.ToString("dd-MM-yyyy"), fechaFin.ToString("dd-MM-yyyy"), listaMa_BancoBL, listaAD_CuentaOrigen);
+                listaFormaPago, listaComprobantes, listaTipoCompra, listaDocumentoCompra, fechaInicio.ToString("dd/MM/yyyy"), fechaFin.ToString("dd/MM/yyyy"), listaMa_BancoBL, listaAD_CuentaOrigen);
         }
         public string ObtenerDatosxID(int id)
         {
@@ -119,7 +119,7 @@ namespace SistemaDermoSalud.View.Controllers
             {
                 oResultDTO = oCOM_DocumentoCompraBL.UpdateInsert(oCOM_DocumentoCompraDTO, fechaInicio, fechaFin);
                 string listaDocumentoCompra = Serializador.rSerializado(oResultDTO.ListaResultado, new string[]
-            {"idDocumentoCompra", "FechaDocumento", "SerieDocumento", "NumDocumento","ProveedorRazon", "SubTotalNacional", "IGVNacional", "TotalNacional" });
+                    {"idDocumentoCompra", "FechaDocumento", "SerieDocumento", "NumDocumento","ProveedorRazon", "SubTotalNacional", "IGVNacional", "TotalNacional" });
                 return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaDocumentoCompra);
             }
             else
