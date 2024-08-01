@@ -216,7 +216,8 @@ namespace SistemaDermoSalud.DataAccess
                         oALM_MovimientoDTO.FechaModificacion = Convert.ToDateTime(dr["FechaModificacion"].ToString());
                         oALM_MovimientoDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"].ToString());
                         oALM_MovimientoDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"].ToString());
-                        oALM_MovimientoDTO.Estado = Convert.ToBoolean(dr["Estado"].ToString());                        
+                        oALM_MovimientoDTO.Estado = Convert.ToBoolean(dr["Estado"].ToString());
+                        oALM_MovimientoDTO.Documento = dr["Documento"].ToString();
                         oResultDTO.ListaResultado.Add(oALM_MovimientoDTO);
                     }
                     if (oResultDTO.ListaResultado != null && oResultDTO.ListaResultado.Count > 0)
@@ -228,9 +229,12 @@ namespace SistemaDermoSalud.DataAccess
                             {
                                 ALM_MovimientoDetalleDTO obj = new ALM_MovimientoDetalleDTO();
                                 obj.idMovimientoDetalle = Convert.ToInt32(dr["idMovimientoDetalle"].ToString());
-                                obj.idArticulo = Convert.ToInt32(dr["idMedicamentos"].ToString());
+                                obj.idMovimiento = Convert.ToInt32(dr["idMovimiento"].ToString());
+                                obj.Item = Convert.ToInt32(dr["Item"].ToString());
+                                obj.idArticulo = Convert.ToInt32(dr["idProducto"].ToString());
                                 obj.DesArticulo = dr["DesArticulo"].ToString();
-                                obj.Laboratorio = dr["Laboratorio"].ToString();
+                                obj.idMarca = Convert.ToInt32(dr["idMarca"].ToString());
+                                obj.Marca = dr["Marca"].ToString();
                                 obj.Cantidad = Convert.ToDecimal(dr["Cantidad"].ToString());
                                 obj.Precio = Convert.ToDecimal(dr["Precio"].ToString());
                                 lista.Add(obj);
@@ -578,8 +582,12 @@ namespace SistemaDermoSalud.DataAccess
                         ALM_MovimientoDTO oALM_MovimientoDTO = new ALM_MovimientoDTO();
                         oALM_MovimientoDTO.idMovimiento = Convert.ToInt32(dr["idMovimiento"] == null ? 0 : Convert.ToInt32(dr["idMovimiento"].ToString()));
                         oALM_MovimientoDTO.DesLocal = dr["DesLocal"].ToString();
+                        oALM_MovimientoDTO.DesAlmacenOrigen = dr["DesAlmacenOrigen"].ToString();
+                        oALM_MovimientoDTO.DesAlmacenDestino = dr["DesAlmacenDestino"].ToString();
                         oALM_MovimientoDTO.Observaciones = dr["Observaciones"].ToString();
                         oALM_MovimientoDTO.DesEstado = dr["DesEstado"].ToString();
+                        oALM_MovimientoDTO.FechaMovimiento = Convert.ToDateTime(dr["FechaMovimiento"].ToString());
+                        oALM_MovimientoDTO.FechaMovimientoDestino = Convert.ToDateTime(dr["FechaMovimientoDestino"].ToString());
                         oALM_MovimientoDTO.FechaModificacion = Convert.ToDateTime(dr["FechaModificacion"].ToString());
                         oResultDTO.ListaResultado.Add(oALM_MovimientoDTO);
                     }

@@ -91,7 +91,7 @@ namespace SistemaDermoSalud.DataAccess
             }
             return oResultDTO;
         }
-        public string ItemStock(int idEmpresa, int idMedicamento, int idAlmacenO, int idAlmacenD)
+        public string ItemStock(int idEmpresa, int idProducto, int idAlmacenO, int idAlmacenD)
         {
             string rpta = "";
             using (SqlConnection cn = new Conexion().conectar())
@@ -102,7 +102,7 @@ namespace SistemaDermoSalud.DataAccess
                     SqlDataAdapter da = new SqlDataAdapter("SP_INV_Stock_Get_ItemStock", cn);
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     da.SelectCommand.Parameters.AddWithValue("@idEmpresa", idEmpresa);
-                    da.SelectCommand.Parameters.AddWithValue("@idMedicamento", idMedicamento);
+                    da.SelectCommand.Parameters.AddWithValue("@idProducto", idProducto);
                     da.SelectCommand.Parameters.AddWithValue("@idAlmacenO", idAlmacenO);
                     da.SelectCommand.Parameters.AddWithValue("@idAlmacenD", idAlmacenD);
                     SqlDataReader dr = da.SelectCommand.ExecuteReader();

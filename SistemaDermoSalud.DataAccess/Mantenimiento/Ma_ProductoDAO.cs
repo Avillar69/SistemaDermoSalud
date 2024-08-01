@@ -102,6 +102,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.idProducto = Convert.ToInt32(dr["idProducto"].ToString());
                         oProductoDTO.Descripcion = dr["Descripcion"].ToString();
                         oProductoDTO.idMarca = Convert.ToInt32(dr["idMarca"].ToString());
+                        oProductoDTO.Marca = dr["Marca"].ToString();
                         oProductoDTO.FechaCreacion = Convert.ToDateTime(dr["FechaCreacion"].ToString());
                         oProductoDTO.FechaModificacion = Convert.ToDateTime(dr["FechaModificacion"].ToString());
                         oProductoDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"].ToString());
@@ -110,6 +111,8 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.Precio = Convert.ToDecimal(dr["Precio"].ToString());
                         oProductoDTO.CodigoProducto = dr["CodigoProducto"].ToString();
                         oProductoDTO.CodigoAutogenerado = dr["CodigoAutogenerado"].ToString();
+                        oProductoDTO.idTalla = Convert.ToInt32(dr["idTalla"].ToString());
+                        oProductoDTO.idColor = Convert.ToInt32(dr["idColor"].ToString());
                         oResultDTO.ListaResultado.Add(oProductoDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -149,6 +152,8 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         da.SelectCommand.Parameters.AddWithValue("@Estado", oProducto.Estado);
                         da.SelectCommand.Parameters.AddWithValue("@Precio", oProducto.Precio);
                         da.SelectCommand.Parameters.AddWithValue("@CodigoProducto", oProducto.CodigoProducto);
+                        da.SelectCommand.Parameters.AddWithValue("@idTalla", oProducto.idTalla);
+                        da.SelectCommand.Parameters.AddWithValue("@idColor", oProducto.idColor);
 
                         int rpta = da.SelectCommand.ExecuteNonQuery();
                         if (rpta == 1)

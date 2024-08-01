@@ -30,7 +30,7 @@ namespace SistemaDermoSalud.Controllers
             if (oResultDTO.ListaResultado != null && oResultDTO.ListaResultado.Count > 0)
             {
                 listaMa_Moneda = Serializador.Serializar(oResultDTO.ListaResultado, '▲', '▼', new string[] {
-                "idMoneda", "CodigoGenerado", "Descripcion", "FechaModificacion", "UsuarioModificacionDes", "Estado"}, false);
+                "idMoneda", "CodigoGenerado", "Descripcion", "FechaModificacion", "Estado"}, false);
             }
             return String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMa_Moneda);
         }
@@ -61,8 +61,7 @@ namespace SistemaDermoSalud.Controllers
             List<Ma_MonedaDTO> lstMA_MonedaDTO = oResultDTO.ListaResultado;
             if (lstMA_MonedaDTO != null && lstMA_MonedaDTO.Count > 0)
             {
-                listaMA_Moneda = Serializador.Serializar(lstMA_MonedaDTO,'▲', '▼', new string[] { "idMoneda", "CodigoGenerado", "Descripcion",
-                    "FechaModificacion", "UsuarioModificacionDes", "Estado" },false);
+                listaMA_Moneda = Serializador.Serializar(lstMA_MonedaDTO,'▲', '▼', new string[] { "idMoneda", "CodigoGenerado", "Descripcion", "FechaModificacion",  "Estado" },false);
             }
             return string.Format("{0}↔{1}↔{2}",oResultDTO.Resultado, oResultDTO.MensajeError, listaMA_Moneda);
         }
@@ -77,7 +76,7 @@ namespace SistemaDermoSalud.Controllers
             if (lstMA_MonedaDTO != null && lstMA_MonedaDTO.Count > 0)
             {
                 listaMA_Moneda = Serializador.Serializar(lstMA_MonedaDTO,'▲', '▼', new string[] { "idMoneda", "CodigoGenerado", "Descripcion",
-                    "FechaModificacion", "UsuarioModificacionDes", "Estado" },false);
+                    "FechaModificacion","Estado" },false);
             }
             return string.Format("{0}↔{1}↔{2}",oResultDTO.Resultado, oResultDTO.MensajeError, listaMA_Moneda);
         }

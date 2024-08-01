@@ -4278,9 +4278,11 @@
     <Content Include="assets\logos-png\tarina.png" />
     <Content Include="assets\logos-png\working.png" />
     <Content Include="Scripts\Administracion\Clientes.js" />
+    <Content Include="Scripts\Configuraciones\Color.js" />
     <Content Include="Scripts\Configuraciones\CtasBancarias.js" />
     <Content Include="Scripts\Configuraciones\PrecioServicios.js" />
     <Content Include="Scripts\Configuraciones\Serie.js" />
+    <Content Include="Scripts\Configuraciones\Talla.js" />
     <Content Include="Scripts\Finanzas\PorcentajeMedico.js" />
     <Content Include="Scripts\LabMedica\Recetas.js" />
     <Content Include="Scripts\logos.js" />
@@ -5156,6 +5158,8 @@
     <Compile Include="Controllers\Inventario\ConsultaStockController.cs" />
     <Compile Include="Controllers\Inventario\KardexController.cs" />
     <Compile Include="Controllers\Inventario\OperacionesStockController.cs" />
+    <Compile Include="Controllers\Mantenimiento\ColorController.cs" />
+    <Compile Include="Controllers\Mantenimiento\TallaController.cs" />
     <Compile Include="Controllers\MarcaController.cs" />
     <Compile Include="Controllers\Mantenimiento\ArticuloController.cs" />
     <Compile Include="Controllers\Mantenimiento\CategoriaController.cs" />
@@ -5243,6 +5247,8 @@
     <Content Include="Views\Reportes\RegistroVentas.cshtml" />
     <Content Include="Views\Recetas\Index.cshtml" />
     <Content Include="Views\CuentaCobrar\IndexNotCredito.cshtml" />
+    <Content Include="Views\Color\Index.cshtml" />
+    <Content Include="Views\Talla\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

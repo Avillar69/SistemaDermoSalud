@@ -21,5 +21,7 @@ namespace SistemaDermoSalud.Entities.Mantenimiento
         public decimal Precio { get; set; }
         public string CodigoProducto { get; set; }
         public string CodigoAutogenerado { get; set; }
+        public int idTalla { get; set; }
+        public int idColor{ get; set; }
     }
 }

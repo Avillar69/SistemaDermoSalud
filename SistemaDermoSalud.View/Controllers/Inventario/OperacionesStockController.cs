@@ -100,7 +100,7 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
                 listaALM_Movimiento = Serializador.Serializar(oResultDTO.ListaResultado, '▲', '▼', new string[] { }, false);
                 listaAlmacen = cargarAlmacenes(oResultDTO.ListaResultado[0].idLocal);
                 listaALM_MovDetalle = Serializador.Serializar(oResultDTO.ListaResultado[0].oListaDetalle, '▲', '▼', new string[]
-                { "idMovimientoDetalle", "idArticulo", "DesArticulo","Laboratorio", "Cantidad", "Precio" }, false);
+                { "idMovimientoDetalle", "idMovimiento", "Item", "idArticulo", "DesArticulo","idMarca", "Marca", "Cantidad", "Precio" }, false);
 
             }
 

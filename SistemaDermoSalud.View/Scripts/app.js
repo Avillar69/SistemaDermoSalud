@@ -635,7 +635,7 @@ function mostrarTotal(matriz) {
 }
 function mostrarRespuesta(titulo, mensaje, tipo) {
 
-    swal({
+    Swal.fire({
         title: titulo,
         text: mensaje,
         type: tipo,

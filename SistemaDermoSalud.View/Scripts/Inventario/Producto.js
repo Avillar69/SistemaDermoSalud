@@ -17,6 +17,8 @@ var txtDescripcion = document.getElementById("txtDescripcion");
 var cboMarca = document.getElementById("cboMarca");
 var chkActivo = document.getElementById("chkActivo");
 var txtPrecio = document.getElementById("txtPrecio");
+var cboTalla = document.getElementById("cboTalla");
+var cboColor = document.getElementById("cboColor");
 $(function () {
     var url = "Producto/ObtenerDatos";
     enviarServidor(url, mostrarLista);
@@ -32,13 +34,18 @@ function mostrarLista(rpta) {
             listaDatos = listas[3].split("▼");
             let listaMarca = listas[2].split("▼");
             cargarDatosMarca(listaMarca);
+            let urlTallas = "/Talla/ObtenerDatos?tabla=Talla";
+            enviarServidor(urlTallas, cargarDatosTallas);
+            let urlColores = "/Color/ObtenerDatos?tabla=Color";
+            enviarServidor(urlColores, cargarDatosColores);
+
             listar(listaDatos);
         }
     }
 }
 function listar(r) {   
-    if (r[0] !== '') {
-        let newDatos = [];
+    let newDatos = [];
+    if (r[0] !== '') {      
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
@@ -47,10 +54,10 @@ function listar(r) {
                 marca: valor[2],
                 estado: valor[3]
             })
-        });
-        let cols = ["producto", "marca", "estado"];
-        loadDataTable(cols, newDatos, "idProducto", "tbDatos", cadButtonOptions(), false);
+        });                
     }
+    let cols = ["producto", "marca", "estado"];
+    loadDataTable(cols, newDatos, "idProducto", "tbDatos", cadButtonOptions(), false);
 }
 function cadButtonOptions() {
     let cad = "";
@@ -161,6 +168,8 @@ function limpiarTodo() {
     txtDescripcion.value = "";
     cboMarca.value = "";
     chkActivo.checked = true;
+    cboTalla.value = "";
+    cboColor.value = "";
 }
 function eliminar(id) {
     let idProducto = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
@@ -216,6 +225,30 @@ function cargarDatosMarca(r) {
         });
     }
 }
+function cargarDatosTallas(r) {
+    let rd = r.split("↔");
+    let tallas = rd[2].split("▼");
+    $("#cboTalla").empty();
+    $("#cboTalla").append(`<option value="0">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        tallas.forEach(element => {
+            $("#cboTalla").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+}
+function cargarDatosColores(r) {
+    let rd = r.split("↔")
+    let colores = rd[2].split("▼");
+    $("#cboColor").empty();
+    $("#cboColor").append(`<option value="0">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        colores.forEach(element => {
+            $("#cboColor").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+}
 function configurarBotonesModal() {
     var btnGrabar = document.getElementById("btnGrabar");
     btnGrabar.onclick = function () {
@@ -228,6 +261,8 @@ function configurarBotonesModal() {
             frm.append("Estado", chkActivo.checked);
             frm.append("Precio",txtPrecio.value);
             frm.append("CodigoProducto", txtCodigoProducto.value);
+            frm.append("idTalla", cboTalla.value);
+            frm.append("idColor", cboColor.value);
             enviarServidorPost(url, actualizarListar, frm);
         }
     };
@@ -304,7 +339,8 @@ function CargarDetalles(rpta) {
     if (rpta != "") {
         var datos = rpta.split("↔");
         var a = datos[0].split("▲");
-        var listaDetalle = datos[2].split("▲");        
+        var listaDetalle = datos[2].split("▲");     
+        console.log(listaDetalle);
         txtID.value = listaDetalle[0];
         txtDescripcion.value = listaDetalle[1];
         cboMarca.value = listaDetalle[2];
@@ -312,6 +348,8 @@ function CargarDetalles(rpta) {
         txtCodigo.value = listaDetalle[11];
         txtPrecio.value = listaDetalle[9];
         txtCodigoProducto.value = listaDetalle[10];
+        cboTalla.value = listaDetalle[12];
+        cboColor.value = listaDetalle[13];
     }
 }
 //
@@ -387,52 +425,4 @@ function CargarDetalles(rpta) {
 //        matriz = crearMatriz(listaDatos);
 //        mostrarMatrizPersonal(matriz, cabe, "divTabla", "contentPrincipal");
 //    };
-//}
-//function mostrarMatrizPersonal(matriz, cabeceras, tabId, contentID) {
-//    var nRegistros = matriz.length;
-//    if (nRegistros > 0) {
-//        nRegistros = matriz.length;
-//        var dat = [];
-//        for (var i = 0; i < nRegistros; i++) {
-//            if (i < nRegistros) {
-//                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-//                for (var j = 0; j < cabeceras.length; j++) {
-//                    contenido2 += "<div class='col-12 ";
-//                    switch (j) {
-//                        case 0:
-//                            contenido2 += "col-md-2' style='display:none;'>";
-//                            break;
-//                        case 1:
-//                            contenido2 += "col-md-4' style='padding-top:5px;'>";
-//                            break;
-//                        case 5:
-//                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-//                            break;
-//                        default:
-//                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-//                            break;
-//                    }
-//                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-//                    contenido2 += "</div>";
-//                }
-//                contenido2 += "<div class='col-12 col-md-2'>";
-
-//                contenido2 += "<div class='row saltbtn'>";
-//                contenido2 += "<div class='col-12'>";
-//                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='eliminar(\"" + matriz[i][0] + "\")'> <i class='fa fa-trash-o fs-11'></i> </button>";
-//                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='mostrarDetalle(2, \"" + matriz[i][0] + "\")'> <i class='fa fa-pencil fs-11'></i></button>";
-//                contenido2 += "</div>";
-//                contenido2 += "</div>";
-//                contenido2 += "</div>";
-//                contenido2 += "</div>";
-//                dat.push(contenido2);
-//            }
-//            else break;
-//        }
-//        var clusterize = new Clusterize({
-//            rows: dat,
-//            scrollId: tabId,
-//            contentId: contentID
-//        });
-//    }
 //}
