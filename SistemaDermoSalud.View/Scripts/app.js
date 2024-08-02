@@ -21,6 +21,88 @@ function reziseTabla() {
     div.style.height = "" + (altoTotal - altoFooter - puntoInicio - 100) + "px";
 }
 
+function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
+    var columnas = [];
+    for (var i = 0; i < cols.length; i++) {
+        let item = {
+            data: cols[i]
+        };
+        columnas.push(item);
+    }
+    let itemBtn = {
+        "data": null,
+        "defaultContent": "<center>" + btns + "</center>"
+    };
+    columnas.push(itemBtn);
+    tbDatos = $('#' + tid).DataTable({
+        data: datos,
+        columns: columnas,
+        rowId: rid,
+        order: arrOrder,
+        columnDefs:
+            [
+                {
+                    "targets": 0,
+                    "visible": showFirstField,
+                },
+                {
+                    "targets": columnas.length - 1,
+                    "width": "10%"
+                }],
+        searching: !0,
+        bLengthChange: !0,
+        destroy: !0,
+        pagingType: "full_numbers",
+        info: !1,
+        paging: !0,
+        pageLength: 10,
+        responsive: !0,
+        footer: false,
+        deferRender: !1,
+        language: {
+            "decimal": "",
+            "emptyTable": "No existen registros a mostrar.",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            search: "_INPUT_",
+            searchPlaceholder: "Buscar ",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "<<",
+                "last": ">>",
+                "next": ">",
+                "previous": "<"
+            }
+        }
+    });
+}
+function cadButtonOptions() {
+    let cad = "";
+    cad += '<ul class="list-inline" style="margin-bottom: 0px;">';
+    cad += '<li class="list-inline-item">';
+    cad += '<div class="dropdown">';
+    cad += '<button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">';
+    cad += '<i class="ri-more-fill align-middle"></i>';
+    cad += '</button>';
+    cad += '<ul class="dropdown-menu dropdown-menu-end" style="">';
+    cad += '<li>';
+    cad += '<a class="dropdown-item edit-item-btn" href="javascript:void(0)" onclick="mostrarDetalle(2, this)" ><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Editar</a>';
+    cad += '</li>';
+    cad += '<li>';
+    cad += '<a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="javascript:void(0)" onclick="eliminar(this)"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Eliminar</a>';
+    cad += '</li>';
+    cad += '</ul>';
+    cad += '</div>';
+    cad += '</li>';
+    cad += ' </ul>';
+    return cad;
+}
 function crearMatrizReporte(listaDatos) {
     var nRegistros = listaDatos.length;
     var nCampos;

@@ -5243,6 +5243,8 @@
     <Content Include="Views\Reportes\RegistroVentas.cshtml" />
     <Content Include="Views\Recetas\Index.cshtml" />
     <Content Include="Views\CuentaCobrar\IndexNotCredito.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="Views\Shared\_LayoutLoginFooter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -5262,7 +5264,6 @@
     <Folder Include="Views\FormaPago\" />
     <Folder Include="Views\ListaPrecio\" />
     <Folder Include="Views\Pago\" />
-    <Folder Include="Views\Shared\" />
     <Folder Include="Views\TipoCambio\" />
   </ItemGroup>
   <ItemGroup>

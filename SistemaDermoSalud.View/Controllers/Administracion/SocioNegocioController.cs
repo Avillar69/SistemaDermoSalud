@@ -14,6 +14,7 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
 {
     public class SocioNegocioController : Controller
     {
+        const string token= "apis-token-9728.Piv1HEdrbWHPGVTAaEo40wuIBXhtfOAH";
         // GET: SocioNegocio
         public ActionResult Index()
         {

@@ -1,141 +1,80 @@
 ﻿
-<!DOCTYPE html>
-<html lang="en" data-textdirection="ltr" class="loading">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="Stack admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-    <meta name="keywords" content="admin template, stack admin template, dashboard template, flat admin template, responsive admin template, web app">
-    <meta name="author" content="PIXINVENT">
-    <title>Sistema Clínica DermoSalud</title>
-    <link rel="apple-touch-icon" href="~/app-assets/images/ico/apple-icon-120.png">
-    <link rel="shortcut icon" type="image/x-icon" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/images/ico/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/vendors.css">
-    <link href="~/app-assets/css/vendors.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/forms/icheck/icheck.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/forms/icheck/custom.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/app.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu-modern.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/login-register.css">
 
-    <link href="~/app-assets/swal/sweetalert.css" rel="stylesheet" />
-    @*<link rel="stylesheet" type="text/css" href="~/assets/css/style.css">*@
-</head>
-<body data-open="click" data-menu="vertical-menu-modern" data-col="1-column" class="vertical-layout vertical-menu-modern 1-column  bg-cyan bg-lighten-2 menu-expanded blank-page blank-page">
-    <div class="app-content content">
-        <div class="content-wrapper">
-            <div class="content-header row">
-            </div>
-            <div class="content-body">
-                <section class="flexbox-container">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="col-md-4 col-10 box-shadow-2 p-0">
-                            <div class="card border-grey border-lighten-3 m-0">
-                                <div class="card-header border-0">
-                                    <div class="card-title text-center">
-                                        <div class="p-1">
-                                        <h4>Iniciar Sesión</h4>
-                                        <img src="~/app-assets/images/logo/LogoNova.jpeg" alt="branding logo"></div>
-                                    </div>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-body pt-0">
-                                        <div class="form-horizontal">
-                                            <fieldset class="form-group floating-label-form-group">
-                                                <label for="user-name">Usuario</label>
-                                                <input type="text" class="form-control" id="txtUsuario" placeholder="Usuario" value="">
-                                            </fieldset>
-                                            <fieldset class="form-group floating-label-form-group mb-1">
-                                                <label for="user-password">Password</label>
-                                                <input type="password" class="form-control" id="txtPassword" placeholder="Ingrese su Password" value="">
-                                            </fieldset>
-                                            <div class="form-group row">
-                                            </div>
-                                            <button id="btnLogin" class="btn btn-outline-primary btn-block"><i class="ft-unlock"></i> Login</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Title = "Login";
+}
 
+@section styles{
+    <!-- Sweet Alert css-->
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .auth-one-bg .bg-overlay {
+            background: linear-gradient(to right,#dee2e9,#ededee);
+            opacity: .9;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="text-center text-white-50">
+            <div>
+                <a href="index.php" class="d-inline-block auth-logo">
+                    <img src="~/assets/images/logo-gca.png" alt="" height="100">
+                </a>
             </div>
+
         </div>
     </div>
+</div>
+<!-- end row -->
 
-    <div id='modalLoginTipoCambio' class='modal stick-up show lg' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
-        <div class='modal-dialog' role='document'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h4 class="modal-title" id="lblTituloModal">Registrar Tipo Cambio</h4>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 col-xl-5">
+        <div class="card mt-4" style="margin-bottom: 0px;">
+            <div class="card-body p-4">
+                <div class="text-center mt-2">
+                    <h5 class="text-primary">Bienvenido !</h5>
+                    <p class="text-muted">Ingresa tus datos para iniciar sesión</p>
                 </div>
-                <br />
-                <div class="modal-body">
-                    <div class="form-horizontal">
-                        <div class="row">
-                            <div class='col-sm-12' id="div_Frm_Modal">
-                                <!-- formulario del modal -->
+                <div class="p-2">
+                    <form action="#">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="txtUsuario" placeholder="Usuario">
+                        </div>
+                        <div class="mb-3">
+                            <div class="float-end">
+                                <a href="/Account/RecuperarPassword" class="text-muted fw-semibold text-primary text-decoration-underline"><font style="vertical-align: inherit;">¿Olvidaste la contraseña?</font></a>
                             </div>
-                            <div class="col-12 col-md-10">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="control-label col-sm-4">Moneda</label>
-                                    <div class="col-sm-8">
-
-                                        <select class="form-control input-sm" id="txtLoginTipoMoneda">
-                                            <option value="2">Dolar</option>
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="control-label col-sm-4">V.Compra</label>
-                                    <div class="col-sm-8">
-                                        <input id='txtLoginValorCompra' type='text' class="form-control input-sm">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="control-label col-sm-4">V.Venta</label>
-                                    <div class="col-sm-8">
-                                        <input id='txtLoginValorVenta' type='text' class="form-control input-sm">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="control-label col-sm-4"></label>
-                                    <label class="control-label col-sm-8" id="txtRptaTipoCambio" style="color:red;"></label>
-                                </div>
+                            <label class="form-label" for="password-input">Contraseña</label>
+                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                <input type="password" class="form-control pe-5 password-input" placeholder="Contraseña" id="txtPassword">
+                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default waves-effect waves-light" id="btnLoginOmitir">Omitir</button>
-                    <button type="button" class="btn btn-primary waves-effect waves-light" id="btnLoginGrabarMonedaCambio" data-grabar="">Guardar</button>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
+                            <label class="form-check-label" for="auth-remember-check">Recuerdame</label>
+                        </div>
+                        <div class="mt-4">
+                            @* <a href="index.php" class="btn btn-success w-100" type="submit">Iniciar sesión</a> *@
+                            <button id="BtnIngresando" style="display:none" type="button" class="btn btn-success w-100"><span class="fa fa-spinner fa-spin"></span> Ingresando...</button>
+                            <button id="btnLogin" type="button" class="btn btn-success w-100">INGRESAR</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+            <!-- end card body -->
         </div>
+        <!-- end card -->
     </div>
+</div>
 
-    <script src="~/app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
-    <script src="~/app-assets/vendors/js/forms/icheck/icheck.min.js" type="text/javascript"></script>
-    <script src="~/app-assets/js/core/app-menu.js" type="text/javascript"></script>
-    <script src="~/app-assets/js/core/app.js" type="text/javascript"></script>
-    @*<script src="~/app-assets/js/scripts/customizer.js" type="text/javascript"></script>*@
-    <script src="~/app-assets/js/scripts/forms/form-login-register.js" type="text/javascript"></script>
+@section Scripts {
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="~/Scripts/app.js"></script>
     <script src="~/Scripts/login.js"></script>
-
-    <script src="~/app-assets/swal/sweetalert.min.js"></script>
-    <script src="~/app-assets/swal/jquery.sweet-alert.custom.js"></script>
-</body>
-</html>
+}

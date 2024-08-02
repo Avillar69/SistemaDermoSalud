@@ -66,10 +66,10 @@ function configurarBoton() {
             enviarServidorPost(url, redireccion, "post");
         }
     };
-    var btnLoginOmitir = document.getElementById("btnLoginOmitir");
-    btnLoginOmitir.onclick = function () {
-        actualizarListarLogin();
-    }
+    //var btnLoginOmitir = document.getElementById("btnLoginOmitir");
+    //btnLoginOmitir.onclick = function () {
+    //    actualizarListarLogin();
+    //}
     var btnLoginGrabarMonedaCambio = document.getElementById("btnLoginGrabarMonedaCambio");
     btnLoginGrabarMonedaCambio.onclick = function () {
         var ValorCompra = parseFloat(gbi("txtLoginValorCompra").value);
@@ -115,12 +115,8 @@ function configurarBoton() {
 }
 function redireccion(rpta) {
     if (rpta == "OK") {
-        if (txtLoginTipoCambio[0] == "") {
-            AbrirModalLogin("modalLoginTipoCambio");
-        } else {
-            var logoutUrl = '../../';
-            window.location.href = logoutUrl;
-        }
+        var logoutUrl = '../../';
+        window.location.href = logoutUrl;
     } else {
         swal('Información', rpta, 'info');
     }

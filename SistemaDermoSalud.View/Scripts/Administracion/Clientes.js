@@ -14,7 +14,6 @@ configBM();
 var url = "/SocioNegocio/ObtenerDatosCliente";
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
-reziseTabla();
 var txtID = document.getElementById("txtID");
 var txtCodigo = document.getElementById("txtCodigo");
 var cboTipoPersona = document.getElementById("cboTipoPersona");
@@ -95,7 +94,6 @@ function cargarImagen(data64, imgCapcha) {
     }
 }
 function mostrarLista(rpta) {
-    crearTablaModal(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         listaDatos = listas[2].split("▼");
@@ -112,18 +110,36 @@ function mostrarLista(rpta) {
         llenarCombo(listaTipoDocumento, "cboTipoDocumento", "Seleccione");
         llenarCombo(listaMoneda, "cboMoneda", "Seleccione");
         llenarCombo(listaDepartamento, "cboDepartamento", "Seleccione");
-        listar();
+        listar(listaDatos);
     }
 }
-function listar() {
-    crearMatriz(listaDatos); configurarFiltro(cabeceras);
-    mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-    configurarBotonesModal();
-    configurarUbigeo();
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
+function listar(r) {
+    if (r[0] !== '') {
+        let newDatos = [];
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idSocioNegocio: valor[0],
+                documento: valor[1],
+                razonSocial: valor[2],
+                fechaModificacion: valor[3],
+                estado: valor[4]
+            })
+        });
+        console.log(newDatos);
+        let cols = [ "documento", "razonSocial", "fechaModificacion", "estado"];
+        loadDataTable(cols, newDatos, "idSocioNegocio", "tbDatos", cadButtonOptions(), false);
+    }
+
+
+    //crearMatriz(listaDatos); configurarFiltro(cabeceras);
+    //mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
+    //configurarBotonesModal();
+    //configurarUbigeo();
+    //reziseTabla();
+    //$(window).resize(function () {
+    //    reziseTabla();
+    //});
 }
 function CargarProvincias() {
     var listaProvFilt = [];
