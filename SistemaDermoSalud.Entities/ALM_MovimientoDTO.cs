@@ -30,6 +30,9 @@ namespace SistemaDermoSalud.Entities
         public List<ALM_MovimientoDetalleDTO> oListaDetalle { get; set; }
         public string TipoMovimiento { get; set; }
         public string DesEstado { get; set; }
+        public DateTime FechaMovimiento { get; set; }
+        public DateTime FechaMovimientoDestino { get; set; }
+        public string Documento { get; set; }
     }
 
     public class ALM_MovimientoDetalleDTO
@@ -48,6 +51,7 @@ namespace SistemaDermoSalud.Entities
         public string DesArticulo { get; set; }
         //precio
         public decimal Precio { get; set; }
-        public string Laboratorio { get; set; }
+        public int idMarca { get; set; }
+        public string Marca { get; set; }
     }
 }

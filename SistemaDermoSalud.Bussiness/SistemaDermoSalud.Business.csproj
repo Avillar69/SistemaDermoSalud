@@ -75,6 +75,7 @@
     <Compile Include="Mantenimiento\Ma_EmpresaBL.cs" />
     <Compile Include="Mantenimiento\Ma_LocalBL.cs" />
     <Compile Include="Mantenimiento\Ma_MotivoBL.cs" />
+    <Compile Include="Mantenimiento\Ma_MultitablaBL.cs" />
     <Compile Include="Mantenimiento\Ma_SerieBL.cs" />
     <Compile Include="Mantenimiento\Ma_TipoAfectacionBL.cs" />
     <Compile Include="Ma_BancoBL.cs" />

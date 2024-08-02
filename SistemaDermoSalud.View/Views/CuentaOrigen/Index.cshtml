@@ -11,62 +11,78 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
-<div class="content-header row">
-    <div class="content-header-left col-md-6 col-12 mb-2">
-        <h3 class="content-header-title mb-0">Cuentas Bancarias</h3>
-        <div class="row breadcrumbs-top">
-            <div class="breadcrumb-wrapper col-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="#">Configuraciones</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        Ctas.Bancarias
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </div>
 
-    <div class="content-header-right col-md-6 col-12">
-        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
-            <a class="btn btn-outline-primary hidden" title="Imprimir"><i class="ft-printer" value="imprimir" id="btnImprimir"></i></a>
-            <div role="group" class="btn-group hidden">
-                <button id="btnGroupDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings icon-left"></i> Exportar</button>
-                <div aria-labelledby="btnGroupDrop1" class="dropdown-menu">
-                    <a class="dropdown-item" value="1" id="btnImprimirPDF">Pdf</a>
-                    <a class="dropdown-item" value="2" id="btnImprimirExcel">Excel</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
 <div class="row" id="rowTabla">
-    <div class="col-md-12">
-        <div class="card p-l-20 p-r-20 m-b-0">
-            <div class="card-body">
-                <div class="row">
-                    <div class="row col-12" style="margin-bottom:2px;">
-                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
+    <div class="col-lg-12">
+        <div class="card" id="orderList">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h3 class="content-header-title mb-0">Cuentas Bancarias</h3>
+                        <div class="row breadcrumbs-top">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="#">Configuraciones</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Cuentas Bancarias
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
-                    <div class="col-sm-12 table-responsive" id="divTabla">
-                        <div id="contentPrincipal" class="clusterize-content">
-
+                    <div class="col-sm-auto">
+                        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+                            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
+                            <a id="btnImprimir" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right material-shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Exportar
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                    <a id="btnImprimirPDF" class="btn dropdown-item"><i class="ri-file-pdf-fill"></i> Pdf</a>
+                                    <a id="btnImprimirExcel" class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0 pt-0">
+                <div class="row">
+                    <div class="table-responsive mt-3 mb-1 col-12" style="min-height:450px;">
+                        <table class="table table-condensed table-bordered table-hover" id="tbDatos">
+                            <thead class="text-muted table-light">
+                                <tr class="">
+                                    <th class="sort">Cuenta</th>
+                                    <th class="sort">Banco</th>
+                                    <th class="sort">Moneda</th>
+                                    <th class="sort">N° Cuenta</th>
+                                    <th class="sort">Estado</th>
+                                    <th class="sort"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
+    <!--end col-->
 </div>
+
 <div class="row" id="rowFrm" style="display:none;">
     <div class="card col-sm-12">
         <div class="card-header p-b-0">
             <div class="row">
                 <div class="col-sm-9">
-                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Usuario</h4>
+                    <h4 class='panel-title' id='lblTituloPanel'>Nueva Cuenta Bancaria</h4>
                 </div>
                 <div class="col-sm-3 pull-right">
                     <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
@@ -78,94 +94,54 @@
             <div class="col-md-12">
                 <div class="container-fluid">
                     <div class='form-horizontal'>
-                        <div class="form-group row m-b-5 p-l-10">
-                            <label class="control-label col-md-4" for="txtNombreCuenta">Nombre Cuenta</label>
-                            <div class="col-12 col-sm-4">
-                                <input id="txtNombreCuenta" type="text" class="form-control form-control-sm" tabindex="1">
-                            </div>
+                        <div class="form-group-sm" style="display:none;">
+                            <input placeholder='' id='txtID' type='text' style="display:none;">
                         </div>
-                        <div class="form-group row m-b-5 p-l-10">
-                            <label class="control-label col-md-4" for="txtBanco">Banco</label>
-                            <div class="col-sm-4">
-                                <div class="row">
-                                    <div class="col-10 p-0 pl-1">
-                                        <input id='txtBanco' type='text' class="form-control form-control-sm" readonly>
-                                    </div>
-                                    <button id="btnModalBanco" type="button" class="btn btn-info btn-sm pr-1 pl-1" tabindex="2">
-                                        <i class="fa fa-ellipsis-v"></i>
-                                    </button>
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Nombre Cuenta</span>
                                 </div>
+                                <input type="text" class="form-control" id="txtNombreCuenta" autocomplete="off">
                             </div>
                         </div>
-                        <div class="form-group row m-b-5 p-l-10">
-                            <div class="form-group" style="display:none;">
-                                <input placeholder='' id='txtID' type='text' style="display:none;">
-                            </div>
-                            <label class="control-label col-md-4" for="txtNombreCuenta">Moneda</label>
-                            <div class="col-12 col-sm-4">
-                                <select id='cboMoneda' class="form-control form-control-sm" tabindex="3"></select>
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">Banco</div>
+                                <select class="form-select" aria-label="Default select example" id="cboBanco">
+                                </select>
                             </div>
                         </div>
-                        <div class="form-group row m-b-5 p-l-10">
-                            <label class="control-label col-md-4" for="txtNombreCuenta">Numero Cuenta</label>
-                            <div class="col-12 col-sm-4">
-                                <input id='txtNroCuenta' type='text' class="form-control form-control-sm" tabindex="4">
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">Moneda</div>
+                                <select class="form-select" aria-label="Default select example" id="cboMoneda">
+                                </select>
                             </div>
                         </div>
-                        <div class="form-group row m-b-5 p-l-10">
-                            <label class="control-label col-md-4" for="chkEstado">Estado</label>
-                            <div class="col-12 col-sm-4">
-                                <div class="checkbox check-info">
-                                    <input type="checkbox" checked="checked" id="chkEstado" tabindex="5">
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Numero Cuenta</span>
                                 </div>
+                                <input type="text" class="form-control" id="txtNroCuenta" autocomplete="off">
                             </div>
                         </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id='modal-Modal' class='modal fade' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
-        <div class='modal-dialog' role='document' style="max-width:800px">
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-sm-12">
-                        <div class="row" style="display:none;">
-                            <div class='col-sm-12' id="div_Frm_Modal">
-                                <!-- formulario del modal -->
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
-                            </div>
-                        </div>
-                        <div class="row" id="rowTabla" style="font-size:12px;">
-                            <div class="col-sm-12">
-                                <div class="col-md-12 m-t-10" id="divTablaCabecera_Modal"></div>
-                                <div class="col-md-12 table-responsive" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;background-color:#f2f2f2">
-                                    <div id="contentArea" class="clusterize-content">
-                                        <!--Aca es la chamba donde se guardara todo los datos del modal-->
-                                    </div>
-                                </div>
+                        <div class="col-lg-6 col-sm-6 mb-2">
+                            <div class="form-check form-switch form-switch-lg" dir="ltr">
+                                <input type="checkbox" class="form-check-input" id="chkEstado" checked="">
+                                <label class="form-check-label" for="chkEstado">Estado</label>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @Scripts.Render("~/bundles/basics")
+<script src="~/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script src="~/Scripts/Configuraciones/CtasBancarias.js"></script>

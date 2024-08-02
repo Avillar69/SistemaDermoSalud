@@ -335,7 +335,6 @@ function mostrarDetalle(opcion, id) {
             break;
         case 2:
             let idDctoCompra = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
-            console.log(idDctoCompra);
             lblTituloPanel.innerHTML = "Editar Documento de Compra";
             TraerDetalle(idDctoCompra);
             show_hidden_Formulario();

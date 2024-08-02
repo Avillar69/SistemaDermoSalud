@@ -23,8 +23,8 @@ function mostrarLista(rpta) {
     }
 }
 function listar(r) {
-    if (r[0] !== '') {
-        let newDatos = [];
+    let newDatos = [];
+    if (r[0] !== '') {        
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
@@ -33,10 +33,10 @@ function listar(r) {
                 fechaCreacion: valor[2],
                 estado: valor[3]
             })
-        });
-        let cols = ["marca", "fechaCreacion", "estado"];
-        loadDataTable(cols, newDatos, "idMarca", "tbDatos", cadButtonOptions(), false);
+        });        
     }    
+    let cols = ["marca", "fechaCreacion", "estado"];
+    loadDataTable(cols, newDatos, "idMarca", "tbDatos", cadButtonOptions(), false);
 }
 function cadButtonOptions() {
     let cad = "";
@@ -267,97 +267,92 @@ function CargarDetalles(rpta) {
 }
 //
 //Descarga Archivo
-//function LabDescargarPDF(tipoImpresion) {
-//    var texto = "";
-//    var columns = cabeceras;
-//    var data = [];
-//    for (var i = 0; i < matriz.length; i++) {
-//        data[i] = matriz[i];
-//    }
-//    var doc = new jsPDF('p', 'pt', "a4");
-//    var width = doc.internal.pageSize.width;
-//    var height = doc.internal.pageSize.height;
-//    var fec = new Date();
-//    var d = fec.getDate().toString().length == 2 ? fec.getDate() : ("0" + fec.getDate());
-//    var m = (fec.getMonth() + 1).length == 2 ? (fec.getMonth() + 1) : ("0" + (fec.getMonth() + 1));
-//    var y = fec.getFullYear();
-//    //Datos Cabecera de Página
-//    var h = fec.getHours().toString().length == 2 ? fec.getHours() : ("0" + fec.getHours());
-//    var mm = fec.getMinutes().toString().length == 2 ? fec.getMinutes() : ("0" + fec.getMinutes());
-//    var s = fec.getSeconds().toString().length == 2 ? fec.getSeconds() : ("0" + fec.getSeconds());
-//    var fechaImpresion = d + '-' + m + '-' + y + ' ' + h + ':' + mm + ':' + s;
-//    doc.setFont('helvetica');
-//    doc.setFontSize(10);
-//    doc.setFontType("bold");
-//    doc.text("Dermosalud S.A.C", 30, 30);
-//    doc.setFontSize(8);
-//    doc.setFontType("normal");
-//    doc.text("Ruc:", 30, 40);
-//    doc.text("20565643143", 50, 40);
-//    doc.text("Dirección:", 30, 50);
-//    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 70, 50);
-//    doc.setFontType("bold");
-//    doc.text("Fecha Impresión", width - 90, 40)
-//    doc.setFontType("normal");
-//    doc.setFontSize(7);
-//    doc.text(fechaImpresion, width - 90, 50)
-//    doc.setFontSize(14);
-//    doc.setFontType("bold");
-//    //Titulo de Documento y datos
-//    doc.text("MarcaS", width / 2, 95, "center");// + gbi("txtRequerimiento").value
-//    var xic = 140;
-//    var altc = 12;
-//    doc.setFontType("bold");
-//    doc.setFontSize(7);
+function LabDescargarPDF(tipoImpresion) {
+    var texto = "";
+    var columns = ["Marca", "FechaCreacion", "Estado"];
+    var data = [];
+    //for (var i = 0; i < matriz.length; i++) {
+    //    data[i] = matriz[i];
+    //}
+    var doc = new jsPDF('p', 'pt', "a4");
+    var width = doc.internal.pageSize.width;
+    var height = doc.internal.pageSize.height;
+    var fec = new Date();
+    var d = fec.getDate().toString().length == 2 ? fec.getDate() : ("0" + fec.getDate());
+    var m = (fec.getMonth() + 1).length == 2 ? (fec.getMonth() + 1) : ("0" + (fec.getMonth() + 1));
+    var y = fec.getFullYear();
+    //Datos Cabecera de Página
+    var h = fec.getHours().toString().length == 2 ? fec.getHours() : ("0" + fec.getHours());
+    var mm = fec.getMinutes().toString().length == 2 ? fec.getMinutes() : ("0" + fec.getMinutes());
+    var s = fec.getSeconds().toString().length == 2 ? fec.getSeconds() : ("0" + fec.getSeconds());
+    var fechaImpresion = d + '-' + m + '-' + y + ' ' + h + ':' + mm + ':' + s;
+    doc.setFont('helvetica');
+    doc.setFontSize(10);
+    doc.setFontType("bold");
+    doc.text("Dermosalud S.A.C", 30, 30);
+    doc.setFontSize(8);
+    doc.setFontType("normal");
+    doc.text("Ruc:", 30, 40);
+    doc.text("20565643143", 50, 40);
+    doc.text("Dirección:", 30, 50);
+    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 70, 50);
+    doc.setFontType("bold");
+    doc.text("Fecha Impresión", width - 90, 40)
+    doc.setFontType("normal");
+    doc.setFontSize(7);
+    doc.text(fechaImpresion, width - 90, 50)
+    doc.setFontSize(14);
+    doc.setFontType("bold");
+    //Titulo de Documento y datos
+    doc.text("Marcas", width / 2, 95, "center");// + gbi("txtRequerimiento").value
+    var xic = 140;
+    var altc = 12;
+    doc.setFontType("bold");
+    doc.setFontSize(7);
 
-//    //Inicio de Detalle
-//    //Crear Cabecera
-//    var xid = 120;
-//    var xad = 12;
-//    agregarCabeceras();
-//    function agregarCabeceras() {
-//        doc.setFontType("bold");
-//        doc.setFontSize(7);
-//        doc.text("ITEM", 30, xid);
-//        doc.text("Marca", 120, xid);
-//        doc.text("FECHA CREACION", 260, xid);
-//        doc.text("ESTADO", 450, xid);
-//        //doc.text("SUB TOTAL", width - 208, xid, 'right');
-//        //doc.text("IGV", width - 138, xid, 'right');
-//        //doc.text("TOTAL", width - 68, xid, 'right');
-//        doc.line(30, xid + 3, width - 30, xid + 1);
-//        doc.setFontType("normal");
-//        doc.setFontSize(6.5);
-//    }
+    //Inicio de Detalle
+    //Crear Cabecera
+    var xid = 120;
+    var xad = 12;
+    agregarCabeceras();
+    function agregarCabeceras() {
+        doc.setFontType("bold");
+        doc.setFontSize(7);
+        doc.text("ITEM", 30, xid);
+        doc.text("MARCA", 120, xid);
+        doc.text("FECHA CREACION", 260, xid);
+        doc.text("ESTADO", 450, xid);
+        doc.line(30, xid + 3, width - 30, xid + 1);
+        doc.setFontType("normal");
+        doc.setFontSize(6.5);
+    }
 
-//    //Crear Detalle
-//    var n = 0;
+    //Crear Detalle
+    var n = 0;
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (let i = 0; i < lstDatos.length; i++) {
+        let colDatos = lstDatos[i].children;
+        doc.text((i + 1).toString(), 30, xid + xad + (n * xad));//item
+        doc.text(colDatos[0].innerHTML, 120, xid + xad + (n * xad));
+        doc.text(colDatos[1].innerHTML, 260, xid + xad + (n * xad));
+        doc.text(colDatos[2].innerHTML, 450, xid + xad + (n * xad));
 
-//    gbi("contentPrincipal").querySelectorAll(".row.panel.salt").forEach((item, index) => {
-//        doc.text((index + 1).toString(), 30, xid + xad + (n * xad));//item
-//        doc.text(item.children[1].lastChild.innerHTML, 120, xid + xad + (n * xad));//fecha
-//        doc.text(item.children[2].lastChild.innerHTML, 260, xid + xad + (n * xad));//Numero doc
-//        doc.text(item.children[3].lastChild.innerHTML, 450, xid + xad + (n * xad));//cliente
-//        //doc.text(item.children[5].lastChild.innerHTML, width - 208, xid + xad + (n * xad), 'right');//sub total
-//        //doc.text(item.children[6].lastChild.innerHTML, width - 138, xid + xad + (n * xad), 'right');//igv
-//        //doc.text(item.children[7].lastChild.innerHTML, width - 68, xid + xad + (n * xad), 'right');//total
+        if (xid + xad + (n * xad) > height - 30) {
+            doc.addPage();
+            n = 0;
+            xid = 30;
+            agregarCabeceras();
+            xid = 35;
+        }
+        n += 1;
+    }
 
-//        if (xid + xad + (n * xad) > height - 30) {
-//            doc.addPage();
-//            n = 0;
-//            xid = 30;
-//            agregarCabeceras();
-//            xid = 35;
-//        }
-//        n += 1;
-//    });
-
-//    if (tipoImpresion == "e") {//exportar
-//        doc.save("Marcas.pdf");
-//    }
-//    else if (tipoImpresion == "i") {//imprimir
-//        doc.autoPrint();
-//        var iframe = document.getElementById('iframePDF');
-//        iframe.src = doc.output('dataurlstring');
-//    }
-//}
+    if (tipoImpresion == "e") {//exportar
+        doc.save("Marcas.pdf");
+    }
+    else if (tipoImpresion == "i") {//imprimir
+        doc.autoPrint();
+        var iframe = document.getElementById('iframePDF');
+        iframe.src = doc.output('dataurlstring');
+    }
+}

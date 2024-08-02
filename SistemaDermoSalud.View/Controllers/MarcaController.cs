@@ -37,7 +37,6 @@ namespace SistemaDermoSalud.View.Controllers
             listaMarca = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { });
             return String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMarca);
         }
-
         public string Grabar(Ma_MarcaDTO oMarcaDTO)
         {
             ResultDTO<Ma_MarcaDTO> oResultDTO;
@@ -55,7 +54,6 @@ namespace SistemaDermoSalud.View.Controllers
             listaMarca = Serializador.rSerializado(lstMarcaDTO, new string[] { "idMarca", "Marca", "FechaCreacion", "Estado" });
             return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMarca);
         }
-
         public string Eliminar(Ma_MarcaDTO oMarcaDTO)
         {
             ResultDTO<Ma_MarcaDTO> oResultDTO;

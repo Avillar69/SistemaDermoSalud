@@ -38,7 +38,7 @@ namespace SistemaDermoSalud.DataAccess
                         oMa_MonedaDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioCreacion"].ToString()));
                         oMa_MonedaDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioModificacion"].ToString()));
                         oMa_MonedaDTO.Estado = Convert.ToBoolean(dr["Estado"] == null ? false : Convert.ToBoolean(dr["Estado"].ToString()));
-                        oMa_MonedaDTO.UsuarioModificacionDes = dr["UsuarioModificacionDes"].ToString();
+                        //oMa_MonedaDTO.UsuarioModificacionDes = dr["UsuarioModificacionDes"].ToString();
                         oResultDTO.ListaResultado.Add(oMa_MonedaDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -120,9 +120,7 @@ namespace SistemaDermoSalud.DataAccess
                         {
                             oResultDTO.Resultado = "OK";
                             oResultDTO.ListaResultado = ListarTodo(1, cn).ListaResultado;
-                            //new Seg_LogDAO().UpdateInsert(da, cn, oMa_Moneda.idEmpresa, oMa_Moneda.UsuarioModificacion,
-                            //    "MANTENIMIENTOS-MONEDA", "Ma_Moneda", (int)id_output.Value, (oMa_Moneda.idMoneda == 0 ? "INSERT" : "UPDATE"));
-                            //transactionScope.Complete();
+                            transactionScope.Complete();
                         }
                         else
                         {

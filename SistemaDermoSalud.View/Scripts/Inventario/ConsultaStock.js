@@ -1,4 +1,4 @@
-﻿var cabeceras = ["idStock", "Código", "Laboratorio", "Descripcion", "Stock"];
+﻿var cabeceras = ["idStock", "Código", "Marca", "Descripcion", "Stock"];
 var listaDatos;
 var matriz = [];
 var orden = 0;
@@ -9,7 +9,6 @@ var indiceActualBloque = 0;
 var indicePagina = 0;
 var textoExportar;
 var excelExportar;
-console.log("consulta stock");
 var cboLocal = document.getElementById("cboLocal");
 var cboAlmacen = document.getElementById("cboAlmacen");
 
@@ -17,6 +16,7 @@ $(function () {
     var url = 'ConsultaStock/ObtenerDatos';
     enviarServidor(url, mostrarLista);
     configurarBotonesModal();
+    configBM();
 });
 function mostrarLista(rpta) {
     if (rpta != '') {
@@ -27,63 +27,9 @@ function mostrarLista(rpta) {
         enviarServidor(urlA, mostrarProductosStock);
     }
 }
-function cargarDatosLocal(r) {
-    let locales = r
-    $("#cboLocal").empty();
-    $("#cboLocal").append(`<option value="">Seleccione</option>`);
-
-    if (r && r.length > 0) {
-        locales.forEach(element => {
-            $("#cboLocal").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
-        });
-    }
-    $("#cboLocal").change(function () {
-        var selectedValue = $(this).val();
-        if (selectedValue !== "") {
-            var urlC = '/ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
-            enviarServidor(urlC, cargarDatosAlmacen);
-        } else {
-            $("#cboLocal").empty();
-            $("#cboLocal").append(`<option value="">Seleccione</option>`);
-        }
-    });
-}
-function cargarDatosAlmacen(rpta) {
-    if (rpta.split('↔')[0] == "OK") {
-        let listas = rpta.split('↔');
-        let listaAlmacenes = listas[2].split("▼");
-
-        $("#cboAlmacen").empty();
-        $("#cboAlmacen").append(`<option value="">Seleccione</option>`);
-
-        if (listaAlmacenes && listaAlmacenes.length > 0) {
-            listaAlmacenes.forEach(element => {
-                $("#cboAlmacen").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
-            });
-        }
-    }
-}
-
-function configurarBotonesModal() {
-    var btnConsultar = gbi("btnConsultar");
-    btnConsultar.onclick = function () {
-        var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
-        enviarServidor(urlA, mostrarProductosStock);
-    }
-}
-function mostrarProductosStock(rpta) {
-    if (rpta != '') {
-        var listasArt = rpta.split('↔');
-        if (listasArt[0] == "OK") {
-            listaDatos = listasArt[2].split("▼");
-            listar(listaDatos);
-        }
-    }
-}
 function listar(r) {
-    console.log(r);
-    if (r[0] !== '') {
-        let newDatos = [];
+    let newDatos = [];
+    if (r[0] !== '') {        
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
@@ -94,9 +40,9 @@ function listar(r) {
                 stock: valor[4]
             })
         });
-        let cols = ["codigo", "marca", "producto", "stock"];
-        loadDataTable(cols, newDatos, "idStock", "tbDatos", "", false);
     }
+    let cols = ["codigo", "marca", "producto", "stock"];
+    loadDataTable(cols, newDatos, "idStock", "tbDatos", "", false);
 }
 function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
     var columnas = [];
@@ -154,6 +100,73 @@ function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
         }
     });
 }
+function cargarDatosLocal(r) {
+    let locales = r
+    $("#cboLocal").empty();
+    $("#cboLocal").append(`<option value="">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        locales.forEach(element => {
+            $("#cboLocal").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+    $("#cboLocal").change(function () {
+        var selectedValue = $(this).val();
+        if (selectedValue !== "") {
+            var urlC = '/ConsultaStock/ObtenerAlmacen?pL=' + cboLocal.value;
+            enviarServidor(urlC, cargarDatosAlmacen);
+        } else {
+            $("#cboLocal").empty();
+            $("#cboLocal").append(`<option value="">Seleccione</option>`);
+        }
+    });
+}
+function cargarDatosAlmacen(rpta) {
+    if (rpta.split('↔')[0] == "OK") {
+        let listas = rpta.split('↔');
+        let listaAlmacenes = listas[2].split("▼");
+
+        $("#cboAlmacen").empty();
+        $("#cboAlmacen").append(`<option value="">Seleccione</option>`);
+
+        if (listaAlmacenes && listaAlmacenes.length > 0) {
+            listaAlmacenes.forEach(element => {
+                $("#cboAlmacen").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+            });
+        }
+    }
+}
+function mostrarProductosStock(rpta) {
+    if (rpta != '') {
+        var listasArt = rpta.split('↔');
+        if (listasArt[0] == "OK") {
+            listaDatos = listasArt[2].split("▼");
+            listar(listaDatos);
+        }
+    }
+}
+function configurarBotonesModal() {
+    var btnConsultar = gbi("btnConsultar");
+    btnConsultar.onclick = function () {
+        var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
+        enviarServidor(urlA, mostrarProductosStock);
+    }
+}
+function configBM() {
+    var btnPDF = gbi("btnImprimirPDF");
+    btnPDF.onclick = function () {
+        ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "e");
+    }
+    var btnImprimir = document.getElementById("btnImprimir");
+    btnImprimir.onclick = function () {
+        ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "i");
+    }
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras, matriz);
+    }
+}
+
 
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
@@ -222,19 +235,6 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
 }
 
 
-//var btnPDF = gbi("btnImprimirPDF");
-//btnPDF.onclick = function () {
-//    ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "e");
-//}
-//var btnImprimir = document.getElementById("btnImprimir");
-//btnImprimir.onclick = function () {
-//    ExportarPDFs("p", "Doc. Compras", cabeceras, matriz, "Documento Compras", "a4", "i");
-//}
-
-//var btnExcel = gbi("btnImprimirExcel");
-//btnExcel.onclick = function () {
-//    fnExcelReport(cabeceras, matriz);
-//}
 
 function configAlmacen() {
     console.log("INGRESO STOCK X ALMACEN");

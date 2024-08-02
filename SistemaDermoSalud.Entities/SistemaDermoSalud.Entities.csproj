@@ -85,6 +85,7 @@
     <Compile Include="Mantenimiento\Ma_CategoriaDTO.cs" />
     <Compile Include="Mantenimiento\Ma_EmpresaDTO.cs" />
     <Compile Include="Mantenimiento\Ma_MotivoDTO.cs" />
+    <Compile Include="Mantenimiento\Ma_MultitablaDTO.cs" />
     <Compile Include="Mantenimiento\Ma_SerieDTO.cs" />
     <Compile Include="Mantenimiento\Ma_TipoAfectacionDTO.cs" />
     <Compile Include="Mantenimiento\Ma_UnidadMedidaDTO.cs" />

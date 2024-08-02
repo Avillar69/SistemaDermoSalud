@@ -77,6 +77,7 @@
     <Compile Include="Mantenimiento\Ma_EmpresaDAO.cs" />
     <Compile Include="Mantenimiento\Ma_LocalDAO.cs" />
     <Compile Include="Mantenimiento\Ma_MotivoDAO.cs" />
+    <Compile Include="Mantenimiento\Ma_MultitablaDAO.cs" />
     <Compile Include="Mantenimiento\Ma_SerieDAO.cs" />
     <Compile Include="Mantenimiento\Ma_TipoAfectacionDAO.cs" />
     <Compile Include="Mantenimiento\Ma_UnidadMedidaDAO.cs" />
