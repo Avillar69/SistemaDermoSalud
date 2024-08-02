@@ -30,13 +30,13 @@ var comboConcepto; var combox;
 var listaConcepto; var listaDEmpleado; var listaDBanco;
 var listaDetalleCajaPDF = [];
 
-$("#txtFilFecIn").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
-$("#txtFilFecFn").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
-$('#datepicker-range').datetimepicker({ format: 'DD-MM-YYYY' });
+//$("#txtFilFecIn").datetimepicker({
+//    format: 'DD-MM-YYYY',
+//});
+//$("#txtFilFecFn").datetimepicker({
+//    format: 'DD-MM-YYYY',
+//});
+//$('#datepicker-range').datetimepicker({ format: 'DD-MM-YYYY' });
 $('#collapseOne-2').on('shown.bs.collapse', function () {
     reziseTabla();
 })
@@ -48,7 +48,7 @@ var url = "/Caja/ObtenerDatos";
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
 function mostrarLista(rpta) {
-    crearTablaCaja(cabeceras, "cabeTabla");
+    //crearTablaCaja(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         listaCaja = listas;
@@ -61,31 +61,40 @@ function mostrarLista(rpta) {
         gbi("txtNroCaja").value = listas[8];
         gbi("txtFilFecIn").value = listas[9];
         gbi("txtFilFecFn").value = listas[10];
-        listar();
-        var btnModalMoneda = document.getElementById("btnModalMoneda");
-        btnModalMoneda.onclick = function () {
-            cbm("moneda", "Monedas", "txtMoneda", null,
-                ["idMoneda", "Descripcion"], listaMoneda, cargarSinXR);
-        }
+        listar(listaDatos);
+        cargarDatosMonedas(listaMoneda);
     }
 }
-function listar() {
-    configurarFiltro();
-    matriz = crearMatriz(listaDatos);
-    mostrarMatrizCaja(matriz, cabeceras, "divTabla", "contentPrincipal");
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
+function listar(r) {
+
+    if (r[0] !== '') {
+        let newDatos = [];
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idCaja: valor[0],
+                descripcion: valor[1],
+                fechaApertura: valor[2],
+                fechaCierre: valor[3],
+                montoInicio: valor[4],
+                montoSaldo: valor[5],
+                estadoCaja: valor[6]
+            })
+        });
+        console.log(newDatos);
+        let cols = ["descripcion", "fechaApertura", "fechaCierre", "montoInicio", "montoSaldo", "estadoCaja"];
+        loadDataTable(cols, newDatos, "idCaja", "tbDatos", cadButtonOptions(), false);
+    }
+
 }
 function mostrarDetalle(opcion, id) {
     var lblTituloPanel = document.getElementById('lblTituloPanel');
     var aperturado = 0;
-    var contentPrincipal = gbi("contentPrincipal");
-    for (var i = 0; i < contentPrincipal.children.length; i++) {
-        if (contentPrincipal.children[i].children[6].innerText == "ABIERTA")
-            aperturado++;
-    }
+    //var contentPrincipal = gbi("contentPrincipal");
+    //for (var i = 0; i < contentPrincipal.children.length; i++) {
+    //    if (contentPrincipal.children[i].children[6].innerText == "ABIERTA")
+    //        aperturado++;
+    //}
     limpiarTodo();
     OpcionCaja = "";
     switch (opcion) {
@@ -111,7 +120,6 @@ function mostrarDetalle(opcion, id) {
                 gbi("txtIngresoTarjeta").value = 0.00;
                 gbi("txtIngresoEfectivo").value = 0.00;
                 gbi("txtSaldoInicial").disabled = false;
-                adc(listaMoneda, 1, "txtMoneda", 1);
                 gbi("btnGrabar").style.display = "";
                 gbi("btnCerrarCaja").style.display = "none";
                 $("#btnGrabar").show();
@@ -165,7 +173,6 @@ function limpiarCabecera() {
     limpiarControl("txtEmpleado");
     limpiarControl("dtpFechaInicio");
     limpiarControl("dtpFechaCierre");
-    limpiarControl("txtMoneda");
     limpiarControl("txtSaldoInicial");
     limpiarControl("txtUsuarioResp");
     limpiarControl("txtInicial");
@@ -213,7 +220,6 @@ function configurarBotonesModal() {
             frm.append("Opcion", OpcionCaja);
             frm.append("MontoEfectivo", gbi("txtIngresoEfectivo").value);
             frm.append("MontoTarjeta", gbi("txtIngresoTarjeta").value);
-            swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
             enviarServidorPost(url, actualizarListar, frm);
         }
     };
@@ -380,7 +386,7 @@ function validarFormularioDetalle() {
     }
     return error;
 }
-function actualizarListar(rpta) { //rpta es mi lista de colores
+function actualizarListar(rpta) { 
     if (rpta != "") { //validar cuando respuesta sea vacio
         var data = rpta.split("↔");
         var res = data[0];
@@ -412,7 +418,7 @@ function actualizarListar(rpta) { //rpta es mi lista de colores
         if (res == "OK") { show_hidden_Formulario(true); }
         mostrarRespuesta(res, mensaje, tipo);
         listaDatos = data[2].split("▼");
-        listar();
+        listar(listaDatos);
     }
 }
 function TraerDetalle(id) {
@@ -647,6 +653,19 @@ function actualizarDeleteDetalle(rpta) { //rpta es mi lista de colores
         CargarDetalleCaja(listaDatos);
         limpiarTodo();
     }
+}
+
+function cargarDatosMonedas(r) {
+    let monedas = r
+    $("#txtMoneda").empty();
+    $("#txtMoneda").append(`<option value="">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        monedas.forEach(element => {
+            $("#txtMoneda").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+    document.getElementById("txtMoneda").selectedIndex = "1";
 }
 function CambiarConcepto() {
     var c1 = gbi("concepto1");

@@ -716,14 +716,7 @@ function mostrarTotal(matriz) {
     spnMensaje.innerHTML = matriz.length;
 }
 function mostrarRespuesta(titulo, mensaje, tipo) {
-
-    Swal.fire({
-        title: titulo,
-        text: mensaje,
-        type: tipo,
-        showConfirmButton: true,
-        closeOnConfirm: false,
-    });
+    Swal.fire(titulo, mensaje, tipo);
 }
 function crearTabla(cabeceras) {
     var nCampos;
@@ -1019,16 +1012,9 @@ function show_hidden_Formulario(filtro) {
     var frmFilt = document.getElementById("rowFilter");
     if (frm.style.display == "none") {
         document.getElementById("rowTabla").style.display = "none";
-        if (filtro) {
-            frmFilt.style.display = "none";
-            $('.content-header-right').hide();
-        }
         $("#rowFrm").fadeIn();
     } else {
         frm.style.display = "none";
-        if (filtro) {
-            $("#rowFilter").fadeIn();
-        }
         $("#rowTabla").fadeIn();
     }
     if ($('.content-header-right')) {

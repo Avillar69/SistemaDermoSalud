@@ -21,7 +21,6 @@ var lp2;
 var url = "DocumentoVenta/ObtenerDatos";
 enviarServidor(url, mostrarLista);
 configBM();
-reziseTabla();
 cfgKP(["txtTipoDocumento", "txtRazonSocial", "txtDireccion", "txtMoneda", "txtFormaPago", "txtArticulo", "txtCita"], cfgTMKP);//"txtCategoria", solo para los q tienen boton
 cfgKP(["txtCantidad", "txtPrecio", "txtTotal", "txtNroDocumento", "txtObservacion", "txtDescuento", "txtNroComprobante", "txtFecha", "txtTipoCambio", "txtDescuentoPrincipal"], cfgTKP);
 //configNav();
@@ -43,17 +42,15 @@ $("#txtFecha").datetimepicker({
     format: 'DD-MM-YYYY',
 });
 $('#collapseOne-2').on('shown.bs.collapse', function () {
-    reziseTabla();
 })
 $(document).ready(function () {
-    gbi("txtFecha").onchange = function () {
-        var url = 'TipoCambio/ObtenerDatosTipoCambio?fecha=' + gbi("txtFecha").value;
-        enviarServidor(url, CargarTipoCambio);
-    };
+    //gbi("txtFecha").onchange = function () {
+    //    var url = 'TipoCambio/ObtenerDatosTipoCambio?fecha=' + gbi("txtFecha").value;
+    //    enviarServidor(url, CargarTipoCambio);
+    //};
 });
 
 function mostrarLista(rpta) {
-    crearTablaCompras(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         var Resultado = listas[0];
@@ -82,7 +79,7 @@ function mostrarLista(rpta) {
                 cbm("tipodocumento", "Tipo de Documento", "txtTipoDocumento", null,
                     ["idTipoComprobante", "Descripción"], listaComprobantes, cargarSinXR);
             }
-      
+
 
         }
         else {
@@ -91,27 +88,33 @@ function mostrarLista(rpta) {
         llenarCombo(listarBanco, "cboBanco", "Seleccione");
         llenarCombo(listarCuentasO, "cboOrigen", "Seleccione");
 
-        listar();
+        listar(listaDatos);
     }
-    reziseTabla();
 }
-function listar() {
-    configurarFiltro();
-    matriz = crearMatriz(listaDatos);
-    configurarFiltro(cabeceras);
-    mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-    //configurarBotonesModal();
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
-    gbi("chkIGV").onchange = function () {
-        switch (gbi("txtTipoVenta").dataset.id) {
-            case "1": calcularSumaDetalle(); break;
-            case "2": calcularSumaDetalleServicio(); break;
-            case "3": calcularSumaDetalleOtroServicio(); break;
-        }
+function listar(r) {
+
+    if (r[0] !== '') {
+        let newDatos = [];
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idDocumentoVenta: valor[0],
+                fechaDocumento: valor[1],
+                serieDocumento: valor[2],
+                numDocumento: valor[3],
+                clienteRazon: valor[4],
+                subTotalNacional: valor[5],
+                iGVNacional: valor[6],
+                totalNacional: valor[7],
+                estado: valor[8],
+                enlace: valor[9]
+            })
+        });
+        console.log(newDatos);
+        let cols = ["fechaDocumento", "serieDocumento", "numDocumento", "numDocumento", "clienteRazon", "subTotalNacional", "iGVNacional", "totalNacional", "estado", "enlace"];
+        loadDataTable(cols, newDatos, "idDocumentoVenta", "tbDatos", cadButtonOptions(), false);
     }
+
 }
 function rptaValidacion(m) {
     if (m == 1) {
@@ -175,7 +178,7 @@ function BloquearDetalle() {
     gbi("divOtroServicio").style.display = "none";
     gbi("divArticulos").style.display = "none";
     gbi("btnGrabar").style.display = "none";
-    
+
 }
 function eliminar(id) {
     swal({
@@ -307,7 +310,7 @@ function configBM() {
             return;
         bDM("txtDireccion");
         cbmu("socio", "Clientes", "txtRazonSocial", "txtNroDocumento",
-            ["idSocioNegocio", "Documento", "Razón Social","direccion"], `/SocioNegocio/ObtenerSocioxTipo?tipo=C&idTipoComprobante=${gbi("txtTipoDocumento").dataset.id}`, cargarLista);
+            ["idSocioNegocio", "Documento", "Razón Social", "direccion"], `/SocioNegocio/ObtenerSocioxTipo?tipo=C&idTipoComprobante=${gbi("txtTipoDocumento").dataset.id}`, cargarLista);
     }
     var btnMoneda = document.getElementById("btnModalMoneda");
     btnMoneda.onclick = function () {
@@ -931,7 +934,7 @@ function actualizarListar(rpta) {
         if (res == "OK") { show_hidden_Formulario(true); }
         mostrarRespuesta(res, mensaje, tipo);
         listaDatos = data[2].split('▼');
-        listar();
+        listar(listaDatos);
     }
 }
 function validarFormulario() {
@@ -990,7 +993,7 @@ function CargarDetalles(rpta) {
             adt(datos[6], "txtDireccion");
             adc(listaMoneda, datos[9], "txtMoneda", 1);
             adc(listaFormaPago, datos[11], "txtFormaPago", 1);
-            gbi("chkIGV").checked = datos[23] == "TRUE" ? true : false;            
+            gbi("chkIGV").checked = datos[23] == "TRUE" ? true : false;
             adt(datos[5], "txtRazonSocial");
             adt(datos[7], "txtNroDocumento");
             gbi("txtNroSerie").value = datos[13];
@@ -1335,7 +1338,6 @@ function mostrarBusqueda(rpta) {
         matriz = crearMatriz(listaDatos);
         configurarFiltro(cabeceras);
         mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-        reziseTabla();
     }
 }
 function BuscarxFecha(f1, f2) {
@@ -1369,7 +1371,6 @@ function limpiarTodo() {
     gbi("txtCita");
     gbi("rowFrm").querySelectorAll("input, select").forEach(item => { if (item.id) limpiarControl(item.id); });
     //
-    gbi("cboTipoAfectacion").value = gbi("cboTipoAfectacion").options[0].value;
     let fecha = new Date();
     let fecPart = {
         day: (fecha.getDate() < 10 ? `0${fecha.getDate()}` : fecha.getDate()),
@@ -1377,7 +1378,7 @@ function limpiarTodo() {
         year: fecha.getFullYear()
     };
     gbi("txtFecha").value = `${fecPart.day}-${fecPart.month}-${fecPart.year}`;
-    gbi("txtFecha").onchange();
+    //gbi("txtFecha").onchange();
     limpiarCamposDetalle();
 }
 function limpiarCamposDetalle() {
@@ -1469,12 +1470,12 @@ function mostrarMatriz(matriz, cabeceras, tabId, contentID) {
                 if ((matriz[i][2]).includes("TK")) {
                     contenido2 += "<a class='btn btn-sm waves-effect waves-light btn-info pull-right m-l-10' style='padding:3px 10px;' onclick='obtenerDatosTicket(" + matriz[i][0] + ")'> <i class='fa fa-file-pdf-o'></i></a>";
                 } else {
-                    if (enlaceDoc.length>10) {
+                    if (enlaceDoc.length > 10) {
                         contenido2 += "<a class='btn btn-sm waves-effect waves-light btn-info pull-right m-l-10' style='padding:3px 10px;'  target='_blank' href='" + enlaceDoc + "'> <i class='fa fa-file-pdf-o'></i></a>";
                     } else {
                         contenido2 += "<a class='btn btn-sm waves-effect waves-light btn-info pull-right m-l-10' style='padding:3px 10px;' id='btnConsultaDcto' onclick='ConsultarDocumento(\"" + matriz[i][2] + "-" + matriz[i][3] + "\")'> <i class='fa fa-file-pdf-o'></i></a>";
                     }
-                    
+
                 }
 
 
@@ -2138,9 +2139,9 @@ function imprimirTicket(rpta) {
         source, // HTML string or DOM elem ref.
         margins.left, // x coord
         margins.top, {
-            // y coord
-            width: margins.width // max width of content on PDF
-        },
+        // y coord
+        width: margins.width // max width of content on PDF
+    },
         function (dispose) {
             // dispose: object with X, Y of the last line add to the PDF
             //          this allow the insertion of new lines after html
@@ -2175,7 +2176,7 @@ function imprimirRegistroVentas() {
             total: datos[11],
             serie: datos[2].split("-")[0]
         };
-    //documentos
+        //documentos
         listaDocumentos.push(obj);
     }
 
@@ -2417,7 +2418,7 @@ function imprimirVentaPorCliente() {
             totalDetalle: datos[11],
             moneda: datos[12]
         };
-    //documentos
+        //documentos
         listaDocumentos.push(obj);
     }
 

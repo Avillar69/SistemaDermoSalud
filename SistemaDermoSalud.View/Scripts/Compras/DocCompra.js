@@ -352,7 +352,6 @@ function limpiarTodo() {
     gbi("txtNroDocumento").value = "";
     gbi("cboDireccion").value = "";
     gbi("txtTipoCambio").value = "";
-    gbi("cboMoneda").value = ""
     gbi("cboFormaPago").value = ""
     gbi("txtDescuentoPrincipal").value = "";
     gbi("tbDetalle").innerHTML = "";
