@@ -3,7 +3,10 @@ var txtID = document.getElementById("txtID");
 var txtTalla = document.getElementById("txtTalla");
 var txtCampo2 = document.getElementById("txtCampo2");
 var chkActivo = document.getElementById("chkActivo");
-var Tabla = "Talla"
+var Tabla = "Talla";
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 $(function () {
     var url = "Talla/ObtenerDatos?tabla=" + Tabla;
     enviarServidor(url, mostrarLista);

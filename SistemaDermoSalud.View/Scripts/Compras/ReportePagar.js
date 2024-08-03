@@ -15,9 +15,9 @@ var idDiv;
 /*ingrese una variable global para capturar los datos del documento por el id */
 
 var datosDelDocumento;
-var nombreEmpresa = "nombre Empresa S.A.C";
-var rucEmpresa = "99999999999";
-var direccionEmpresa = "direccion empresa - lima";
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 
 $(function () {
     var url = "ReportePagar/ObtenerDatos";

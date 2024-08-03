@@ -10,9 +10,9 @@ var indicePagina = 0;
 var textoExportar;
 var excelExportar;
 var idTablaDetalle;
-var nombreEmpresa = "nombre Empresa S.A.C";
-var rucEmpresa = "99999999999";
-var direccionEmpresa = "direccion empresa - lima";
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 //idUsuario
 var idUsuario;
 //ListasGlobales

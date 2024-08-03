@@ -13,9 +13,9 @@ var listaLocales;
 var listaTipoMovimiento;
 var listaEstado;
 var listaGuias;
-var nombreEmpresa = "nombre Empresa S.A.C";
-var rucEmpresa = "99999999999";
-var direccionEmpresa = "direccion empresa - lima";
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 //
 var idxDetalle = 0;
 var precioProducto = 0;
