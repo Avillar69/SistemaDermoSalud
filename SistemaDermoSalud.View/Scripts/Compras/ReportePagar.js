@@ -1,5 +1,4 @@
-﻿var cabeceras = ["idDocumento", "DOCUMENTO", "RAZON SOCIAL", "MONTO TOTAL", "MONTO APLICADO", "MONTO POR PAGAR"];
-var cabeceras2 = ["DOCUMENTO", "RAZON SOCIAL", "MONTO TOTAL", "MONTO APLICADO", "MONTO POR PAGAR"];
+﻿var cabeceras = ["DOCUMENTO", "RAZON SOCIAL", "MONTO TOTAL", "MONTO APLICADO", "MONTO POR PAGAR"];
 var listaDatos;
 var matriz = [];
 var txtModal;
@@ -16,14 +15,16 @@ var idDiv;
 /*ingrese una variable global para capturar los datos del documento por el id */
 
 var datosDelDocumento;
+var nombreEmpresa = "nombre Empresa S.A.C";
+var rucEmpresa = "99999999999";
+var direccionEmpresa = "direccion empresa - lima";
 
-
-var url = "ReportePagar/ObtenerDatos";
-enviarServidor(url, mostrarLista);
-
-
+$(function () {
+    var url = "ReportePagar/ObtenerDatos";
+    enviarServidor(url, mostrarLista);
+    configBM();
+});
 function mostrarLista(rpta) {
-    crearTablaCompras(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         var Resultado = listas[0];
@@ -33,143 +34,117 @@ function mostrarLista(rpta) {
             listaDatos = listas[1].split("▼");
             var fechaInicio = listas[2];
             var fechaFin = listas[3];
-            gbi("txtFilFecIn").value = fechaInicio;
-            gbi("txtFilFecFn").value = fechaFin;
-        }
-        else {
-            mostrarRespuesta(Resultado, mensaje, "error");
-        }
-        listar();
+            //gbi("txtFilFecIn").value = fechaInicio;
+            //gbi("txtFilFecFn").value = fechaFin;
+            listar(listaDatos);
+        }   
     }
-    reziseTabla();
 }
-
-
-function crearTablaCompras(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info d-none d-md-flex' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-    for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0:
-                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-                break;
-            case 1:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-            case 3: case 5: case 4:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-            case 2:
-                contenido += "              <div class='col-12 col-md-3'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-4'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
-    }
-    contenido += "          </div>";
-
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
-}
-
-
-
-
-function listar() {
-    configurarFiltrok();
-    matriz = crearMatrizReporte(listaDatos);
-    configurarFiltrok(cabeceras2);
-    mostrarMatrizReportesPago(matriz, cabeceras2, "divTabla", "contentPrincipal");
-    //configurarBotonesModal();
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
-
-}
-
-function mostrarMatrizReportesPago(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-                for (var j = 0; j < cabeceras.length; j++) {
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                        case 2: case 3: case 4:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                        case 5:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        case 1:
-                            contenido2 += "col-md-3 style='padding-top:5px;'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
-        }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
+function listar(r) {
+    let newDatos = [];
+    if (r[0] !== '') {
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                documento: valor[0],
+                razonSocial: valor[1],
+                montoTotal: valor[2],
+                montoAplicado: valor[3],
+                montoPorPagar: valor[4]
+            })
         });
     }
-}
+    let cols = ["documento", "razonSocial", "montoTotal", "montoAplicado", "montoPorPagar"];
+    loadDataTable(cols, newDatos, "documento", "tbDatos", "", false);
 
-var btnPDF = gbi("btnImprimirPDF");
-btnPDF.onclick = function () {
-    ExportarPDFs("p", "Reporte de Pagos", cabeceras2, matriz, "Reporte de Pagos", "a4", "e");
 }
-var btnImprimir = document.getElementById("btnImprimir");
-btnImprimir.onclick = function () {
-    ExportarPDFs("p", "Reporte de Pagos", cabeceras2, matriz, "Reporte de Pagos", "a4", "i");
+function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
+    var columnas = [];
+    for (var i = 0; i < cols.length; i++) {
+        let item = {
+            data: cols[i]
+        };
+        columnas.push(item);
+    }
+    tbDatos = $('#' + tid).DataTable({
+        data: datos,
+        columns: columnas,
+        rowId: rid,
+        order: arrOrder,
+        columnDefs:
+            [
+                {
+                    "targets": 0,
+                    "visible": showFirstField,
+                },
+                {
+                    "targets": columnas.length - 1,
+                    "width": "10%"
+                }],
+        searching: !0,
+        bLengthChange: !0,
+        destroy: !0,
+        pagingType: "full_numbers",
+        info: !1,
+        paging: !0,
+        pageLength: 25,
+        responsive: !0,
+        footer: false,
+        deferRender: !1,
+        language: {
+            "decimal": "",
+            "emptyTable": "No existen registros a mostrar.",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            search: "_INPUT_",
+            searchPlaceholder: "Buscar ",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "<<",
+                "last": ">>",
+                "next": ">",
+                "previous": "<"
+            }
+        }
+    });
 }
-
-var btnExcel = gbi("btnImprimirExcel");
-btnExcel.onclick = function () {
-    fnExcelReport(cabeceras2, matriz);
+function configBM() {
+    var btnPDF = gbi("btnImprimirPDF");
+    btnPDF.onclick = function () {
+        ExportarPDFs("p", "Reporte de Pagos", cabeceras, matriz, "Reporte de Pagos", "a4", "e");
+    }
+    var btnImprimir = document.getElementById("btnImprimir");
+    btnImprimir.onclick = function () {
+        ExportarPDFs("p", "Reporte de Pagos", cabeceras, matriz, "Reporte de Pagos", "a4", "i");
+    }
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras);
+    }
 }
-
 
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
     var columns = [];
     for (var i = 0; i < cabeceras.length; i++) {
-        if (i != 0) {
-            columns[i - 1] = cabeceras[i];
-        }
+        columns[i] = cabeceras[i];
     }
     var data = [];
-    for (var i = 0; i < matriz.length; i++) {
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (var i = 0; i < lstDatos.length; i++) {
+        let lstcolDatos = lstDatos[i].children;
         data[i] = [];
-        for (var j = 0; j < matriz[i].length; j++) {
-            if (j != 0) {
-                data[i][j - 1] = matriz[i][j];
-            }
+        for (var j = 0; j < lstcolDatos.length; j++) {
+            data[i][j] = lstcolDatos[j];
         }
     }
+
     var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
     var width = doc.internal.pageSize.width;
     var height = doc.internal.pageSize.height;
@@ -188,13 +163,13 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     doc.line(30, 125, width - 30, 125);
     doc.setFontSize(10);
     doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 10, 30);
+    doc.text(nombreEmpresa, 10, 30);
     doc.setFontSize(8);
     doc.setFontType("normal");
     doc.text("Ruc:", 10, 40);
-    doc.text("20565643143", 30, 40);
+    doc.text(rucEmpresa, 30, 40);
     doc.text("Dirección:", 10, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
+    doc.text(direccionEmpresa, 50, 50);
     doc.setFontType("bold");
     doc.text("Fecha Impresión", width - 90, 40)
     doc.setFontType("normal");
@@ -210,7 +185,7 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
 
     });
     if (v == "e") {
-        doc.save((nombre != undefined ? nombre : "table.pdf"));
+        doc.save((nombre != undefined ? nombre : "reporte_pagos.pdf"));
     }
     else if (v == "i") {
         doc.autoPrint();
@@ -218,15 +193,51 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
         iframe.src = doc.output('dataurlstring');
     }
 }
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
 
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
+    for (var i = 0; i < nCampos; i++) {
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
+    }
+    tab_text += "</tr>";
 
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
+        }
+        tab_text += "</tr>";
+    }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
-function configurarFiltrok(cabe) {
-    var texto = document.getElementById("txtFiltro");
-    texto.onkeyup = function () {
-        matriz = crearMatriz(listaDatos);
-        mostrarMatrizReporte(matriz, cabe, "divTabla", "contentPrincipal");
-    };
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "Reporte_Pagos.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
 }
 
 

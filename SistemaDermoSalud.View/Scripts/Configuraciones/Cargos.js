@@ -1,7 +1,9 @@
-﻿var cabeceras = ["idCargos", "Descripción", "FechaModificacion","Estado"];
+﻿var cabeceras = ["Descripcion", "Fecha","Estado"];
 var listaDatos;
 var matriz = [];
-
+var nombreEmpresa = "nombre Empresa S.A.C";
+var rucEmpresa = "99999999999";
+var direccionEmpresa = "direccion empresa - lima";
 $(function () {
     var url = "Cargos/ObtenerDatos";
     enviarServidor(url, mostrarLista);
@@ -203,21 +205,6 @@ function configurarBotonesModal() {
         show_hidden_Formulario();
     }
 }
-function configBM() {
-    var btnPDF = gbi("btnImprimirPDF");
-    btnPDF.onclick = function () {
-        ExportarPDFs("p", "Servicios", cabeceras, matriz, "Servicios", "a4", "e");
-    }
-    var btnImprimir = document.getElementById("btnImprimir");
-    btnImprimir.onclick = function () {
-        ExportarPDFs("p", "servicios", cabeceras, matriz, "Servicios", "a4", "i");
-    }
-
-    var btnExcel = gbi("btnImprimirExcel");
-    btnExcel.onclick = function () {
-        fnExcelReport(cabeceras, matriz);
-    }
-}
 function validarFormulario() {
     var error = true;
     if (validarControl("txtDescripcion")) error = false;
@@ -280,23 +267,37 @@ function CargarDetalles(rpta) {
 }
 //
 //exportar
+function configBM() {
+    var btnPDF = gbi("btnImprimirPDF");
+    btnPDF.onclick = function () {
+        ExportarPDFs("p", "Servicios", cabeceras, matriz, "Servicios", "a4", "e");
+    }
+    var btnImprimir = document.getElementById("btnImprimir");
+    btnImprimir.onclick = function () {
+        ExportarPDFs("p", "servicios", cabeceras, matriz, "Servicios", "a4", "i");
+    }
+
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras, matriz);
+    }
+}
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
     var columns = [];
     for (var i = 0; i < cabeceras.length; i++) {
-        if (i != 0) {
-            columns[i - 1] = cabeceras[i];
-        }
+        columns[i] = cabeceras[i];
     }
     var data = [];
-    for (var i = 0; i < matriz.length; i++) {
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (var i = 0; i < lstDatos.length; i++) {
+        let lstcolDatos = lstDatos[i].children;
         data[i] = [];
-        for (var j = 0; j < matriz[i].length; j++) {
-            if (j != 0) {
-                data[i][j - 1] = matriz[i][j];
-            }
+        for (var j = 0; j < lstcolDatos.length; j++) {
+            data[i][j] = lstcolDatos[j];
         }
     }
+
     var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
     var width = doc.internal.pageSize.width;
     var height = doc.internal.pageSize.height;
@@ -315,13 +316,13 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     doc.line(30, 125, width - 30, 125);
     doc.setFontSize(10);
     doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 10, 30);
+    doc.text(nombreEmpresa, 10, 30);
     doc.setFontSize(8);
     doc.setFontType("normal");
     doc.text("Ruc:", 10, 40);
-    doc.text("20565643143", 30, 40);
+    doc.text(rucEmpresa, 30, 40);
     doc.text("Dirección:", 10, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
+    doc.text(direccionEmpresa, 50, 50);
     doc.setFontType("bold");
     doc.text("Fecha Impresión", width - 90, 40)
     doc.setFontType("normal");
@@ -337,11 +338,57 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
 
     });
     if (v == "e") {
-        doc.save((nombre != undefined ? nombre : "table.pdf"));
+        doc.save((nombre != undefined ? nombre : "cargos.pdf"));
     }
     else if (v == "i") {
         doc.autoPrint();
         var iframe = document.getElementById('iframePDF');
         iframe.src = doc.output('dataurlstring');
     }
+}
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
+
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
+    for (var i = 0; i < nCampos; i++) {
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
+    }
+    tab_text += "</tr>";
+
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length - 1; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
+        }
+        tab_text += "</tr>";
+    }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "Cargos.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
 }

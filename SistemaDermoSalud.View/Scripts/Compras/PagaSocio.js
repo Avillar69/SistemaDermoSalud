@@ -1,4 +1,4 @@
-﻿var cabeceras = ["id", "Fecha", "Serie", "Numero", "Descripcion", "Pago", "Operacion", "Monto"];
+﻿var cabeceras = ["Fecha", "Serie", "Numero", "Descripcion", "Pago", "Operacion", "Monto"];
 var cabeceras2 = ["DOCUMENTO", "RAZON SOCIAL", "MONTO TOTAL", "MONTO APLICADO", "MONTO POR PAGAR"];
 var listaDatos;
 var matriz = [];
@@ -15,6 +15,9 @@ var FechaActual;
 var idTablaDetalle;
 var idDiv;
 var ListaPago = [];
+var nombreEmpresa = "nombre Empresa S.A.C";
+var rucEmpresa = "99999999999";
+var direccionEmpresa = "direccion empresa - lima";
 /*ingrese una variable global para capturar los datos del documento por el id */
 //configNav();
 var datosDelDocumento = [];
@@ -23,20 +26,9 @@ $(function () {
     var url = "PagarSocio/ObtenerDatosPagoDetalle?id=1";
     enviarServidor(url, mostrarLista);
     configurarBotonesModal();
+    configBM();
 });
-
-
-
-configBM();
-reziseTabla();
-cfgKP(["txtDocumento", "txtRazonSocial", "txtCuentaDestino", "txtCuentaOrigen", "txtTipoOperacion"], cfgTMKP);
-cfgKP(["txtTotal", "txtMontoAplicado", "txtNOperacion", "txtFechaPago", "txtFechaCobroCheque", "txtMontoCancelar", "txtTipoOperacion", "txtObservacion"], cfgTKP);
-function cfgKP(l, m) {
-    for (var i = 0; i < l.length; i++) {
-        gbi(l[i]).onkeyup = m;
-    }
-}
-
+//listar
 function mostrarLista(rpta) {
     //crearTablaCompras(cabeceras, "cabeTabla");
     if (rpta != "") {
@@ -55,635 +47,169 @@ function mostrarLista(rpta) {
             gbi("txtFilFecFn").value = fechaFin;
             gbi("txtFechaPago").value = FechaActual;
             gbi("txtFechaCobroCheque").value = FechaActual;
-        }
-        else {
-            mostrarRespuesta(Resultado, mensaje, "error");
-        }
+            cargarDatosMonedas(listaMoneda);
+            let urlDocumento = "/PagarSocio/ListarPagosPendientes?id=1";
+            enviarServidor(urlDocumento, cargarDatosPagosPendiente);
 
-        llenarCombo(listaMoneda, "cboMoneda", "Seleccione");
-        listar();
-    }
-    reziseTabla();
-}
-function TraerDetalle(id) {
-    var url = "PagarSocio/ObtenerDatosxIdDetalle?IdDetalle=" + id;
-    enviarServidor(url, CargarDetalles);
-}
-function CargarDetalles(rpta) {
-    if (rpta != '') {
-        var listas = rpta.split('↔');
-        var Resultado = listas[0];
-        var datos = listas[1].split('▲');
-        var dir = listas[2].split("▼");
-        var det = listas[3].split("▼");
-        if (Resultado == 'OK') {
-            var temporal = datos[33] + '-' + datos[34];
-            adc(ListaPago, datos[1], "txtDocumento", 1);
-            adt(datos[32], "txtFecha");
-            adt(datos[27], "txtRazonSocial");
-            adt(datos[28], "txtTotal");
-            adt(datos[30], "txtMontoAplicado");
-            adt(datos[31], "txtDiferencia");
-            adt(datos[8], "cboMoneda");
-            adt(datos[13], "txtMontoCancelar");
-            adt(datos[23], "txtFechaPago", 1);
-            adt(datos[3], "txtTipoOperacion");
-            if (datos[3] == 1) {
-                var lblTituloPanel = document.getElementById('lblOperacion');
-                lblTituloPanel.innerHTML = "N°.Operacion";
-                gbi("divCuentaOrigen").style.display = "";
-                gbi("divCuentaDestino").style.display = "";
-                gbi("divOperacion").style.display = "";
-                gbi("divFCC").style.display = "none";
-
-                limpiarControl("txtNOperacion");
-                limpiarControl("txtCuentaDestino");
-                limpiarControl("txtCuentaOrigen");
-            } else if (datos[3] == 2) {
-                var lblTituloPanel = document.getElementById('lblOperacion');
-                lblTituloPanel.innerHTML = "N°.Cheque";//Titulo Insertar
-                gbi("divCuentaOrigen").style.display = "none";
-                gbi("divCuentaDestino").style.display = "none";
-                gbi("divOperacion").style.display = "";
-                gbi("divFCC").style.display = "";
-                limpiarControl("txtCuentaDestino");
-                limpiarControl("txtCuentaOrigen");
-            }
-            else {
-                var lblTituloPanel = document.getElementById('lblOperacion');
-                lblTituloPanel.innerHTML = "N°.Operacion";
-                gbi("divCuentaDestino").style.display = "";
-                gbi("divOperacion").style.display = "";
-                gbi("divFCC").style.display = "none";
-                gbi("divCuentaOrigen").style.display = "none";
-                limpiarControl("txtFechaCobroCheque");
-
-                limpiarControl("txtCuentaOrigen");
-            }
-            adt(datos[19], "txtObservacion", 1);
-            gbi("txtCuentaOrigen").dataset.id = datos[11];
-            adt(datos[12], "txtCuentaOrigen");
-            gbi("txtCuentaDestino").dataset.id = datos[21];
-            adt(datos[22], "txtCuentaDestino");
-
-
-            var idPago = gbi("txtDocumento").dataset.id;
-            var url = 'Pago/ObtenerDatosxIDPagoCompras?id=' + idPago;
-            enviarServidor(url, CargarDetalleOC);
-
-            adt(datos[10], "txtNOperacion");
-            adt(datos[23], "txtFechaCobroCheque");
-            adt(datos[0], "txtID");
-            adt(datos[1], "txtID2");
-
+            let urlOrigen = "/PagarSocio/ObtenerCuentasOrigen";
+            enviarServidor(urlOrigen, cargarDatosCuentaOrigen);
+            listar(listaDatos);
         }
     }
 }
-function TimeStamp() {
-    var t = new Date();
-    var ss = t.substring()
-}
-var btnPDF = gbi("btnImprimirPDF");
-btnPDF.onclick = function () {
-    ExportarPDFs("p", "Pagar Socio", cabeceras, matriz, "Pago por Socios", "a4", "e");
-}
-var btnImprimir = document.getElementById("btnImprimir");
-btnImprimir.onclick = function () {
-    ExportarPDFs("p", "Pagar Socio", cabeceras, matriz, "Pago por Socios", "a4", "i");
-}
-var btnExcel = gbi("btnImprimirExcel");
-btnExcel.onclick = function () {
-    fnExcelReport(cabeceras, matriz);
-}
-
-function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
-    var texto = "";
-    var columns = [];
-    for (var i = 0; i < cabeceras.length; i++) {
-        if (i != 0) {
-            columns[i - 1] = cabeceras[i];
-        }
+function listar(r) {
+    let newDatos = [];
+    if (r[0] !== '') {
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                id: valor[0],
+                fecha: valor[1],
+                serie: valor[2],
+                numero: valor[3],
+                descripcion: valor[4],
+                pago: valor[5],
+                operacion: valor[6],
+                monto: valor[7]
+            })
+        });
     }
-    var data = [];
-    for (var i = 0; i < matriz.length; i++) {
-        data[i] = [];
-        for (var j = 0; j < matriz[i].length; j++) {
-            if (j != 0) {
-                data[i][j - 1] = matriz[i][j];
+    let cols = ["fecha", "serie", "numero", "descripcion", "pago", "operacion", "monto"];
+    loadDataTable(cols, newDatos, "id", "tbDatos", cadButtonOptions(), false);
+
+}
+function cadButtonOptions() {
+    let cad = "";
+    cad += '<ul class="list-inline" style="margin-bottom: 0px;">';
+    cad += '<li class="list-inline-item">';
+    cad += '<div class="dropdown">';
+    cad += '<button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">';
+    cad += '<i class="ri-more-fill align-middle"></i>';
+    cad += '</button>';
+    cad += '<ul class="dropdown-menu dropdown-menu-end" style="">';
+    cad += '<li>';
+    cad += '<a class="dropdown-item edit-item-btn" href="javascript:void(0)" onclick="mostrarDetalle(2, this)" ><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Editar</a>';
+    cad += '</li>';
+    cad += '<li>';
+    cad += '<a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="javascript:void(0)" onclick="eliminar(this)"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Eliminar</a>';
+    cad += '</li>';
+    cad += '</ul>';
+    cad += '</div>';
+    cad += '</li>';
+    cad += ' </ul>';
+    return cad;
+}
+function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
+    var columnas = [];
+    for (var i = 0; i < cols.length; i++) {
+        let item = {
+            data: cols[i]
+        };
+        columnas.push(item);
+    }
+    let itemBtn = {
+        "data": null,
+        "defaultContent": "<center>" + btns + "</center>"
+    };
+    columnas.push(itemBtn);
+    tbDatos = $('#' + tid).DataTable({
+        data: datos,
+        columns: columnas,
+        rowId: rid,
+        order: arrOrder,
+        columnDefs:
+            [
+                {
+                    "targets": 0,
+                    "visible": showFirstField,
+                },
+                {
+                    "targets": columnas.length - 1,
+                    "width": "10%"
+                }],
+        searching: !0,
+        bLengthChange: !0,
+        destroy: !0,
+        pagingType: "full_numbers",
+        info: !1,
+        paging: !0,
+        pageLength: 25,
+        responsive: !0,
+        footer: false,
+        deferRender: !1,
+        language: {
+            "decimal": "",
+            "emptyTable": "No existen registros a mostrar.",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            search: "_INPUT_",
+            searchPlaceholder: "Buscar ",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "<<",
+                "last": ">>",
+                "next": ">",
+                "previous": "<"
             }
         }
-    }
-    var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
-    var width = doc.internal.pageSize.width;
-    var height = doc.internal.pageSize.height;
-    var fec = new Date();
-    var d = fec.getDate().toString().length == 2 ? fec.getDate() : ("0" + fec.getDate());
-    var m = (fec.getMonth() + 1).length == 2 ? (fec.getMonth() + 1) : ("0" + (fec.getMonth() + 1));
-    var y = fec.getFullYear();
-
-    var h = fec.getHours().toString().length == 2 ? fec.getHours() : ("0" + fec.getHours());
-    var mm = fec.getMinutes().toString().length == 2 ? fec.getMinutes() : ("0" + fec.getMinutes());
-    var s = fec.getSeconds().toString().length == 2 ? fec.getSeconds() : ("0" + fec.getSeconds());
-    var fechaImpresion = d + '-' + m + '-' + y + ' ' + h + ':' + mm + ':' + s;
-    doc.setFont('helvetica')
-    doc.setFontSize(14);
-    doc.text(titulo, width / 2 - 80, 95);
-    doc.line(30, 125, width - 30, 125);
-    doc.setFontSize(10);
-    doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 10, 30);
-    doc.setFontSize(8);
-    doc.setFontType("normal");
-    doc.text("Ruc:", 10, 40);
-    doc.text("20565643143", 30, 40);
-    doc.text("Dirección:", 10, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
-    doc.setFontType("bold");
-    doc.text("Fecha Impresión", width - 90, 40)
-    doc.setFontType("normal");
-    doc.setFontSize(7);
-    doc.text(fechaImpresion, width - 90, 50)
-
-    doc.autoTable(columns, data, {
-        theme: 'plain',
-        startY: 110, showHeader: 'firstPage',
-        headerStyles: { styles: { overflow: 'linebreak', halign: 'center' }, fontSize: 7, },
-        bodyStyles: { fontSize: 6, valign: 'middle', cellPadding: 2, columnWidt: 'wrap' },
-        columnStyles: {},
-
     });
-    if (v == "e") {
-        doc.save((nombre != undefined ? nombre : "table.pdf"));
-    }
-    else if (v == "i") {
-        doc.autoPrint();
-        var iframe = document.getElementById('iframePDF');
-        iframe.src = doc.output('dataurlstring');
-    }
 }
-function JsonParse(data) {
-
-}
-function cfgSOC(evt) {
-    switch (evt.srcElement.id) {
-        case "cboLocalDet":
-            var urlC = 'ConsultaStock/ObtenerAlmacen?pL=' + cboLocalDet.value;
-            enviarServidor(urlC, cargarAlmacenDet);
-            gbi("cboAlmacenDet").focus();
-            break;
-        case "cboAlmacenDet":
-            gbi("cboTipoCompra").focus();
-            break;
-        default:
-
-    }
-
-}
-function mostrarDetalle(opcion, id) {
-    var lblTituloPanel = document.getElementById('lblTituloPanel');
-    limpiarTodo();
-    switch (opcion) {
-        case 1:
-            show_hidden_Formulario();
-            lblTituloPanel.innerHTML = "Nuevo Pago";
-            document.getElementById("btnModalDocumento").disabled = false;
-            gbi("txtFechaPago").value = FechaActual;
-            gbi("txtFechaCobroCheque").value = FechaActual;
-            gbi("txtTipoOperacion").value = "1";
-            gbi("txtTipoOperacion").onchange();
-            break;
-            gbi("btnCancelarDetalle").style.display = "";
-        case 2:
-            lblTituloPanel.innerHTML = "Editar Pago";//Titulo Modificar
-            TraerDetalle(id);
-            show_hidden_Formulario(true);
-            document.getElementById("btnModalDocumento").disabled = true;
-            break;
-    }
-}
-$('#collapseOne-2').on('shown.bs.collapse', function () {
-    reziseTabla();
-})
-$('#collapseOne-2').on('hidden.bs.collapse', function () {
-    reziseTabla();
-})
-
-function crearTablaCompras(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info d-none d-md-flex' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-    for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0:
-                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-                break;
-            case 1:
-                contenido += "              <div class='col-12 col-md-1'>";
-                break;
-            case 2: case 3: case 7:
-                contenido += "              <div class='col-12 col-md-1'>";
-                break;
-            case 4:
-                contenido += "              <div class='col-12 col-md-3'>";
-                break;
-            case 5:
-                contenido += "              <div class='col-12 col-md-1'>";
-                break;
-            case 6:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-4'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
-    }
-    contenido += "          </div>";
-
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
-}
-function listar() {
-    //configurarFiltrok();
-    //matriz = crearMatrizReporte(listaDatos);
-    //configurarFiltrok(cabeceras);
-    //mostrarMatrizOC(matriz, cabeceras, "divTabla", "contentPrincipal");
-    ////configurarBotonesModal();
-    //reziseTabla();
-    //$(window).resize(function () {
-    //    reziseTabla();
-    //});
-
-}
-function mostrarMatriz(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-                for (var j = 0; j < cabeceras.length; j++) {
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0:
-                            contenido2 += "col-md-2' style='display:none;'>";
-                            break;
-                        case 4:
-                            contenido2 += "col-md-3' style='padding-top:5px;'>";
-                            break;
-                        case 2: case 3: case 1: case 5: case 7:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        case 6:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "<div class='col-12 col-md-1'>";
-
-                contenido2 += "<div class='row saltbtn'>";
-                contenido2 += "<div class='col-12'>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
-        }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
-        });
-    }
-}
-function mostrarMatrizOC(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-                for (var j = 0; j < cabeceras.length; j++) {
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0:
-                            contenido2 += "col-md-2' style='display:none;'>";
-                            break;
-                        case 1:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        case 4:
-                            contenido2 += "col-md-3' style='padding-top:5px;'>";
-                            break;
-                        case 2: case 3: case 7:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        case 5:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        case 6:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "<div class='col-12 col-md-2'>";
-
-                contenido2 += "<div class='row saltbtn'>";
-                contenido2 += "<div class='col-12'>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;'  onclick='eliminar(\"" + matriz[i][0] + "\")'> <i class='fa fa-trash-o'></i> </button>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;'  onclick='mostrarDetalle(2, \"" + matriz[i][0] + "\")'> <i class='fa fa-pencil'></i></button>";
-
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
-        }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
-        });
-    }
-}
-function CTM() {
-
-    var contenido = "";
-    contenido += "<div class='panel panel-default' style='margin-bottom:10px;'>";
-    contenido += "  <div id='collapse" + i + "' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='heading" + i + "'>";
-    contenido += "      <div class='panel-body'  style='padding: 10px 20px 20px 10px'>";
-    contenido += "          <div class='row' style='padding-left:20px;padding-right:20px'>";
-    contenido += "              <div class='col-xs-12 col-md-2'>";
-    contenido += "                  <label style='padding-top:5px;'> Código : " + matriz[i][4] + "</label>";
-    contenido += "              </div>";
-    contenido += "              <div class='col-xs-12 col-md-4'>";
-    contenido += "                  <label style='padding-top:5px;'> Categoría : " + matriz[i][5] + "</label>";
-    contenido += "              </div>";
-    contenido += "              <div class='col-xs-12 col-md-4'>";
-    contenido += "                  <label style='padding-top:5px;'> Descripción : " + matriz[i][6] + "</label>";
-    contenido += "              </div>";
-    contenido += "              <div class='col-xs-12 col-md-2'>";
-    contenido += "                  <label style='padding-top:5px;'> Stock Actual : " + matriz[i][7] + "</label>";
-    contenido += "              </div>";
-    contenido += "          </div>";
-    contenido += "      </div>";
-    contenido += "  </div>";
-    contenido += "</div>";
-}
-function isNumberKey(evt) {
-
-}
-function eliminarListar(rpta) {
-    if (rpta != '') {
-        var data = rpta.split('↔');
-        var res = data[0];
-        var mensaje = '';
-        if (res == 'OK') {
-            mensaje = 'Se eliminó el Pago';
-            tipo = 'success';
-            listaDatos = data[2].split('▼');
-            listar();
-        }
-        else {
-            mensaje = data[1]
-            tipo = 'error';
-        }
-    } else {
-        mensaje = 'No hubo respuesta';
-    }
-    mostrarRespuesta(res, mensaje, tipo);
-}
-function cfgTMKP(evt) {
-    var o = evt.srcElement.id;
-    if (evt.keyCode === 13) {
-        var n = o.replace("txt", "");
-        gbi("btnModal" + n).click();
-
-
-
-
-    }
-}
-function pad(n, width, z) {
-    z = z || '0';
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-function cfgTKP(evt) {
-    //event.target || event.srcElement
-    var o = evt.srcElement.id;
-    if (evt.keyCode === 13) {
-        switch (o) {
-
-
-            case "txtMontoCancelar":
-                gbi("txtFechaPago").focus();
-                break;
-            case "txtFechaPago":
-                gbi("txtTipoOperacion").focus();
-                break;
-
-            case "txtTipoOperacion":
-                if (gvc("txtTipoOperacion") == 1) {
-                    gbi("txtCuentaOrigen").focus();
-
-                }
-                else if (gvc("txtTipoOperacion") == 2) {
-                    gbi("txtNOperacion").focus();
-                }
-                else if (gvc("txtTipoOperacion") == 3) {
-                    gbi("txtCuentaDestino").focus();
-                }
-
-                break;
-            case "txtCuentaOrigen":
-                gbi("txtCuentaDestino").focus();
-                break;
-            case "txtCuentaDestino":
-                gbi("txtNOperacion").focus();
-                break;
-            case "txtNOperacion":
-                gbi("txtFechaCobroCheque").focus();
-                break;
-            case "txtFechaCobroCheque":
-                gbi("txtObservacion").focus();
-                break;
-
-
-            //case "txt"
-            default:
-
-        }
-        return true;
-    }
-    else {
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        var valor;
-        switch (o) {
-            case "txtCantidad":
-            case "txtPrecio":
-                if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-                    valor = false;
-                }
-                else {
-                    valor = true;
-                }
-                var c = gbi("txtCantidad").value == "" ? 0 : parseFloat(gbi("txtCantidad").value);
-                var p = gbi("txtPrecio").value == "" ? 0 : parseFloat(gbi("txtPrecio").value);
-
-                gbi("txtTotal").value = parseFloat(c * p).toFixed(2);
-                return valor;
-                break;
-            default:
-                break;
-
-        }
-    }
-}
-function cargarAlmacen(rpta) {
-    if (rpta.split('↔')[0] == "OK") {
-        var listas = rpta.split('↔');
-        listaAlmacenes = listas[2].split("▼");
-        llenarCombo(listaAlmacenes, "cboAlmacen", "Seleccione");
-    }
-}
-//Carga con botones de Modal desde URL
-function cbmu(ds, t, tM, tM2, cab, u, m) {
-    document.getElementById("div_Frm_Modal").innerHTML = document.getElementById("div_Frm_Detalle").innerHTML;
-    document.getElementById("btnGrabar_Modal").dataset.grabar = ds;
-    document.getElementById("lblTituloModal").innerHTML = t;
-    var txtCodigo_FormaPago = document.getElementById("txtCodigo_Detalle");
-    txtCodigo_FormaPago.disabled = true;
-    txtCodigo_FormaPago.placeholder = "Autogenerado";
-    var txtM1 = document.getElementById(tM);
-    txtModal = txtM1;
-    tM2 == null ? txtModal2 = tM2 : txtModal2 = document.getElementById(tM2);
-    cabecera_Modal = cab;
-    enviarServidor(u, m);
-}
-//Carga con botones de Modal sin URL (Con datos dat[])
-function cbm(ds, t, tM, tM2, cab, dat, m) {
-    document.getElementById("div_Frm_Modal").innerHTML = document.getElementById("div_Frm_Detalle").innerHTML;
-    document.getElementById("btnGrabar_Modal").dataset.grabar = ds;
-    document.getElementById("lblTituloModal").innerHTML = t;
-    var txtCodigo_FormaPago = document.getElementById("txtCodigo_Detalle");
-    txtCodigo_FormaPago.disabled = true;
-    txtCodigo_FormaPago.placeholder = "Autogenerado";
-    var txtM1 = document.getElementById(tM);
-    txtModal = txtM1;
-    tM2 == null ? txtModal2 = tM2 : txtModal2 = document.getElementById(tM2);
-    cabecera_Modal = cab;
-    m(dat);
-}
-//Configurar botones de Modal
-function configBM() {
-    var btnModDocumento = gbi("btnModalDocumento");
-    btnModDocumento.onclick = function () {
-        cbmu("l.pagos", "Lista de Pagos", "txtDocumento", null,
-            ["id", "Fecha", "Razon", "Serie", "Numero Dcto", "Debe"], "/PagarSocio/ListarPagosPendientes?id=" + 1, cargarLista);
-    };
-    var btnModCuentaOrigen = gbi("btnModalCuentaOrigen");
-    btnModCuentaOrigen.onclick = function () {
-        cbmu("cuentasOrigen", "Cuentas Origen", "txtCuentaOrigen", null,
-            ["id", "Banco", "Numero", "Cuenta"], "/PagarSocio/ObtenerCuentasOrigen", cargarLista);
-    };
-    var btnModCuentaDestino = gbi("btnModalCuentaDestino");
-    btnModCuentaDestino.onclick = function () {
-        if (datosDelDocumento.length > 0) {
-            cbmu("cuentasDestino", "Cuentas Destino", "txtCuentaDestino", null,
-                ["id", "Descripcion", "Cuenta"], "/PagarSocio/ObtenerCuentasSocio?id=" + datosDelDocumento[4], cargarLista);
-        } else {
-            mostrarRespuesta("Info", "Debe elegir un documento.", "warning");
-        }
-    };
-    function cargarBusqueda(rpta) {
-        if (rpta != "") {
-
-            var data = rpta.split('↔');
-            var res = data[0];
-            var mensaje = '';
-            var tipo = '';
-            var txtCodigo = document.getElementById('txtID');
-            var codigo = txtCodigo.value;
-            if (res == 'OK') {
-                listaDatos = data[2].split('▼');
-
-                listar();
-            }
-            else {
-                mensaje = data[1];
-                tipo = 'error';
-                mostrarRespuesta(res, mensaje, tipo);
-            }
-
-        }
+function configurarBotonesModal() {
+    var btnBuscar = document.getElementById("btnBuscar");
+    btnBuscar.onclick = function () {
+        BuscarxFecha(gbi("txtFilFecIn").value, gbi("txtFilFecFn").value);
     }
     var btnGrabar = document.getElementById("btnGrabar");
     btnGrabar.onclick = function () {
         if (validarFormulario()) {
             var url = "PagarSocio/grabar";
 
-            var MontoCancelar = parseFloat(gvt("txtMontoCancelar"));
-            var Diferencia = parseFloat(gvt("txtDiferencia"));
+            var MontoCancelar = parseFloat(gbi("txtMontoCancelar").value);
+            var Diferencia = parseFloat(gbi("txtDiferencia").value);
             if (MontoCancelar > Diferencia || MontoCancelar <= 0) {
                 mostrarRespuesta("Error", "El monto a pagar no puede ser mayor al Saldo actual", "error");
                 return;
             }
             var frm = new FormData();
             if (datosDelDocumento.length <= 0) {
-                frm.append("idPagoDetalle", gvt("txtID"));
-                frm.append("idPago", gvt("txtID2"));
+                frm.append("idPagoDetalle", gbi("txtID").value);
+                frm.append("idPago", gbi("txtID2").value);
             }
             else {
-
-                frm.append("idPagoDetalle", gvt("txtID"));
+                frm.append("idPagoDetalle", gbi("txtID").value);
                 frm.append("idPago", datosDelDocumento[0]);
             }
             frm.append("idCajaDetalle", 1);//gvt texto 
-            frm.append("idTipo", gvt("txtTipoOperacion"));
-            frm.append("idDocumento", datosDelDocumento[3]);
+            frm.append("idTipo", gbi("cboTipoOperacion").value);
+            frm.append("idDocumento", gbi("cboDocumento").value);
             frm.append("idEmpresa", 1);
             frm.append("idConcepto", 0);
             frm.append("Concepto", "  ");
-            frm.append("idFormaPago", gvt("cboMoneda"));
+            frm.append("idFormaPago", gbi("cboMoneda").value);
             frm.append("DescripcionFormaPago", $("#cboMoneda option:selected").text());
             frm.append("NumeroOperacion", gvt("txtNOperacion"));
-            frm.append("idCuentaBancario", gvc("txtCuentaOrigen"));
-            frm.append("NumeroCuenta", gvt("txtCuentaOrigen"));
+            frm.append("idCuentaBancario", gbi("cboCuentaOrigen").value);
+            frm.append("NumeroCuenta", $("#cboCuentaOrigen option:selected").text());
 
-            frm.append("idCuentaBancarioDestino", gvc("txtCuentaDestino"));/////////
-            frm.append("NumeroCuentaDestino", gvt("txtCuentaDestino"));
-            frm.append("Monto", gvt("txtMontoCancelar"));
+            frm.append("idCuentaBancarioDestino", gbi("cboCuentaDestino").value);
+            frm.append("NumeroCuentaDestino", $("#cboCuentaDestino option:selected").text());
+            frm.append("Monto", gbi("txtMontoCancelar").value);
 
             frm.append("Estado", true);
-            frm.append("Observacion", gvt("txtObservacion").length == 0 ? "-" : gvt("txtObservacion"));
-            frm.append("DescripcionOperacion", $("#txtTipoOperacion option:selected").text());
+            frm.append("Observacion", gbi("txtObservacion").value.length == 0 ? "-" : gbi("txtObservacion").value);
+            frm.append("DescripcionOperacion", $("#cboTipoOperacion option:selected").text());
 
-            if (gvc("txtTipoOperacion") == 2) {
-                frm.append("FechaDetalle", gvt("txtFechaCobroCheque"));
+            if (gbi("cboTipoOperacion").value == "2") {
+                frm.append("FechaDetalle", gbi("txtFechaCobroCheque").value);
             } else {
-                frm.append("FechaDetalle", gvt("txtFechaPago"));
+                frm.append("FechaDetalle", gbi("txtFechaPago").value);
             }
-
-            swal({ title: "<div class='loader' style='margin:0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
             enviarServidorPost(url, actualizarListar, frm);
             datosDelDocumento = [];
         }
@@ -691,10 +217,6 @@ function configBM() {
     var btnCancelar = document.getElementById("btnCancelar");
     btnCancelar.onclick = function () {
         show_hidden_Formulario(true);
-    }
-    var btnBuscar = document.getElementById("btnBuscar");
-    btnBuscar.onclick = function () {
-        BuscarxFecha(gbi("txtFilFecIn").value, gbi("txtFilFecFn").value);
     }
 }
 function BuscarxFecha(f1, f2) {
@@ -705,121 +227,228 @@ function mostrarBusqueda(rpta) {
     if (rpta != '') {
         var listas = rpta.split('↔');
         listaDatos = listas[2].split('▼');
-        matriz = crearMatriz(listaDatos);
-        //configurarFiltro(cabeceras);
-        mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-        reziseTabla();
+        listar(listaDatos);
     }
 }
-function editItem(id) {
-    var row = gbi(id);
-    gbi("txtArticulo").dataset.id = row.children[3].dataset.id;
-    gbi("txtArticulo").value = row.children[3].innerHTML;
-    gbi("txtCategoria").dataset.id = row.children[2].dataset.id;
-    gbi("txtCategoria").value = row.children[2].innerHTML;
-    gbi("txtCantidad").value = row.children[4].innerHTML;
-    gbi("txtPrecio").value = row.children[6].innerHTML;
-    gbi("txtTotal").value = row.children[7].innerHTML;
+function mostrarDetalle(opcion, id) {
+    var lblTituloPanel = document.getElementById('lblTituloPanel');
+    limpiarTodo();
+    switch (opcion) {
+        case 1:
+            show_hidden_Formulario();
+            lblTituloPanel.innerHTML = "Nuevo Pago";
+            gbi("txtFechaPago").value = FechaActual;
+            gbi("txtFechaCobroCheque").value = FechaActual;
+            gbi("cboTipoOperacion").value = "";
+            break;
+        case 2:
+            let idPago = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+            lblTituloPanel.innerHTML = "Editar Pago";//Titulo Modificar
+            TraerDetalle(idPago);
+            show_hidden_Formulario();
+            break;
+    }
+}
+function limpiarTodo() {
+    limpiarControl("txtID");
+    limpiarControl("txtID2");
+    $("#cboDocumento").val(null).trigger('change');
+    limpiarControl("txtDocumento");
+    limpiarControl("txtFecha");
+    limpiarControl("txtRazonSocial");
+    limpiarControl("txtTotal");
+    limpiarControl("txtMontoAplicado");
+    limpiarControl("txtDiferencia");    
+    limpiarControl("cboMoneda");   
+    limpiarControl("txtMontoCancelar");
+    limpiarControl("txtFechaPago");
+    limpiarControl("cboTipoOperacion");
+    limpiarControl("txtNOperacion");
+    limpiarControl("cboCuentaDestino");
+    limpiarControl("cboCuentaOrigen");
+    limpiarControl("txtFechaCobroCheque")
+    limpiarControl("txtObservacion");
+}
+function eliminar(id) {
+    let idPago = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
-    gbi("btnGrabarDetalle").innerHTML = "Actualizar";
-    idTablaDetalle = id;
-    //para que aparescan , ya que en el html  esta en style="display:none;"
-    gbi("btnGrabarDetalle").style.display = "";
-    gbi("btnCancelarDetalle").style.display = "";
+    Swal.fire({
+        title: '¿Estás seguro de eliminar este pago?',
+        text: '¡No podrás revertir esto!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Eliminalo!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            var u = "PagarSocio/Eliminar?idPagoDetalle=" + idPago;
+            enviarServidor(u, eliminarListar);
+        } else {
+            Swal.fire('Cancelado', 'No se elminó el pago', 'error');
+        }
+    });
+}
+function eliminarListar(rpta) {
+    if (rpta != "") {
+        var data = rpta.split("↔");
+        var res = data[0];
+        var mensaje = "";
+        if (res == "OK") {
+            mensaje = "Se eliminó el pago";
+            tipo = "success";
+        }
+        else {
+            mensaje = data[1];
+            tipo = "error";
+        }
+    } else {
+        mensaje = "No hubo respuesta";
+    }
+    Swal.fire(res, mensaje, tipo);
+    setTimeout(function () {
+        listaDatos = data[2].split("▼");
+        listar(listaDatos);
+    }, 1000);
+}
 
+//
+//crear
+function cargarDatosMonedas(r) {
+    let monedas = r
+    $("#cboMoneda").empty();
+    $("#cboMoneda").append(`<option value="">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        monedas.forEach(element => {
+            $("#cboMoneda").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+}
+function cargarDatosPagosPendiente(r) {
+    let dataP = r.split("↔");
+    let pagos = dataP[2].split("▼");
+    let arr = [{
+        id: 0,
+        text: "Seleccione",
+    }];
+    for (var j = 0; j < pagos.length; j++) {
+        let objChild = {
+            id: pagos[j].split('▲')[0],
+            text: pagos[j].split('▲')[1] + " | " + pagos[j].split('▲')[4] + "-" + pagos[j].split('▲')[3] + " | " + pagos[j].split('▲')[2] + " | " + pagos[j].split('▲')[5]
+        };
+        arr.push(objChild);
+    }
+    $("#cboDocumento").select2({
+        placeholder: "Seleccione",
+        data: arr, allowClear: true,
+        escapeMarkup: function (e) {
+            return e;
+        }
+    });
+
+    $("#cboDocumento").change(function () {
+        var selectedValue = $(this).val();
+        if (selectedValue !== "" && selectedValue !== null) {
+            var url = '/Pago/ObtenerDatosxIDPagoCompras?id=' + selectedValue;
+            enviarServidor(url, CargarDetalleOC);
+        }
+    });
+}
+function cargarDatosCuentaOrigen(r) {
+    let dataP = r.split("↔");
+    let ctasOrigen = dataP[2].split("▼");
+    $("#cboCuentaOrigen").empty();
+    $("#cboCuentaOrigen").append(`<option value="">Seleccione</option>`);
+    if (r && r.length > 0) {
+        ctasOrigen.forEach(element => {
+            $("#cboCuentaOrigen").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[2]}</option>`);
+        });
+    }
+}
+function cargarDatosCuentaDestino(r) {
+    let dataP = r.split("↔");
+    let ctasDestino = dataP[2].split("▼");
+    $("#cboCuentaDestino").empty();
+    $("#cboCuentaDestino").append(`<option value="">Seleccione</option>`);
+    if (r && r.length > 0) {
+        ctasDestino.forEach(element => {
+            $("#cboCuentaDestino").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[2]}</option>`);
+        });
+    }
+}
+function CargarDetalleOC(rpta) {
+    datosDelDocumento = "";
+    if (rpta != '') {
+        var listas = rpta.split('↔');
+        var Resultado = listas[0];
+        var datos = listas[1].split('▲'); 
+        datosDelDocumento = listas[1].split('▲');
+        console.log(datosDelDocumento);
+        if (Resultado == 'OK') {
+            var temp = datos[6] + '-' + datos[7];
+            adt(temp, "txtDocumento");
+            adt(datos[13], "txtFecha", 1);
+            adt(datos[9], "txtTotal", 1);
+            adt(datos[11], "txtMontoAplicado", 1);
+            adt(datos[12], "txtDiferencia", 1);
+            adc(listaSocios, datos[4], "txtRazonSocial", 1);
+            adt(datos[20], "cboMoneda", 1);
+            adt(0, "txtID", 1);
+            adt(datos[0], "txtID2", 1);
+
+            let urlDestino = "/PagarSocio/ObtenerCuentasSocio?id=" + datosDelDocumento[4];
+            enviarServidor(urlDestino, cargarDatosCuentaDestino);
+        }
+    }
+}
+function buscarXCombo() {
+    var comb = document.getElementById("cboTipoOperacion").value;
+
+    gbi("cboCuentaDestino").value = "";
+    gbi("txtNOperacion").value = "";
+    gbi("cboCuentaOrigen").value = "";
+
+    if (comb == "1") {// cuando es transferencia 
+
+        var lblTituloPanel = document.getElementById('lblOperacion');
+        lblTituloPanel.innerHTML = "N°.Operacion";
+        gbi("divCuentaOrigen").style.display = "";
+        gbi("divCuentaDestino").style.display = "";
+        gbi("divOperacion").style.display = "";
+        gbi("divFCC").style.display = "none";
+    }
+    if (comb == "2") {//cuando es cheque
+        gbi("divCuentaOrigen").style.display = "none";
+        gbi("divCuentaDestino").style.display = "none";
+        gbi("divOperacion").style.display = "";
+        gbi("divFCC").style.display = "";
+        var lblTituloPanel = document.getElementById('lblOperacion');
+        lblTituloPanel.innerHTML = "N°.Cheque";//Titulo Insertar
+    }
+    if (comb == "3") {//cuando es deposito
+        var lblTituloPanel = document.getElementById('lblOperacion');
+        lblTituloPanel.innerHTML = "N°.Operacion";
+        gbi("divCuentaDestino").style.display = "";
+        gbi("divOperacion").style.display = "";
+        gbi("divFCC").style.display = "none";
+        gbi("divCuentaOrigen").style.display = "none";
+    }
 }
 function validarFormulario() {
     var error = true;
-    //Aqui Ingresar todos los campos a validar || validarCombo || validarTexto
-
     if (validarControl("txtDocumento")) error = false;
-    if (validarControl("txtNOperacion")) error = false;
-    if (validarControl("txtMontoCancelar")) error = false;
     if (validarControl("txtMontoCancelar")) error = false;
     if (validarControl("txtFechaPago")) error = false;
-
-    if (gbi("txtTipoOperacion").value == "1") {
-        if (validarControl("txtCuentaOrigen")) error = false;
-        if (validarControl("txtCuentaDestino")) error = false;
-    } else if (gbi("txtTipoOperacion").value == "3") {
-        if (validarControl("txtCuentaDestino")) error = false;
+    if (validarControl("txtNOperacion")) error = false;
+    if (gbi("cboTipoOperacion").value == "1") {
+        if (validarControl("cboCuentaOrigen")) error = false;
+        if (validarControl("cboCuentaDestino")) error = false;
+    } else if (gbi("cboTipoOperacion").value == "3") {
+        if (validarControl("cboCuentaDestino")) error = false;
+    } else {
+        if (validarControl("txtFechaCobroCheque")) error = false;        
     }
-
     return error;
-}
-function guardarItemDetalle() {
-    var id = idTablaDetalle;
-    var row = gbi(id);
-    row.children[3].dataset.id = gbi("txtArticulo").dataset.id;
-    row.children[3].innerHTML = gbi("txtArticulo").value;
-    row.children[2].dataset.id = gbi("txtCategoria").dataset.id;
-    row.children[2].innerHTML = gbi("txtCategoria").value;
-    row.children[4].innerHTML = gbi("txtCantidad").value;
-    row.children[6].innerHTML = gbi("txtPrecio").value;
-    row.children[7].innerHTML = gbi("txtTotal").value;
-    gbi("btnGrabarDetalle").style.display = "none";
-    gbi("btnCancelarDetalle").style.display = "none";
-}
-function eliminarDetalle(id) {
-
-    limpiarControl("txtCantidad");
-    bDM("txtCategoria");
-    bDM("txtArticulo");
-    bDM("txtPrecio");
-    bDM("txtTotal");
-
-    gbi("btnGrabarDetalle").style.display = "none";
-    gbi("btnCancelarDetalle").style.display = "none";
-}
-function borrarDetalle(elem) {
-    var p = elem.parentNode.parentNode.parentNode.parentNode.remove();
-}
-//Agregar Item a Tabla Detalle
-function addItem(tipo, data) {
-    var contenido = "";
-    contenido += '<div class="row rowDet" id="gd' + (tipo == 1 ? data[0] : document.getElementsByClassName("rowDet").length + 1) + '"style="margin-bottom:2px;padding:0px 20px;padding-top:4px;">';
-    contenido += '  <div class="col-sm-1" style="display:none;">' + (tipo == 1 ? data[0] : '0') + '</div>';
-    contenido += '  <div class="col-sm-1" style="display:none;">' + (tipo == 1 ? data[1] : '0') + '</div>';
-    contenido += '  <div class="col-sm-2 p-t-5" data-id="' + (tipo == 1 ? data[4] : gvc("txtCategoria")) + '">' + (tipo == 1 ? data[5] : gvt("txtCategoria")) + '</div>';
-    contenido += '  <div class="col-sm-4 p-t-5" data-id="' + (tipo == 1 ? data[2] : gvc("txtArticulo")) + '">' + (tipo == 1 ? data[3] : gvt("txtArticulo")) + '</div>';
-    contenido += '  <div class="col-sm-1 p-t-5">' + (tipo == 1 ? parseFloat(data[6]).toFixed(2) : parseFloat(gvt("txtCantidad")).toFixed(2)) + '</div>';
-    contenido += '  <div class="col-sm-1 p-t-5">' + (tipo == 1 ? data[16] : 'Und.') + '</div>';// +gvt("txtUnidad") + '</div>';
-    contenido += '  <div class="col-sm-1 p-t-5">' + (tipo == 1 ? parseFloat(data[7]).toFixed(3) : parseFloat(gvt("txtPrecio")).toFixed(3)) + '</div>';
-    contenido += '  <div class="col-sm-1 p-t-5">' + (tipo == 1 ? parseFloat(data[9]).toFixed(3) : parseFloat(gvt("txtTotal")).toFixed(3)) + '</div>';
-    contenido += '  <div class="col-sm-1">';
-    contenido += '      <div class="row rowDetbtn">';
-    contenido += '          <div class="col-xs-12">';
-    contenido += "              <button type='button' onclick='borrarDetalle(this);' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:2px 10px;' > <i class='fa fa-trash-o'></i> </button>";
-    contenido += "              <button type='button' onclick='editItem(\"gd" + (tipo == 1 ? data[0] : document.getElementsByClassName("rowDet").length + 1) + "\");' class='btn btn-sm waves-effect waves-light btn-info pull-right m-l-10' style='padding:2px 10px;' > <i class='fa fa-pencil'></i> </button>";
-    contenido += '          </div>';
-    contenido += '      </div>';
-    contenido += '  </div>';
-    contenido += '  <div class="col-sm-1"></div>';
-    contenido += '</div>';
-    gbi("tb_DetalleF").innerHTML += contenido;
-}
-//Crear Detalle como Cadena para env Serv.
-function crearCadDetalleOrden() {
-    //ingresar los datos correctos
-    var cdet = "";
-    $(".rowDet").each(function (obj) {
-
-        cdet += $(".rowDet")[obj].children[0].innerHTML;//idOrdenCompraDetalle
-        cdet += "|" + $(".rowDet")[obj].children[1].innerHTML;//idCompra
-        cdet += "|" + $(".rowDet")[obj].children[3].dataset.id;//idCategoria
-        cdet += "|" + $(".rowDet")[obj].children[3].innerHTML;//descripcionCategoria
-        cdet += "|" + $(".rowDet")[obj].children[2].dataset.id;//idArticulo
-        cdet += "|" + $(".rowDet")[obj].children[2].innerHTML;//DescripcionArticulo
-        cdet += "|" + $(".rowDet")[obj].children[4].innerHTML;//Cantidad
-        //cdet += "|" + $(".rowDet")[obj].children[5].innerHTML;//Unidad
-        cdet += "|" + $(".rowDet")[obj].children[6].innerHTML;//Precio
-        cdet += "|" + $(".rowDet")[obj].children[6].innerHTML;//Precio
-        cdet += "|" + $(".rowDet")[obj].children[7].innerHTML;//Total-nacional
-        cdet += "|" + $(".rowDet")[obj].children[7].innerHTML;//Total-nacional
-        cdet += "|0|01-01-2000|01-01-2000|1|1|true";
-        cdet += "¯";
-    });
-    return cdet;
 }
 function actualizarListar(rpta) {
     if (rpta != '') {
@@ -849,334 +478,214 @@ function actualizarListar(rpta) {
                 tipo = 'error';
             }
         }
-        if (res == "OK") { show_hidden_Formulario(true); }
-        mostrarRespuesta(res, mensaje, tipo);
-        listaDatos = data[2].split('▼');
-        listar();
+        if (res == "OK") {
+            Swal.fire(res, mensaje, tipo);
+            setTimeout(function () {
+                show_hidden_Formulario(true);
+                listaDatos = data[2].split("▼");
+                listar(listaDatos);
+            }, 1000);
+        }
     }
 }
-function ValorMayorNegativo(id) {
-
-    swal({
-        title: 'Error',
-        text: 'La cantiadad excede o es negativa.',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'ingrese un valor menor al que debe pagar!',
-        closeOnConfirm: false,
-        closeOnCancel: false
-    });
+//
+//editar
+function TraerDetalle(id) {
+    var url = "PagarSocio/ObtenerDatosxIdDetalle?IdDetalle=" + id;
+    enviarServidor(url, CargarDetalles);
 }
-function eliminar(id) {
-
-    swal({
-        title: 'Desea Eliminar el Pago? ',
-        text: 'No podrá recuperar los datos eliminados.',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si, Eliminalo!',
-        closeOnConfirm: false,
-        closeOnCancel: false
-    },
-        function (isConfirm) {
-            if (isConfirm) {
-                var u = "PagarSocio/Eliminar?idPagoDetalle=" + id;
-                enviarServidor(u, eliminarListar);
-            } else {
-                swal('Cancelado', 'No se eliminó el Pago', 'error');
-            }
-        });
-}
-//Borrar Data del Modal x ID
-function bDM(v) {
-    gbi(v).value = "";
-    gbi(v).dataset.id = "";
-}
-function limpiarTodo() {
-
-    limpiarControl("txtID");
-    limpiarControl("txtID2");
-    limpiarControl("txtDocumento");
-    limpiarControl("txtTotal");
-    limpiarControl("cboMoneda");
-    limpiarControl("txtFecha");
-    limpiarControl("txtMontoAplicado");
-    limpiarControl("txtRazonSocial");
-    limpiarControl("txtDiferencia");
-    limpiarControl("txtMontoCancelar");
-    limpiarControl("txtFechaPago");
-    limpiarControl("txtTipoOperacion");
-    limpiarControl("txtObservacion");
-    limpiarControl("txtFechaCobroCheque");
-    limpiarControl("txtNOperacion");
-    limpiarControl("txtCuentaDestino");
-    limpiarControl("txtCuentaOrigen");
-    limpiarControl("txtFechaPago");
-    limpiarControl("txtFechaCobroCheque");
-}
-function limpiarCamposDetalle() {
-    bDM("txtCategoria");
-    bDM("txtArticulo");
-    gbi("txtCantidad").value = "";
-    gbi("txtPrecio").value = "";
-    gbi("txtTotal").value = "";
-}
-function limpiarTablaDetalle() {
-    $("#tb_DetalleF").html("");
-}
-function accionModal2(url, tr, id) {
-    switch (txtModal.id) {
-        case "txtCategoria":
-            //var txtCategoria = document.getElementById("txtCategoria");
-            gbi("txtArticulo").value = "";
-            gbi("txtArticulo").dataset = "";
-            var btnModalArticulo = gbi("btnModalArticulo");
-            btnModalArticulo.onclick = function () {
-                cbmu("articulo", "Articulo", "txtArticulo", null,
-                    ["idArticulo", "Código", "Descripción"], "/Articulo/ObtenerDatosxCategoria?Cat=" + gbi("txtCategoria").dataset.id + "&Activo=A", cargarLista);
-            }
-            return gbi("txtArticulo");
-            break;
-        case "txtArticulo":
-            return gbi("txtCantidad");
-            break;
-        case "txtRazonSocial":
-            return gbi("txtDireccion");
-            break;
-        case "txtFormaPago":
-            return gbi("txtCategoria");
-            break;
-        case "txtMoneda":
-            return gbi("txtFormaPago");
-            break;
-        case "txtDocumento":
-            var idPago = gbi("txtDocumento").dataset.id;
-            var url = 'Pago/ObtenerDatosxIDPagoCompras?id=' + idPago;
-            enviarServidor(url, CargarDetalleOC);
-            return gbi("txtMontoCancelar");
-            break;
-
-        case "txtTipoOperacion":
-            return gbi("txtCuentaOrigen");
-            break;
-
-        case "txtCuentaOrigen":
-            return gbi("txtCuentaDestino");
-            break;
-        case "txtCuentaDestino":
-            return gbi("txtNOperacion");
-            break;
-        case "txtNOperacion":
-            return gbi("txtFechaCobroCheque");
-            break;
-        default:
-            break;
-    }
-
-
-
-    if (txtModal.id == "txtCategoria") {
-    }
-    if (txtModal.id == "txtArticulo") {
-        return gbi("txtCantidad");
-    }
-    if (txtModal.id == "txtRazonSocial") {
-        return gbi("txtDireccion");
-    }
-}
-function cargarAlmacenDet(rpta) {
-
-
-}
-function CerrarModal(idModal, te) {
-    ventanaActual = 1;
-    $('#' + idModal).modal('hide');
-    if (te) {
-        te.focus();
-    }
-}
-function funcionModal(tr) {
-    var num = tr.id.replace("numMod", "");
-    var id = gbi("md" + num + "-0").innerHTML;
-    var value;
-    if (tr.children.length === 2) {
-        value = gbi("md" + num + "-1").innerHTML;
-    }
-    else {
-        value = gbi("md" + num + "-2").innerHTML;
-    }
-    var value2 = gbi("md" + num + "-1").innerHTML;
-    //) {
-
-    // }
-    //var azx = gbi("md" + num + "-3").innerHTML;
-    //funcion al dar doble click segun la URL
-
-    txtModal.value = value;
-    txtModal.dataset.id = id;
-    var next = accionModal2(url, tr, id);
-    if (txtModal2) {
-        txtModal2.value = value2;
-    }
-    CerrarModal("modal-Modal", next);
-    gbi("txtFiltroMod").value = "";
-}
-function CargarDetalleOC(rpta) {
-    datosDelDocumento = "";
-    gbi("tb_DetalleF").innerHTML = "";
+function CargarDetalles(rpta) {
     if (rpta != '') {
         var listas = rpta.split('↔');
         var Resultado = listas[0];
-        var datos = listas[1].split('▲'); //lista OC
-        datosDelDocumento = listas[1].split('▲');
+        var datos = listas[1].split('▲');
+        var dir = listas[2].split("▼");
+        var det = listas[3].split("▼");
         if (Resultado == 'OK') {
-            var temp = datos[6] + '-' + datos[7];
-            adt(temp, "txtDocumento");
-            adt(datos[13], "txtFecha", 1);
-            adt(datos[9], "txtTotal", 1);
-            adt(datos[11], "txtMontoAplicado", 1);
-            adt(datos[12], "txtDiferencia", 1);
-            adc(listaSocios, datos[4], "txtRazonSocial", 1);
-            adt(datos[20], "cboMoneda", 1);
-        }
-    }
-}
-function buscarXCombo() {
-    var comb = document.getElementById("txtTipoOperacion").value;
+            var temporal = datos[33] + '-' + datos[34];
+            adc(ListaPago, datos[1], "txtDocumento", 1);
+            adt(datos[32], "txtFecha");
+            adt(datos[27], "txtRazonSocial");
+            adt(datos[28], "txtTotal");
+            adt(datos[30], "txtMontoAplicado");
+            adt(datos[31], "txtDiferencia");
+            adt(datos[8], "cboMoneda");
+            adt(datos[13], "txtMontoCancelar");
+            adt(datos[23], "txtFechaPago", 1);
+            adt(datos[3], "cboTipoOperacion");
+            if (datos[3] == 1) {
+                var lblTituloPanel = document.getElementById('lblOperacion');
+                lblTituloPanel.innerHTML = "N°.Operacion";
+                gbi("divCuentaOrigen").style.display = "";
+                gbi("divCuentaDestino").style.display = "";
+                gbi("divOperacion").style.display = "";
+                gbi("divFCC").style.display = "none";
 
-    gbi("txtCuentaDestino").value = "";
-    gbi("txtCuentaDestino").dataset.id = "";
-    gbi("txtNOperacion").value = "";
-    gbi("txtCuentaOrigen").value = "";
-    gbi("txtCuentaOrigen").dataset.id = "";
-
-    limpiarControl("txtCuentaDestino");
-    limpiarControl("txtNOperacion");
-    limpiarControl("txtCuentaOrigen");
-
-    if (comb == 1) {// cuando es transferencia 
-
-        var lblTituloPanel = document.getElementById('lblOperacion');
-        lblTituloPanel.innerHTML = "N°.Operacion";
-        gbi("divCuentaOrigen").style.display = "";
-        gbi("divCuentaDestino").style.display = "";
-        gbi("divOperacion").style.display = "";
-        gbi("divFCC").style.display = "none";
-    }
-    if (comb == 2) {//cuando es cheque
-        gbi("divCuentaOrigen").style.display = "none";
-        gbi("divCuentaDestino").style.display = "none";
-        gbi("divOperacion").style.display = "";
-        gbi("divFCC").style.display = "";
-        var lblTituloPanel = document.getElementById('lblOperacion');
-        lblTituloPanel.innerHTML = "N°.Cheque";//Titulo Insertar
-
-
-
-    }
-    if (comb == 3) {//cuando es deposito
-        var lblTituloPanel = document.getElementById('lblOperacion');
-        lblTituloPanel.innerHTML = "N°.Operacion";
-        gbi("divCuentaDestino").style.display = "";
-        gbi("divOperacion").style.display = "";
-        gbi("divFCC").style.display = "none";
-        gbi("divCuentaOrigen").style.display = "none";
-    }
-}
-function configurarFiltrok(cabe) {
-    var texto = document.getElementById("txtFiltro");
-    texto.onkeyup = function () {
-        matriz = crearMatriz(listaDatos);
-        mostrarMatrizOC(matriz, cabe, "divTabla", "contentPrincipal");
-    };
-}
-function adt(v, ctrl) {
-    gbi(ctrl).value = v;
-}
-function adc(l, id, ctrl, c) {
-    var ind;
-    for (var i = 0; i < l.length; i++) {
-        if (l[i].split('▲')[0] == id) {
-            ind = i;
-            break;
-        }
-    }
-    gbi(ctrl).value = l[ind].split('▲')[c];
-    gbi(ctrl).dataset.id = id;
-}
-function crearTablaModal(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-    for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0:
-                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-                break;
-            case 2:
-                contenido += "              <div class='col-12 col-md-4'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
-    }
-    contenido += "          </div>";
-
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
-}
-function mostrarMatrizModal(matriz, cabeceras, tabId, contentID, confdbc) {
-    if (matriz.length == 0) {
-
-    } else {
-        var esBloque = false;
-        var contenido = "";
-        var nRegistros = matriz.length;
-        if (nRegistros > 0) {
-            nRegistros = matriz.length;
-            var nCampos = matriz[0].length;
-            var tbTabla = document.getElementById(tabId);
-            tbTabla.style.cursor = "pointer";
-            var tipocol = "";
-            var tipoColDes = "";
-            var tipoColum = "";
-            var dat = [];
-            for (var i = 0; i < nRegistros; i++) {
-                if (i < nRegistros) {
-                    var contenido2 = "<div class='row panel salt' id='numMod" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;cursor:pointer;'>";
-                    for (var j = 0; j < cabeceras.length; j++) {
-                        switch (j) {
-                            case 0: case 6:
-                                contenido2 += "<div class='col-12 col-md-2' style='display:none;'>";
-                                break;
-                            case 1:
-                                contenido2 += ("<div class='col-12 col-md-2'>");
-                                break;
-                            case 2:
-                                contenido2 += ("<div class='col-12 col-md-4'>");
-                                break;
-                            default:
-                                contenido2 += ("<div class='col-12 col-md-2'>");
-                                break;
-                        }
-                        contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='md" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                        contenido2 += "</div>";
-                    }
-                    contenido2 += "</div>";
-                    dat.push(contenido2);
-                }
-                else break;
+                limpiarControl("txtNOperacion");
+                limpiarControl("cboCuentaDestino");
+                limpiarControl("cboCuentaOrigen");
+            } else if (datos[3] == 2) {
+                var lblTituloPanel = document.getElementById('lblOperacion');
+                lblTituloPanel.innerHTML = "N°.Cheque";//Titulo Insertar
+                gbi("divCuentaOrigen").style.display = "none";
+                gbi("divCuentaDestino").style.display = "none";
+                gbi("divOperacion").style.display = "";
+                gbi("divFCC").style.display = "";
+                limpiarControl("cboCuentaDestino");
+                limpiarControl("cboCuentaOrigen");
             }
-            var clusterize = new Clusterize({
-                rows: dat,
-                scrollId: tabId,
-                contentId: contentID
-            });
+            else {
+                var lblTituloPanel = document.getElementById('lblOperacion');
+                lblTituloPanel.innerHTML = "N°.Operacion";
+                gbi("divCuentaDestino").style.display = "";
+                gbi("divOperacion").style.display = "";
+                gbi("divFCC").style.display = "none";
+                gbi("divCuentaOrigen").style.display = "none";
+                limpiarControl("txtFechaCobroCheque");
+
+                limpiarControl("txtCuentaOrigen");
+            }
+            adt(datos[19], "txtObservacion", 1);
+            gbi("cboCuentaOrigen").value = datos[11];
+            gbi("cboCuentaDestino").value = datos[21];
+
+            var idPago = gbi("txtDocumento").dataset.id;
+            var url = 'Pago/ObtenerDatosxIDPagoCompras?id=' + idPago;
+            enviarServidor(url, CargarDetalleOC);
+
+            adt(datos[10], "txtNOperacion");
+            adt(datos[23], "txtFechaCobroCheque");
+            adt(datos[0], "txtID");
+            adt(datos[1], "txtID2");
+
         }
-        confdbc();
     }
 }
+//
+//exportar
+function configBM() {
+    var btnPDF = gbi("btnImprimirPDF");
+    btnPDF.onclick = function () {
+        ExportarPDFs("p", "Pagar Socio", cabeceras, matriz, "Pago por Socios", "a4", "e");
+    }
+    var btnImprimir = document.getElementById("btnImprimir");
+    btnImprimir.onclick = function () {
+        ExportarPDFs("p", "Pagar Socio", cabeceras, matriz, "Pago por Socios", "a4", "i");
+    }
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras, matriz);
+    }
+}
+function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
+    var texto = "";
+    var columns = [];
+    let cabPdf = ["Fecha", "Serie", "Numero", "Descripcion", "Pago", "Operacion", "Monto"];
+    for (var i = 0; i < cabPdf.length; i++) {
+        columns[i] = cabPdf[i];
+    }
+    var data = [];
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (var i = 0; i < lstDatos.length; i++) {
+        let lstcolDatos = lstDatos[i].children;
+        data[i] = [];
+        for (var j = 0; j < lstcolDatos.length; j++) {
+            data[i][j] = lstcolDatos[j];
+        }
+    }
+
+    var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
+    var width = doc.internal.pageSize.width;
+    var height = doc.internal.pageSize.height;
+    var fec = new Date();
+    var d = fec.getDate().toString().length == 2 ? fec.getDate() : ("0" + fec.getDate());
+    var m = (fec.getMonth() + 1).length == 2 ? (fec.getMonth() + 1) : ("0" + (fec.getMonth() + 1));
+    var y = fec.getFullYear();
+
+    var h = fec.getHours().toString().length == 2 ? fec.getHours() : ("0" + fec.getHours());
+    var mm = fec.getMinutes().toString().length == 2 ? fec.getMinutes() : ("0" + fec.getMinutes());
+    var s = fec.getSeconds().toString().length == 2 ? fec.getSeconds() : ("0" + fec.getSeconds());
+    var fechaImpresion = d + '-' + m + '-' + y + ' ' + h + ':' + mm + ':' + s;
+    doc.setFont('helvetica')
+    doc.setFontSize(14);
+    doc.text(titulo, width / 2 - 80, 95);
+    doc.line(30, 125, width - 30, 125);
+    doc.setFontSize(10);
+    doc.setFontType("bold");
+    doc.text(nombreEmpresa, 10, 30);
+    doc.setFontSize(8);
+    doc.setFontType("normal");
+    doc.text("Ruc:", 10, 40);
+    doc.text(rucEmpresa, 30, 40);
+    doc.text("Dirección:", 10, 50);
+    doc.text(direccionEmpresa, 50, 50);
+    doc.setFontType("bold");
+    doc.text("Fecha Impresión", width - 90, 40)
+    doc.setFontType("normal");
+    doc.setFontSize(7);
+    doc.text(fechaImpresion, width - 90, 50)
+
+    doc.autoTable(columns, data, {
+        theme: 'plain',
+        startY: 110, showHeader: 'firstPage',
+        headerStyles: { styles: { overflow: 'linebreak', halign: 'center' }, fontSize: 7, },
+        bodyStyles: { fontSize: 6, valign: 'middle', cellPadding: 2, columnWidt: 'wrap' },
+        columnStyles: {},
+
+    });
+    if (v == "e") {
+        doc.save((nombre != undefined ? nombre : "Pagos.pdf"));
+    }
+    else if (v == "i") {
+        doc.autoPrint();
+        var iframe = document.getElementById('iframePDF');
+        iframe.src = doc.output('dataurlstring');
+    }
+}
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
+
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
+    for (var i = 0; i < nCampos; i++) {
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
+    }
+    tab_text += "</tr>";
+
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length - 1; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
+        }
+        tab_text += "</tr>";
+    }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "Pagos.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
+}
+//

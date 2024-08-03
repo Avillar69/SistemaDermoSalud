@@ -12,7 +12,7 @@ namespace SistemaDermoSalud.DataAccess.Inventario
 {
     public class KardexDAO
     {
-        public ResultDTO<KardexDTO> ListarRangoFecha(int idEmpresa, DateTime fechaInicio, DateTime fechaFin, int idCategoria, int idArticulo, SqlConnection cn = null)
+        public ResultDTO<KardexDTO> ListarRangoFecha(int idEmpresa, DateTime fechaInicio, DateTime fechaFin, int idMarca, int idProducto, SqlConnection cn = null)
         {
             ResultDTO<KardexDTO> oResultDTO = new ResultDTO<KardexDTO>();
             oResultDTO.ListaResultado = new List<KardexDTO>();
@@ -22,11 +22,10 @@ namespace SistemaDermoSalud.DataAccess.Inventario
                 {
                     if (cn.State == ConnectionState.Closed) { cn.Open(); }
                     SqlDataAdapter da = new SqlDataAdapter("SP_INV_RepKardex", cn);
-                    //da.SelectCommand.Parameters.AddWithValue("@idEmpresa", idEmpresa);
-                    //da.SelectCommand.Parameters.AddWithValue("@idCategoria", idCategoria);
+                    da.SelectCommand.Parameters.AddWithValue("@idMarca", idMarca);
                     da.SelectCommand.Parameters.AddWithValue("@fechaInicio", fechaInicio);
                     da.SelectCommand.Parameters.AddWithValue("@fechaFin", fechaFin);
-                    da.SelectCommand.Parameters.AddWithValue("@idArticulo", idArticulo);
+                    da.SelectCommand.Parameters.AddWithValue("@idProducto", idProducto);
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
 
                     SqlDataReader dr = da.SelectCommand.ExecuteReader();
