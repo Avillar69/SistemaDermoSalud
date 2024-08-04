@@ -1,4 +1,4 @@
-﻿var cabeceras = ["idMovimiento", "Local", "Observacion", "Fecha", "Estado"];
+﻿var cabeceras = ["Local", "Observacion", "Fecha", "Estado"];
 var listaDatos;
 var matriz = [];
 var orden = 0;
@@ -12,6 +12,9 @@ var excelExportar;
 var idxDetalle = 0;
 var precioProducto = 0;
 var Tipo = "SALIDA";
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 $(function () {
     var url = "/OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
     enviarServidor(url, mostrarLista);
@@ -250,20 +253,6 @@ function configurarBotonesModal() {
     }
     txtCantidad.onfocus = function () { this.select(); }
     txtPrecio.onfocus = function () { this.select(); }
-}
-function configBM() {
-    var btnPDF = gbi("btnImprimirPDF");
-    btnPDF.onclick = function () {
-        ExportarPDFs("p", "Operacion Salida", cabeceras, matriz, "Operacion Salida", "a4", "e");
-    }
-    var btnImprimir = document.getElementById("btnImprimir");
-    btnImprimir.onclick = function () {
-        ExportarPDFs("p", "Operacion Salida", cabeceras, matriz, "Operacion Salida", "a4", "i");
-    }
-    var btnExcel = gbi("btnImprimirExcel");
-    btnExcel.onclick = function () {
-        fnExcelReport(cabeceras, matriz);
-    }
 }
 function limpiarTodo() {
     limpiarControl("txtID");
@@ -710,311 +699,38 @@ function CargarDetalles(rpta) {
     }
 }
 //
-
-
-
-
-
-//function CambioLocal() {
-//    if (contentArticulo.length > 0) {
-//        swal({
-//            title: "Desea cambiar el Local?", text: "Si cambia de Local se perderan los Artículos agregados!", type: "warning",
-//            showCancelButton: true,
-//            confirmButtonText: "Si, cambiar de Local!",
-//            closeOnConfirm: false
-//        }, function (isConfirm) {
-//            if (isConfirm) {
-//                postLocales();
-//                swal.close();
-//            }
-//        });
-//    } else {
-//        //this.dataset.id = this.value;
-//        postLocales();
-//    }
-//    function postLocales() {
-//        if (txtLocalDet.value != "") {
-//            divArticulo.innerHTML = "";
-//            var btnModalAlmacen = document.getElementById("btnModalAlmacen");
-//            btnModalAlmacen.onclick = function () {
-//                cbmu("almacen", "Almacen", "txtAlmacen", null,
-//                    ["idAlmacen", "Descripción"], "/OperacionesStock/cargarAlmacenes?idlocal=" + gbi("txtLocalDet").dataset.id, cargarLista);
-//            }
-//        } else {
-//        }
-//    }
-//    cancel_AddArticulo();
-//}
-//function MostrarxTipoMovimiento() {
-//    var nroVenta = document.getElementById("TVenta");
-//    var tipoMovimiento = document.getElementById("txtTipoMovimiento").dataset.id;
-//    switch (tipoMovimiento) {
-//        case "10": nroVenta.style.display = ""; break;
-//        default: nroVenta.style.display = "none";
-//    }
-//}
-//function borrarDetalle(elem) {
-//    var p = elem.parentNode.parentNode.parentNode.parentNode.remove();
-//}
-////Detalle Articulo
-//function add_ItemArticulo() {
-//    var txtArticulo = document.getElementById("txtArticulo");
-//    var txtMarca = document.getElementById("txtMarca");
-//    var txtUnidadMedida = document.getElementById("txtUnidadMedida");
-//    var txtCantidad = document.getElementById("txtCantidad");
-//    var txtPrecio = document.getElementById("txtPrecio");
-//    var rows = gbi("contentArticulo").querySelectorAll(".art");
-//    var btnAgregarArticulo = document.getElementById("btnAgregarArticulo");
-//    var arti = rows.length + 1;
-//    var div = document.getElementById("contentArticulo");
-//    if (btnAgregarArticulo.dataset.row != undefined && btnAgregarArticulo.dataset.row != -1) {//editar
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[2].innerHTML = txtArticulo.value.toUpperCase().trim();
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[2].dataset.id = txtArticulo.dataset.id;
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[3].innerHTML = txtMarca.value.toUpperCase().trim();
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[4].innerHTML = txtUnidadMedida.value.toUpperCase().trim();
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[5].innerHTML = parseFloat(txtCantidad.value.trim()).toFixed(2);
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[6].innerHTML = parseFloat(txtPrecio.value.trim()).toFixed(2);
-//    } else {//nuevo
-//        var estaAgregado = false;
-//        for (var i = 0; i < rows.length; i++) {
-//            if (txtArticulo.dataset.id == rows[i].children[2].dataset.id) {
-//                var cantidad = parseFloat(rows[i].children[5].innerHTML);
-//                rows[i].children[5].innerHTML = (cantidad + parseFloat(txtCantidad.value));
-//                estaAgregado = true;
-//                break;
-//            }
-//        }
-//        if (!estaAgregado) {
-//            var cadena = "<div class='art row panel salt' data-id='0' tabindex='100' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-//            cadena += "<div class='col-12 col-md-1' style='display:none' data-id='" + (rows.length + 1) + "'>" + (rows.length + 1) + "</div>";
-//            cadena += "<div class='col-12 col-md-1'>" + (rows.length + 1) + "</div>";
-//            cadena += "<div class='col-12 col-md-3' data-id='" + txtArticulo.dataset.id + "'>" + txtArticulo.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2'>" + txtMarca.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2' style='display:none;'>" + txtUnidadMedida.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2'>" + txtCantidad.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2'>" + txtPrecio.value + "</div>";
-//            cadena += "<div class='col-12 col-md-1' style='display:none'>0</div>";
-//            cadena += "<div class='col-12 col-md-1'>";
-//            cadena += "<div class='row saltbtn'>";
-//            cadena += "<div class='col-12'>";
-//            cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='eliminar(\"" + (rows.length + 1) + "\")'> <i class='fa fa-trash-o fs-11'></i> </button>";
-//            cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='mostrarDetalle(2, \"" + (rows.length + 1) + "\")'> <i class='fa fa-pencil fs-11'></i></button>";
-//            cadena += "</div>";
-//            cadena += "</div>";
-//            cadena += "</div>";
-//            cadena += "</div>";
-//            div.innerHTML += cadena;
-//            //var cadena = "<tr data-id='0'>";
-//            //cadena += "<td style='text-align: center;'><span class='fa fa-pencil' style='cursor: pointer;color: #03a9f4; font-size:13px;'></span></td>";//btnEditar
-//            //cadena += "<td style='text-align: center;'><span class='fa fa-trash-o' style='cursor: pointer;color: #03a9f4; font-size:13px;'></span></td>";//btnEliminar
-//            //cadena += "<td>" + (tbArticulo.rows.length + 1) + "</td>";//item
-//            //cadena += "<td data-id='" + txtArticulo.dataset.id + "'>" + txtArticulo.value.trim().toUpperCase() + "</td>";//Articulo
-//            //cadena += "<td>" + txtMarca.value.trim().toUpperCase() + "</td>";//Marca
-//            //cadena += "<td>" + txtUnidadMedida.value.trim().toUpperCase() + "</td>";//Unidad de Medida
-//            //cadena += "<td>" + parseFloat(txtCantidad.value).toFixed(2) + "</td>";//Cantidad
-//            //cadena += "</tr>";
-//            //tbArticulo.innerHTML += cadena;
-//        }
-//    }
-//    cancel_AddArticulo();
-//}
-//function cancel_AddArticulo() {
-//    var btnAgregarArticulo = document.getElementById("btnAgregarArticulo");
-//    var btnCancelarArticulo = document.getElementById("btnCancelarArticulo");
-//    //btnCancelarArticulo.style.visibility = "hidden";
-//    btnAgregarArticulo.dataset.row = -1;
-//    limpiarControl("txtArticulo");
-//    limpiarControl("txtMarca");
-//    limpiarControl("txtUnidadMedida");
-//    txtCantidad.value = "0.00";
-//    txtStock.value = "0.00";
-//    txtStockTotal.value = "0.00";
-//    txtPrecio.value = "0.00";
-//    btnAgregarArticulo.innerHTML = "Agregar";
-//    gbi("btnActualizarArticulo").style.display = "none";
-//    gbi("btnCancelarArticulo").style.display = "none";
-//    gbi("btnAgregarArticulo").style.display = "";
-//}
-//function cargarDetalleArticulo(lista) {
-//    var rows = gbi("contentArticulo").querySelectorAll(".art");
-//    if (lista.length > 0 && lista[0] != "") {
-//        for (var i = 0; i < lista.length; i++) {
-//            var item = lista[i].split("▲");
-//            add_ItemArticulo();
-//            rows[i].dataset.id = item[0];
-//            rows[i].children[2].dataset.id = item[1];
-//            rows[i].children[2].innerHTML = item[2];
-//            rows[i].children[3].innerHTML = item[3];
-//            rows[i].children[4].innerHTML = item[4];
-//            rows[i].children[5].innerHTML = item[5];
-//        }
-//    }
-//}
-////Carga con botones de Modal sin URL (Con datos dat[])
-//function cbm(ds, t, tM, tM2, cab, dat, m) {
-//    comboConcepto = "";
-//    document.getElementById("div_Frm_Modals").innerHTML = document.getElementById("div_Frm_Detalles").innerHTML;
-//    document.getElementById("btnGrabar_Modal").dataset.grabar = ds;
-//    document.getElementById("lblTituloModal").innerHTML = t;
-//    var txtCodigo_FormaPago = document.getElementById("txtCodigo_Detalle");
-//    txtCodigo_FormaPago.disabled = true;
-//    txtCodigo_FormaPago.placeholder = "Autogenerado";
-//    var txtM1 = document.getElementById(tM);
-//    txtModal = txtM1;
-//    tM2 == null ? txtModal2 = tM2 : txtModal2 = document.getElementById(tM2);
-//    cabecera_Modal = cab;
-//    m(dat);
-//    combox = ds;
-//}
-////Carga con botones de Modal desde URL
-//function cbmu(ds, t, tM, tM2, cab, u, m) {
-//    document.getElementById("div_Frm_Modals").innerHTML = document.getElementById("div_Frm_Detalles").innerHTML;
-//    document.getElementById("btnGrabar_Modal").dataset.grabar = ds;
-//    document.getElementById("lblTituloModal").innerHTML = t;
-//    var txtCodigo_FormaPago = document.getElementById("txtCodigo_Detalle");
-//    txtCodigo_FormaPago.disabled = true;
-//    txtCodigo_FormaPago.placeholder = "Autogenerado";
-//    var txtM1 = document.getElementById(tM);
-//    txtModal = txtM1;
-//    tM2 == null ? txtModal2 = tM2 : txtModal2 = document.getElementById(tM2);
-//    cabecera_Modal = cab;
-//    enviarServidor(u, m);
-//    combox = ds;
-//}
-////
-//function funcionModal(tr) {
-//    var num = tr.id.replace("numMod", "");
-//    var id = gbi("md" + num + "-0").innerHTML;
-//    if (tr.children.length == 2) {
-//        var value = gbi("md" + num + "-1").innerHTML;
-//    } else {
-//        var value = gbi("md" + num + "-2").innerHTML;
-//    }
-//    var value2 = gbi("md" + num + "-1").innerHTML;
-//    //var azx = gbi("md" + num + "-3").innerHTML;
-//    txtModal.value = value;
-//    txtModal.dataset.id = id;
-//    var next = accionModal2(url, tr, id);
-//    if (txtModal2) {
-//        txtModal2.value = value2;
-//    }
-//    CerrarModal("modal-Modal", next);
-//    gbi("txtFiltroMod").value = "";
-//    switch (combox) {
-//        case "almacen": almacenId = id; break;
-//        case "tipoMovimiento": tipoMovimientoId = id; MostrarxTipoMovimiento(); break;
-//        case "estadoMovimiento": estadoMovimientoId = id; break;
-//        case "Medicamento": MedicamentoId = id; document.getElementById("txtMarca").value = gbi("md" + num + "-3").innerHTML;
-//            var url_2 = "OperacionesStock/cargarStock?idMedicamento=" + MedicamentoId + "&idAlmacenO=" + 0;
-//            enviarServidor(url_2, cargarStock); break;
-//    }
-//}
-//function accionModal2(url, tr, id) {
-//    switch (txtModal.id) {
-//        case "txtLocalDet":
-//            return gbi("txtAlmacen");
-//            break;
-//        case "txtVenta":
-//            var idVenta = gbi("txtVenta").dataset.id;
-//            var url = 'OperacionesStock/cargarDetalleVentas?idVentas=' + idVenta;
-//            enviarServidor(url, CargarDetalleVenta);
-//            break;
-//        case "txtTipoMovimiento":
-//            var tipoMov = gbi("txtTipoMovimiento").dataset.id;
-//            var p;
-//            switch (tipoMov) {
-//                case "10": p = "txtVenta"; gbi("txtPrecio").value = 0; gbi("txtPrecio").disabled = true;
-//                    gbi("art").style.display = "none"; gbi("art2").style.display = "none"; gbi("art3").style.display = "none";
-//                    break;
-//                default: p = "txtEstadoMovimiento"; gbi("txtPrecio").disabled = true;
-//                    gbi("art").style.display = ""; gbi("art2").style.display = ""; gbi("art3").style.display = "";
-//                    break;
-//            }
-//            return gbi(p);
-//            break;
-//        case "txtArticulo":
-//            var txtArt = gbi("txtArticulo").dataset.id;
-//            var url = 'Medicamento/ObtenerDatosxID?id=' + txtArt;
-//            enviarServidor(url, cLP);
-//            break;
-//    }
-//}
-//function CerrarModal(idModal, te) {
-//    ventanaActual = 1;
-//    $('#' + idModal).modal('hide');
-//    if (te) {
-//        te.focus();
-//    }
-//}
-////Modal cargar y grabar
-//function cargarLista(rpta) {
-//    if (rpta != "") {
-//        var data = rpta.split('↔');
-//        listaDatosModal = data[0].split("▼");
-//        mostrarModal(cabecera_Modal, listaDatosModal);
-//    }
-//}
-//function cargarListaArticulo(rpta) {
-//    if (rpta != "") {
-//        var data = rpta.split('↔');
-//        var res = data[0];
-//        var mensaje = data[1];
-//        listaDatosModal = data[2].split("▼");
-//        mostrarModal(cabecera_Modal, listaDatosModal);
-//    }
-//}
-//function adc(l, id, ctrl, c) {
-//    var ind;
-//    for (var i = 0; i < l.length; i++) {
-//        if (l[i].split('▲')[0] == id) {
-//            ind = i;
-//            break;
-//        }
-//    }
-//    gbi(ctrl).value = l[ind].split('▲')[c];
-//    gbi(ctrl).dataset.id = id;
-//}
-////Al editar
-//function addItem(tipo, data) {
-//    var contenido = "";
-//    var div = document.getElementById("contentArticulo");
-//    var cadena = "<div class='art row panel salt' id='gd" + (tipo == 1 ? data[0] : document.getElementsByClassName("art").length + 1) + "' data-id='0' tabindex='100' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-//    cadena += "<div class='col-12 col-md-1' style='display:none' data-id='" + (document.getElementsByClassName("art").length + 1) + "'>" + (document.getElementsByClassName("art").length + 1) + "</div>";
-//    cadena += "<div class='col-12 col-md-1'>" + (document.getElementsByClassName("art").length + 1) + "</div>";
-//    cadena += "<div class='col-12 col-md-3' data-id='" + (tipo == 1 ? data[2] : gbi("txtArticulo").dataset.id) + "'>" + (tipo == 1 ? data[2] : gvt("txtArticulo")) + "</div>";
-//    cadena += "<div class='col-12 col-md-2'>" + (tipo == 1 ? data[3] : gvt("txtMarca")) + "</div>";
-//    cadena += "<div class='col-12 col-md-2'>" + (tipo == 1 ? data[4] : gvt("txtCantidad")) + "</div>";
-//    cadena += "<div class='col-12 col-md-2'>" + (tipo == 1 ? data[5] : gvt("txtPrecio")) + "</div>";
-//    cadena += "<div class='col-12 col-md-1' style='display:none'>0</div>";
-//    cadena += "<div class='row saltbtn'>";
-//    cadena += "<div class='col-12'>";
-//    cadena += "<button type='button' onclick='borrarDetalle(this);'  class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' > <i class='fa fa-trash-o fs-11'></i> </button>";
-//    cadena += "<button type='button' onclick='editItem(\"gd" + (tipo == 1 ? data[0] : document.getElementsByClassName("rowDet").length + 1) + "\");'  class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' > <i class='fa fa-pencil fs-11'></i></button>";
-//    cadena += "</div>";
-//    cadena += "</div>";
-//    cadena += "</div>";
-//    cadena += "</div>";
-//    div.innerHTML += cadena;
-//    cancel_AddArticulo();
-//}
-
+//exportar
+function configBM() {
+    var btnPDF = gbi("btnImprimirPDF");
+    btnPDF.onclick = function () {
+        ExportarPDFs("p", "Salida Mercancia", cabeceras, matriz, "Salida Mercancia ", "a4", "e");
+    }
+    var btnImprimir = document.getElementById("btnImprimir");
+    btnImprimir.onclick = function () {
+        ExportarPDFs("p", "Salida Mercancia", cabeceras, matriz, "Salida Mercancia ", "a4", "i");
+    }
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras, matriz);
+    }
+}
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
     var columns = [];
-    for (var i = 0; i < cabeceras.length; i++) {
-        if (i != 0) {
-            columns[i - 1] = cabeceras[i]
-        }
+    let cabPdf = ["Local", "Observacion", "Fecha", "Estado"];
+    for (var i = 0; i < cabPdf.length; i++) {
+        columns[i] = cabPdf[i];
     }
     var data = [];
-    for (var i = 0; i < matriz.length; i++) {
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (var i = 0; i < lstDatos.length; i++) {
+        let lstcolDatos = lstDatos[i].children;
         data[i] = [];
-        for (var j = 0; j < matriz[i].length; j++) {
-            if (j != 0) {
-                data[i][j - 1] = matriz[i][j];
-            }
+        for (var j = 0; j < lstcolDatos.length; j++) {
+            data[i][j] = lstcolDatos[j];
         }
     }
+
     var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
     var width = doc.internal.pageSize.width;
     var height = doc.internal.pageSize.height;
@@ -1033,13 +749,13 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     doc.line(30, 125, width - 30, 125);
     doc.setFontSize(10);
     doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 10, 30);
+    doc.text(nombreEmpresa, 10, 30);
     doc.setFontSize(8);
     doc.setFontType("normal");
     doc.text("Ruc:", 10, 40);
-    doc.text("20565643143", 30, 40);
+    doc.text(rucEmpresa, 30, 40);
     doc.text("Dirección:", 10, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
+    doc.text(direccionEmpresa, 50, 50);
     doc.setFontType("bold");
     doc.text("Fecha Impresión", width - 90, 40)
     doc.setFontType("normal");
@@ -1055,7 +771,7 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
 
     });
     if (v == "e") {
-        doc.save((nombre != undefined ? nombre : "table.pdf"));
+        doc.save((nombre != undefined ? nombre : "nota_de_ingreso.pdf"));
     }
     else if (v == "i") {
         doc.autoPrint();
@@ -1063,82 +779,52 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
         iframe.src = doc.output('dataurlstring');
     }
 }
-function mostrarMatriz(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;cursor:pointer;'>";
-                for (var j = 0; j < cabeceras.length; j++) {
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0:
-                            contenido2 += "col-md-2' style='display:none;'>";
-                            break;
-                        case 2:
-                            contenido2 += "col-md-4' style='padding-top:5px;'>";
-                            break;
-                        case 5:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "<div class='col-12 col-md-2'>";
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
 
-                contenido2 += "<div class='row saltbtn'>";
-                contenido2 += "<div class='col-12'>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='eliminar(\"" + matriz[i][0] + "\")'> <i class='fa fa-trash-o fs-11'></i> </button>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='mostrarDetalle(2, \"" + matriz[i][0] + "\")'> <i class='fa fa-eye fs-11'></i></button>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
-        }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
-        });
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
+    for (var i = 0; i < nCampos; i++) {
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
     }
-}
-//Precio Medicamento
+    tab_text += "</tr>";
 
-//Borrar Detalle
-function borrarDetalle(elem) {
-    var p = elem.parentNode.parentNode.parentNode.remove();
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length - 1; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
+        }
+        tab_text += "</tr>";
+    }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "Nota_salidas.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
 }
-function editItem(id) {
-    var row = gbi(id);
-    gbi("txtArticulo").dataset.id = row.children[2].dataset.id;
-    gbi("txtArticulo").value = row.children[2].innerHTML;
-    gbi("txtMarca").value = row.children[3].innerHTML;
-    gbi("txtCantidad").value = row.children[4].innerHTML;
-    gbi("txtPrecio").value = row.children[5].innerHTML;
-    gbi("btnAgregarArticulo").style.display = "none";
-    gbi("btnActualizarArticulo").style.display = "";
-    gbi("btnCancelarArticulo").style.display = "";
-    idTablaDetalle = id;
-}
-function guardarItemDetalle() {
-    var id = idTablaDetalle;
-    var row = gbi(id);
-    row.children[2].dataset.id = gbi("txtArticulo").dataset.id;
-    row.children[2].innerHTML = gbi("txtArticulo").value;
-    row.children[3].innerHTML = gbi("txtMarca").value;
-    row.children[4].innerHTML = gbi("txtCantidad").value;
-    row.children[5].innerHTML = gbi("txtPrecio").value;
-    gbi("btnActualizarArticulo").style.display = "none";
-    gbi("btnCancelarArticulo").style.display = "none";
-    gbi("btnAgregarArticulo").style.display = "";
-    cancel_AddArticulo();
-}
+//
+
+

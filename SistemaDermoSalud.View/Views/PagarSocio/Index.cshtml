@@ -11,9 +11,6 @@
 }
 
 <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
 
 <div class="row" id="rowTabla">
     <div class="col-lg-12">
@@ -119,21 +116,29 @@
         </div>
         <div class="card-body p-t-10 p-b-10">
             <div class="row">
-                <div class="col-lg-4 col-sm-6 mb-2">
+                <div class="col-lg-12 col-sm-6 mb-2">
                     <div class="input-group mb-2" style="flex-wrap: nowrap;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">N°Documento</span>
+                            <span class="input-group-text">Documento</span>
                         </div>
                         <select class="form-control" id="cboDocumento">
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2 col-sm-6 mb-2">
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">N° Documento</span>
+                        </div>
+                        <input type="text" class="form-control" id="txtDocumento" autocomplete="off" disabled readonly />
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
                     <div class="input-group mb-2" style="flex-wrap: nowrap;">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Fecha Documento</span>
                         </div>
-                        <input type="text" class="form-control flatpickr flatpickr-input" id="txtFecha" data-provider="flatpickr" data-date-format="d/m/Y" />
+                        <input type="text" class="form-control flatpickr flatpickr-input" id="txtFecha" data-provider="flatpickr" data-date-format="d/m/Y" disabled readonly />
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-6 mb-2">
@@ -141,7 +146,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Proveedor</span>
                         </div>
-                        <input type="text" class="form-control" id="txtRazonSocial" autocomplete="off">
+                        <input type="text" class="form-control" id="txtRazonSocial" autocomplete="off" disabled readonly>
                         <input class='d-none' placeholder='' id='txtID' type='text'>
                         <input class='d-none' placeholder='' id='txtID2' type='text'>
                     </div>
@@ -151,7 +156,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Total</span>
                         </div>
-                        <input type="text" class="form-control" id="txtTotal" autocomplete="off">
+                        <input type="text" class="form-control" id="txtTotal" autocomplete="off" disabled readonly>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6 mb-2">
@@ -159,7 +164,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Monto aplicado</span>
                         </div>
-                        <input type="text" class="form-control" id="txtMontoAplicado" autocomplete="off">
+                        <input type="text" class="form-control" id="txtMontoAplicado" autocomplete="off" disabled readonly>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6 mb-2">
@@ -167,7 +172,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Diferencia</span>
                         </div>
-                        <input type="text" class="form-control" id="txtDiferencia" autocomplete="off" onkeypress="return IngresoNumero(event)">
+                        <input type="text" class="form-control" id="txtDiferencia" autocomplete="off" onkeypress="return IngresoNumero(event)" disabled readonly>
                     </div>
                 </div>
                 <div class="col-lg-4 col-sm-6 mb-2">
@@ -185,7 +190,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Monto a Pagar</span>
                         </div>
-                        <input type="text" class="form-control" id="txtMontoCancelar" autocomplete="off" onkeypress="return IngresoNumero(event)">
+                        <input type="text" class="form-control" id="txtMontoCancelar" autocomplete="off" onkeypress="return IngresoNumero(event)" />
                     </div>
                 </div>
                 <div class="col-lg-4 col-sm-6 mb-2">
@@ -200,6 +205,7 @@
                     <div class="input-group">
                         <div class="input-group-text">Tipo Operacion</div>
                         <select class="form-control" id="cboTipoOperacion" onchange="buscarXCombo()">
+                            <option value="" name="">Seleccione</option>
                             <option value="1" name="1">Transferencia</option>
                             <option value="2" name="2">Cheque</option>
                             <option value="3" name="3">Deposito</option>
@@ -223,7 +229,7 @@
                 <div class="col-lg-4 col-sm-6 mb-2" id="divOperacion" style="display:none">
                     <div class="input-group mb-2" style="flex-wrap: nowrap;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">N° Operación</span>
+                            <span class="input-group-text" id="lblOperacion">N° Operación</span>
                         </div>
                         <input type="text" class="form-control" id="txtNOperacion" autocomplete="off" onkeypress="return IngresoNumero(event)">
                     </div>
@@ -245,18 +251,18 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="table-responsive table-card" style="min-height:200px;margin:0">
+            <div class="row mt-2 d-none">
+                <div class="table-responsive table-card d-none" style="min-height:200px;margin:0">
                     <table class="table table-nowrap table-sm align-middle">
                         <thead class="text-muted table-light">
                             <tr class="text-uppercase">
-                                <th class="d-none"></th>
+                                <th class="d-none">id</th>
                                 <th class="d-none"></th>
                                 <th>Descripción</th>
                                 <th>Cantidad</th>
                                 <th>U.M.</th>
                                 <th>Precio</th>
-                                <th>Sub Total</th>
+                                <th>SubTotal</th>
                                 <th style="width:90px"></th>
                             </tr>
                         </thead>
@@ -267,153 +273,9 @@
             </div>
 
 
-            <!--<div class="col-md-12">
-                <div class='form-horizontal'>
-                    <div class="row">
-                        <div class="col-12 col-md-5">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtDocumento' class="control-label col-md-4">N°Documento</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id='txtDocumento' type='text' class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalDocumento" type="button" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtFecha' class="control-label col-md-4">Fecha Documento</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id='txtFecha' type='text' class="form-control form-control-sm" readonly>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-10">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtProveedor' class="control-label col-md-2">Proveedor</label>
-                                <div class="col-md-10">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtRazonSocial" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <div class="form-group row m-b-5 p-l-10" style="display:none;">
-                                            <input placeholder='' id='txtID' type='text' style="display:none;">
-                                            <input placeholder='' id='txtID2' type='text' style="display:none;">
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-5">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtTotal' class="control-label col-md-4">Total</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id='txtTotal' type='text' class="form-control form-control-sm" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtMontoAplicado' class="control-label col-md-4">Monto aplicado</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id='txtMontoAplicado' type='text' class="form-control form-control-sm" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+            <!--
             @*la diferencia es el total - Monto Aplicado*@
-            <!--<div class="col-12 col-md-5">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtDiferencia' class="control-label col-md-4">Diferencia</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id='txtDiferencia' type='text' class="form-control form-control-sm" readonly>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboMoneda' class="control-label col-sm-4">Moneda</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <select id='cboMoneda' class="form-control form-control-sm" disabled></select>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtMontoCancelar' class="control-label col-md-4">Monto a Pagar</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id='txtMontoCancelar' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtFechaPago' class="control-label col-md-4">Fecha Pago</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id='txtFechaPago' type='text' class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtTipoOperacion' class="control-label col-md-4">Tipo Operacion</label>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <div class="col-10 p-0">
-                                                <select class="form-control form-control-sm" id="txtTipoOperacion" onchange="buscarXCombo()">
-                                                    <option value="1" name="1">Transferencia</option>
-                                                    <option value="2" name="2">Cheque</option>
-                                                    <option value="3" name="3">Deposito</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!--
                     <div class="row">
                         <br />
                         <div class="col-12 col-md-4" id="divCuentaOrigen" style="display:none">
@@ -570,15 +432,12 @@
 
 
 @Scripts.Render("~/bundles/basics")
+<script src="~/assets/js/jspdf.debug.js"></script>
+<script src="~/assets/js/jspdf.min.js"></script>
+<script src="~/assets/js/jspdf.plugin.autotable.js"></script>
 <script src="/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="/assets/libs/list.js/list.min.js"></script>
 <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 <script src="~/Scripts/Compras/PagaSocio.js"></script>
-
-
-
-

@@ -1,4 +1,4 @@
-﻿var cabeceras = ["idStock", "Código", "Marca", "Descripcion", "Stock"];
+﻿var cabeceras = ["Codigo", "Marca", "Descripcion", "Stock"];
 var listaDatos;
 var matriz = [];
 var orden = 0;
@@ -11,6 +11,9 @@ var textoExportar;
 var excelExportar;
 var cboLocal = document.getElementById("cboLocal");
 var cboAlmacen = document.getElementById("cboAlmacen");
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 
 $(function () {
     var url = 'ConsultaStock/ObtenerDatos';
@@ -29,7 +32,7 @@ function mostrarLista(rpta) {
 }
 function listar(r) {
     let newDatos = [];
-    if (r[0] !== '') {        
+    if (r[0] !== '') {
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
@@ -163,28 +166,26 @@ function configBM() {
     }
     var btnExcel = gbi("btnImprimirExcel");
     btnExcel.onclick = function () {
-        fnExcelReport(cabeceras, matriz);
+        fnExcelReport(cabeceras);
     }
 }
-
-
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
     var columns = [];
-    for (var i = 0; i < cabeceras.length; i++) {
-        if (i != 0) {
-            columns[i - 1] = cabeceras[i];
-        }
+    let cabStock = ["Código", "Marca", "Descripcion", "Stock"];
+    for (var i = 0; i < cabStock.length; i++) {
+        columns[i] = cabStock[i];
     }
     var data = [];
-    for (var i = 0; i < matriz.length; i++) {
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (var i = 0; i < lstDatos.length; i++) {
+        let lstcolDatos = lstDatos[i].children;
         data[i] = [];
-        for (var j = 0; j < matriz[i].length; j++) {
-            if (j != 0) {
-                data[i][j - 1] = matriz[i][j];
-            }
+        for (var j = 0; j < lstcolDatos.length; j++) {
+            data[i][j] = lstcolDatos[j];
         }
     }
+
     var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
     var width = doc.internal.pageSize.width;
     var height = doc.internal.pageSize.height;
@@ -203,13 +204,13 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     doc.line(30, 125, width - 30, 125);
     doc.setFontSize(10);
     doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 10, 30);
+    doc.text(nombreEmpresa, 10, 30);
     doc.setFontSize(8);
     doc.setFontType("normal");
     doc.text("Ruc:", 10, 40);
-    doc.text("20565643143", 30, 40);
+    doc.text(rucEmpresa, 30, 40);
     doc.text("Dirección:", 10, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
+    doc.text(direccionEmpresa, 50, 50);
     doc.setFontType("bold");
     doc.text("Fecha Impresión", width - 90, 40)
     doc.setFontType("normal");
@@ -225,7 +226,7 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
 
     });
     if (v == "e") {
-        doc.save((nombre != undefined ? nombre : "table.pdf"));
+        doc.save((nombre != undefined ? nombre : "consulta_stock.pdf"));
     }
     else if (v == "i") {
         doc.autoPrint();
@@ -233,79 +234,49 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
         iframe.src = doc.output('dataurlstring');
     }
 }
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
 
-
-
-function configAlmacen() {
-    console.log("INGRESO STOCK X ALMACEN");
-    var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
-    enviarServidor(urlA, mostrarArticulos);
-    cboAlmacen.onchange = function () {
-        var urlA = '/ConsultaStock/ObtenerStockxAlmacen?pA=' + cboAlmacen.value;
-        enviarServidor(urlA, mostrarArticulos);
-    }
-}
-
-function crearTablaModal(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info d-none d-md-flex' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
     for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0:
-                contenido += "              <div class='col-12 col-md-1' style='display:none;'>";
-                break;
-            case 3:
-                contenido += "              <div class='col-12 col-md-6'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
     }
-    contenido += "          </div>";
+    tab_text += "</tr>";
 
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
-}
-function mostrarMatriz(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-                for (var j = 0; j < cabeceras.length; j++) {
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0:
-                            contenido2 += "col-md-1' style='display:none;'>";
-                            break;
-                        case 3:
-                            contenido2 += "col-md-6'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "<div class='col-12 col-md-1'>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
         }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
-        });
+        tab_text += "</tr>";
     }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "Consulta_stocks.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
 }

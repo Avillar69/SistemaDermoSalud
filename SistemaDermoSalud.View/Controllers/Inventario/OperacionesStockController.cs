@@ -199,14 +199,14 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
             rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
             return rpta;
         }
-        public string cargarProductoxLaboratorio(int idLab)//cargar Productos
+        public string cargarProductoxMarca(int idMarca)//cargar Productos
         {
             string rpta = "";
             string listaProducto = "";
             Ma_ProductoBL oProductoBL = new Ma_ProductoBL();
             ResultDTO<Ma_ProductoDTO> oResultDTO = new ResultDTO<Ma_ProductoDTO>();
-            oResultDTO = oProductoBL.ListarporMarca(idLab);
-            listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProductos", "Descripcion" });
+            oResultDTO = oProductoBL.ListarporMarca(idMarca);
+            listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProducto", "Descripcion" });
             rpta = String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
             return rpta;
         }

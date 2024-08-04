@@ -9,7 +9,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
-
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
 <div class="row" id="rowTabla">
     <div class="col-lg-12">
@@ -33,8 +33,8 @@
                     </div>
                     <div class="col-sm-auto">
                         <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-                            <a onclick="mostrarDetalle(1,0)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
-                            <a onclick="LabDescargarPDF('i')" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
+                            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
+                            <a id="btnImprimir" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
                             <div class="btn-group" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right material-shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Exportar
@@ -251,7 +251,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6 mb-2"> <input type='text' class="form-control form-control-sm d-none" id='txtOC' ></div>
+                <div class="col-lg-4 col-sm-6 mb-2"> <input type='text' class="form-control form-control-sm d-none" id='txtOC'></div>
                 <div class="col-lg-4 col-sm-6 mb-2">
                     <div class="input-group mb-2" style="flex-wrap: nowrap;">
                         <div class="input-group-prepend">
@@ -345,11 +345,13 @@
             </div>
             <hr />
             <div class="row mb-3">
+                <label class="d-none" id="lblDetalleId"></label>
+                <label class="d-none" id="lblDocumentoId"></label>
                 <div class="col-lg-4 col-sm-6 mb-2">
-                    <div class="input-group">
-                        <label class="d-none" id="lblDetalleId"></label>
-                        <label class="d-none" id="lblDocumentoId"></label>
-                        <div class="input-group-text">Producto</div>
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Producto</span>
+                        </div>
                         <select class="form-control detalle vDetalle" id="cboProducto">
                         </select>
                     </div>
@@ -969,9 +971,10 @@
 </div>
 
 @Scripts.Render("~/bundles/basics")
+<script src="~/assets/js/jspdf.debug.js"></script>
+<script src="~/assets/js/jspdf.min.js"></script>
+<script src="~/assets/js/jspdf.plugin.autotable.js"></script>
 <script src="/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="/assets/libs/list.js/list.min.js"></script>
 <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

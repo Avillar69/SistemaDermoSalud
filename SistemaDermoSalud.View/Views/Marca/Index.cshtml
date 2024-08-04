@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-sm-auto">
                         <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-                            <a onclick="mostrarDetalle(1,0)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
+                            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
                             <a onclick="LabDescargarPDF('i')" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
 
                             <div class="btn-group" role="group">
@@ -43,7 +43,7 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
                                     <a onclick="LabDescargarPDF('e')" class="btn dropdown-item"><i class="ri-file-pdf-fill"></i> Pdf</a>
-                                    <a class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
+                                    <a id="btnImprimirExcel" class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
                                 </div>
                             </div>
                         </div>
@@ -125,6 +125,9 @@
 </div>
 
 @Scripts.Render("~/bundles/basics")
+<script src="~/assets/js/jspdf.debug.js"></script>
+<script src="~/assets/js/jspdf.min.js"></script>
+<script src="~/assets/js/jspdf.plugin.autotable.js"></script>
 <script src="~/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>

@@ -1,15 +1,20 @@
-﻿var cabeceras = ["idMarca", "Marca", "FechaCreacion", "Estado"];
+﻿var cabeceras = ["Marca", "FechaCreacion", "Estado"];
 var posiciones = [0, 1, 2, 3];
 var listaDatos;
 var txtID = document.getElementById("txtID");
 var txtCodigo = document.getElementById("txtCodigo");
 var txtMarca = document.getElementById("txtMarca");
 var chkActivo = document.getElementById("chkActivo");
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
+
 
 $(function () {
     var url = "Marca/ObtenerDatos";
     enviarServidor(url, mostrarLista);
     configurarBotonesModal();
+    configBM();
 });
 //index listar Marca
 function mostrarLista(rpta) {
@@ -187,7 +192,6 @@ function eliminarListar(rpta) {
 }
 //
 //
-
 //crear Marca
 function configurarBotonesModal() {
     var btnGrabar = document.getElementById("btnGrabar");
@@ -267,6 +271,12 @@ function CargarDetalles(rpta) {
 }
 //
 //Descarga Archivo
+function configBM() {
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras);
+    }
+}
 function LabDescargarPDF(tipoImpresion) {
     var texto = "";
     var columns = ["Marca", "FechaCreacion", "Estado"];
@@ -289,13 +299,13 @@ function LabDescargarPDF(tipoImpresion) {
     doc.setFont('helvetica');
     doc.setFontSize(10);
     doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 30, 30);
+    doc.text(nombreEmpresa, 30, 30);
     doc.setFontSize(8);
     doc.setFontType("normal");
     doc.text("Ruc:", 30, 40);
-    doc.text("20565643143", 50, 40);
+    doc.text(rucEmpresa, 50, 40);
     doc.text("Dirección:", 30, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 70, 50);
+    doc.text(direccionEmpresa, 70, 50);
     doc.setFontType("bold");
     doc.text("Fecha Impresión", width - 90, 40)
     doc.setFontType("normal");
@@ -304,7 +314,7 @@ function LabDescargarPDF(tipoImpresion) {
     doc.setFontSize(14);
     doc.setFontType("bold");
     //Titulo de Documento y datos
-    doc.text("Marcas", width / 2, 95, "center");// + gbi("txtRequerimiento").value
+    doc.text("Marcas", width / 2, 95, "center");
     var xic = 140;
     var altc = 12;
     doc.setFontType("bold");
@@ -355,4 +365,50 @@ function LabDescargarPDF(tipoImpresion) {
         var iframe = document.getElementById('iframePDF');
         iframe.src = doc.output('dataurlstring');
     }
+}
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
+
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
+    for (var i = 0; i < nCampos; i++) {
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
+    }
+    tab_text += "</tr>";
+
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length - 1; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
+        }
+        tab_text += "</tr>";
+    }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "marcas.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
 }

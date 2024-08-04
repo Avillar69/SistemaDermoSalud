@@ -1,4 +1,4 @@
-﻿var cabeceras = ["idProducto", "Descripcion", "Marca", "Estado"];
+﻿var cabeceras = ["Producto", "Marca", "Estado"];
 var posiciones = [0, 1, 2, 3];
 var listaDatos;
 var matriz = [];
@@ -19,10 +19,15 @@ var chkActivo = document.getElementById("chkActivo");
 var txtPrecio = document.getElementById("txtPrecio");
 var cboTalla = document.getElementById("cboTalla");
 var cboColor = document.getElementById("cboColor");
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
+
 $(function () {
     var url = "Producto/ObtenerDatos";
     enviarServidor(url, mostrarLista);
     configurarBotonesModal();
+    configBM();
 });
 
 //listar Producto
@@ -269,19 +274,7 @@ function configurarBotonesModal() {
     var btnCancelar = document.getElementById("btnCancelar");
     btnCancelar.onclick = function () {
         show_hidden_Formulario();
-    }
-    //var btnPDF = gbi("btnImprimirPDF");
-    //btnPDF.onclick = function () {
-    //    ExportarPDFs("p", "Productos", cabeceras, matriz, "Productos", "a4", "e");
-    //}
-    //var btnImprimir = document.getElementById("btnImprimir");
-    //btnImprimir.onclick = function () {
-    //    ExportarPDFs("p", "Productos", cabeceras, matriz, "Productos", "a4", "i");
-    //}
-    //var btnExcel = gbi("btnImprimirExcel");
-    //btnExcel.onclick = function () {
-    //    fnExcelReport(cabeceras, matriz);
-    //}
+    }    
 }
 function validarFormulario() {
     var error = true;
@@ -339,8 +332,7 @@ function CargarDetalles(rpta) {
     if (rpta != "") {
         var datos = rpta.split("↔");
         var a = datos[0].split("▲");
-        var listaDetalle = datos[2].split("▲");     
-        console.log(listaDetalle);
+        var listaDetalle = datos[2].split("▲");  
         txtID.value = listaDetalle[0];
         txtDescripcion.value = listaDetalle[1];
         cboMarca.value = listaDetalle[2];
@@ -353,76 +345,128 @@ function CargarDetalles(rpta) {
     }
 }
 //
+function configBM() {
+    var btnPDF = gbi("btnImprimirPDF");
+    btnPDF.onclick = function () {
+        ExportarPDFs("p", "Productos", cabeceras, matriz, "Productos", "a4", "e");
+    }
+    var btnImprimir = document.getElementById("btnImprimir");
+    btnImprimir.onclick = function () {
+        ExportarPDFs("p", "Productos", cabeceras, matriz, "Productos", "a4", "i");
+    }
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras, matriz);
+    }
+}
+function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
+    var texto = "";
+    var columns = [];
+    let cabPdf = ["Producto", "Marca", "Estado"];
+    for (var i = 0; i < cabPdf.length; i++) {
+        columns[i] = cabPdf[i];
+    }
+    var data = [];
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (var i = 0; i < lstDatos.length; i++) {
+        let lstcolDatos = lstDatos[i].children;
+        data[i] = [];
+        for (var j = 0; j < lstcolDatos.length; j++) {
+            data[i][j] = lstcolDatos[j];
+        }
+    }
 
-//function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
-//    var texto = "";
-//    var columns = [];
-//    for (var i = 0; i < cabeceras.length; i++) {
-//        if (i != 0) {
-//            columns[i - 1] = cabeceras[i];
-//        }
-//    }
-//    var data = [];
-//    for (var i = 0; i < matriz.length; i++) {
-//        data[i] = [];
-//        for (var j = 0; j < matriz[i].length; j++) {
-//            if (j != 0) {
-//                data[i][j - 1] = matriz[i][j];
-//            }
-//        }
-//    }
-//    var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
-//    var width = doc.internal.pageSize.width;
-//    var height = doc.internal.pageSize.height;
-//    var fec = new Date();
-//    var d = fec.getDate().toString().length == 2 ? fec.getDate() : ("0" + fec.getDate());
-//    var m = (fec.getMonth() + 1).length == 2 ? (fec.getMonth() + 1) : ("0" + (fec.getMonth() + 1));
-//    var y = fec.getFullYear();
+    var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
+    var width = doc.internal.pageSize.width;
+    var height = doc.internal.pageSize.height;
+    var fec = new Date();
+    var d = fec.getDate().toString().length == 2 ? fec.getDate() : ("0" + fec.getDate());
+    var m = (fec.getMonth() + 1).length == 2 ? (fec.getMonth() + 1) : ("0" + (fec.getMonth() + 1));
+    var y = fec.getFullYear();
 
-//    var h = fec.getHours().toString().length == 2 ? fec.getHours() : ("0" + fec.getHours());
-//    var mm = fec.getMinutes().toString().length == 2 ? fec.getMinutes() : ("0" + fec.getMinutes());
-//    var s = fec.getSeconds().toString().length == 2 ? fec.getSeconds() : ("0" + fec.getSeconds());
-//    var fechaImpresion = d + '-' + m + '-' + y + ' ' + h + ':' + mm + ':' + s;
-//    doc.setFont('helvetica')
-//    doc.setFontSize(14);
-//    doc.text(titulo, width / 2 - 80, 95);
-//    doc.line(30, 125, width - 30, 125);
-//    doc.setFontSize(10);
-//    doc.setFontType("bold");
-//    doc.text("Dermosalud S.A.C", 10, 30);
-//    doc.setFontSize(8);
-//    doc.setFontType("normal");
-//    doc.text("Ruc:", 10, 40);
-//    doc.text("20565643143", 30, 40);
-//    doc.text("Dirección:", 10, 50);
-//    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
-//    doc.setFontType("bold");
-//    doc.text("Fecha Impresión", width - 90, 40)
-//    doc.setFontType("normal");
-//    doc.setFontSize(7);
-//    doc.text(fechaImpresion, width - 90, 50)
+    var h = fec.getHours().toString().length == 2 ? fec.getHours() : ("0" + fec.getHours());
+    var mm = fec.getMinutes().toString().length == 2 ? fec.getMinutes() : ("0" + fec.getMinutes());
+    var s = fec.getSeconds().toString().length == 2 ? fec.getSeconds() : ("0" + fec.getSeconds());
+    var fechaImpresion = d + '-' + m + '-' + y + ' ' + h + ':' + mm + ':' + s;
+    doc.setFont('helvetica')
+    doc.setFontSize(14);
+    doc.text(titulo, width / 2 - 80, 95);
+    doc.line(30, 125, width - 30, 125);
+    doc.setFontSize(10);
+    doc.setFontType("bold");
+    doc.text(nombreEmpresa, 10, 30);
+    doc.setFontSize(8);
+    doc.setFontType("normal");
+    doc.text("Ruc:", 10, 40);
+    doc.text(rucEmpresa, 30, 40);
+    doc.text("Dirección:", 10, 50);
+    doc.text(direccionEmpresa, 50, 50);
+    doc.setFontType("bold");
+    doc.text("Fecha Impresión", width - 90, 40)
+    doc.setFontType("normal");
+    doc.setFontSize(7);
+    doc.text(fechaImpresion, width - 90, 50)
 
-//    doc.autoTable(columns, data, {
-//        theme: 'plain',
-//        startY: 110, showHeader: 'firstPage',
-//        headerStyles: { styles: { overflow: 'linebreak', halign: 'center' }, fontSize: 7, },
-//        bodyStyles: { fontSize: 6, valign: 'middle', cellPadding: 2, columnWidt: 'wrap' },
-//        columnStyles: {},
+    doc.autoTable(columns, data, {
+        theme: 'plain',
+        startY: 110, showHeader: 'firstPage',
+        headerStyles: { styles: { overflow: 'linebreak', halign: 'center' }, fontSize: 7, },
+        bodyStyles: { fontSize: 6, valign: 'middle', cellPadding: 2, columnWidt: 'wrap' },
+        columnStyles: {},
 
-//    });
-//    if (v == "e") {
-//        doc.save((nombre != undefined ? nombre : "table.pdf"));
-//    }
-//    else if (v == "i") {
-//        doc.autoPrint();
-//        var iframe = document.getElementById('iframePDF');
-//        iframe.src = doc.output('dataurlstring');
-//    }
-//}
-//function configurarFiltro(cabe) {
-//    var texto = document.getElementById("txtFiltro");
-//    texto.onkeyup = function () {
-//        matriz = crearMatriz(listaDatos);
-//        mostrarMatrizPersonal(matriz, cabe, "divTabla", "contentPrincipal");
-//    };
-//}
+    });
+    if (v == "e") {
+        doc.save((nombre != undefined ? nombre : "productos.pdf"));
+    }
+    else if (v == "i") {
+        doc.autoPrint();
+        var iframe = document.getElementById('iframePDF');
+        iframe.src = doc.output('dataurlstring');
+    }
+}
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
+
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
+    for (var i = 0; i < nCampos; i++) {
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
+    }
+    tab_text += "</tr>";
+
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length - 1; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
+        }
+        tab_text += "</tr>";
+    }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "Productos.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
+}

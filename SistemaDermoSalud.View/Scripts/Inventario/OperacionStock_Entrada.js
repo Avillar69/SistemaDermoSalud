@@ -1,4 +1,4 @@
-﻿var cabeceras = ["idMovimiento", "Local", "Observacion", "Fecha", "Estado"];
+﻿var cabeceras = ["Local", "Observacion", "Fecha", "Estado"];
 var listaDatos;
 var matriz = [];
 var orden = 0;
@@ -13,6 +13,9 @@ var listaLocales;
 var listaTipoMovimiento;
 var listaEstado;
 var listaGuias;
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 //
 var idxDetalle = 0;
 var precioProducto = 0;
@@ -263,20 +266,6 @@ function configurarBotonesModal() {
     }
     txtCantidad.onfocus = function () { this.select(); }
     txtPrecio.onfocus = function () { this.select(); }
-}
-function configBM() {
-    var btnPDF = gbi("btnImprimirPDF");
-    btnPDF.onclick = function () {
-        ExportarPDFs("p", "Entrada.Mercancia", cabeceras, matriz, "Entrada   Mercancia ", "a4", "e");
-    }
-    var btnImprimir = document.getElementById("btnImprimir");
-    btnImprimir.onclick = function () {
-        ExportarPDFs("p", "Entrada.Mercancia", cabeceras, matriz, "Entrada   Mercancia ", "a4", "i");
-    }
-    var btnExcel = gbi("btnImprimirExcel");
-    btnExcel.onclick = function () {
-        fnExcelReport(cabeceras, matriz);
-    }
 }
 function limpiarTodo() {
     limpiarControl("txtID");
@@ -751,39 +740,38 @@ function CargarDetalles(rpta) {
     }
 }
 //
-
-//var txtID = document.getElementById("txtID");
-//var txtObservacion = document.getElementById("txtObservacion");
-//var txtFecha = document.getElementById("txtFecha");
-//var contentArticulo = gbi("contentArticulo").querySelectorAll(".art");
-//var divArticulo = document.getElementById("contentArticulo");
-//var txtArticulo = document.getElementById("txtArticulo");
-//var txtMarca = document.getElementById("txtMarca");
-//var txtUnidadMedida = document.getElementById("txtUnidadMedida");
-//var txtAlmacen = document.getElementById("txtAlmacen");
-//var localId; var almacenId; var articuloId; var movimientoId; var tipoMovimientoId; var estadoMovimientoId;
-//var combox;
-//cfgKP(["txtLocalDet", "txtTipoMovimiento", "txtEstadoMovimiento", "txtArticulo", "cboCompra", "cboGuia"], cfgTMKP);
-//cfgKP(["txtFecha", "txtObservacion", "txtCantidad", "txtPrecio"], cfgTKP);
-
-
+//exportar
+function configBM() {
+    var btnPDF = gbi("btnImprimirPDF");
+    btnPDF.onclick = function () {
+        ExportarPDFs("p", "Entrada Mercancia", cabeceras, matriz, "Entrada   Mercancia ", "a4", "e");
+    }
+    var btnImprimir = document.getElementById("btnImprimir");
+    btnImprimir.onclick = function () {
+        ExportarPDFs("p", "Entrada Mercancia", cabeceras, matriz, "Entrada   Mercancia ", "a4", "i");
+    }
+    var btnExcel = gbi("btnImprimirExcel");
+    btnExcel.onclick = function () {
+        fnExcelReport(cabeceras, matriz);
+    }
+}
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
     var columns = [];
-    for (var i = 0; i < cabeceras.length; i++) {
-        if (i != 0) {
-            columns[i - 1] = cabeceras[i];
-        }
+    let cabPdf = ["Local", "Observacion", "Fecha", "Estado"];
+    for (var i = 0; i < cabPdf.length; i++) {
+        columns[i] = cabPdf[i];
     }
     var data = [];
-    for (var i = 0; i < matriz.length; i++) {
+    let lstDatos = gbi("tbDatos").children[1].children;
+    for (var i = 0; i < lstDatos.length; i++) {
+        let lstcolDatos = lstDatos[i].children;
         data[i] = [];
-        for (var j = 0; j < matriz[i].length; j++) {
-            if (j != 0) {
-                data[i][j - 1] = matriz[i][j];
-            }
+        for (var j = 0; j < lstcolDatos.length; j++) {
+            data[i][j] = lstcolDatos[j];
         }
     }
+
     var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
     var width = doc.internal.pageSize.width;
     var height = doc.internal.pageSize.height;
@@ -802,13 +790,13 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     doc.line(30, 125, width - 30, 125);
     doc.setFontSize(10);
     doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 10, 30);
+    doc.text(nombreEmpresa, 10, 30);
     doc.setFontSize(8);
     doc.setFontType("normal");
     doc.text("Ruc:", 10, 40);
-    doc.text("20565643143", 30, 40);
+    doc.text(rucEmpresa, 30, 40);
     doc.text("Dirección:", 10, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
+    doc.text(direccionEmpresa, 50, 50);
     doc.setFontType("bold");
     doc.text("Fecha Impresión", width - 90, 40)
     doc.setFontType("normal");
@@ -824,7 +812,7 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
 
     });
     if (v == "e") {
-        doc.save((nombre != undefined ? nombre : "table.pdf"));
+        doc.save((nombre != undefined ? nombre : "nota_de_ingreso.pdf"));
     }
     else if (v == "i") {
         doc.autoPrint();
@@ -832,528 +820,50 @@ function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
         iframe.src = doc.output('dataurlstring');
     }
 }
+function fnExcelReport(cabeceras) {
+    var tab_text = "<table border='2px'>";
+    var j = 0;
 
-//function crearTablaCompras(cabeceras, div) {
-//    var contenido = "";
-//    nCampos = cabeceras.length;
-//    contenido += "";
-//    contenido += "          <div class='row panel bg-info d-none d-md-flex' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-//    for (var i = 0; i < nCampos; i++) {
-//        switch (i) {
-//            case 0:
-//                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-//                break;
-//            case 3: case 1: case 5: case 6: case 7:
-//                contenido += "              <div class='col-12 col-md-2'>";
-//                break;
-//            case 2:
-//                contenido += "              <div class='col-12 col-md-4'>";
-//                break;
-//            default:
-//                contenido += "              <div class='col-12 col-md-4'>";
-//                break;
-//        }
-//        contenido += "                  <label>" + cabeceras[i] + "</label>";
-//        contenido += "              </div>";
-//    }
-//    contenido += "          </div>";
-//    var divTabla = gbi(div);
-//    divTabla.innerHTML = contenido;
-//}
-//function CambioLocal() {
-//    if (contentArticulo.length > 0) {
-//        Swal.fire({
-//            title: "Desea cambiar el Local?", text: "Si cambia de Local se perderan los Artículos agregados!", type: "warning",
-//            showCancelButton: true,
-//            confirmButtonText: "Si, cambiar de Local!",
-//            closeOnConfirm: false
-//        }, function (isConfirm) {
-//            if (isConfirm) {
-//                postLocales();
-//                swal.close();
-//            }
-//        });
-//    } else {
-//        //this.dataset.id = this.value;
-//        postLocales();
-//    }
-//    function postLocales() {
-//        if (txtLocalDet.value != "") {
-//            divArticulo.innerHTML = "";
-//            var btnModalAlmacen = document.getElementById("btnModalAlmacen");
-//            btnModalAlmacen.onclick = function () {
-//                cbmu("almacen", "Almacen", "txtAlmacen", null,
-//                    ["idAlmacen", "Descripción"], "/OperacionesStock/cargarAlmacenes?idlocal=" + gbi("txtLocalDet").dataset.id, cargarLista);
-//            }
-//        } else {
-//            divArticulo.innerHTML = "";
-//        }
-//    }
-//    cancel_AddArticulo();
-//}
+    var nCampos = cabeceras.length;
+    tab_text += "<tr >";
+    for (var i = 0; i < nCampos; i++) {
+        tab_text += "<td style='height:30px;background-color:#29b6f6'>";
+        tab_text += cabeceras[i];
+        tab_text += "</td>";
+    }
+    tab_text += "</tr>";
+
+    let lstDatos = gbi("tbDatos").children[1].children;
+    let nRegitros = lstDatos.length;
+    for (var i = 0; i < nRegitros; i++) {
+        let nCampos = lstDatos[i].children;
+        tab_text += "<tr>";
+        for (var j = 0; j < nCampos.length - 1; j++) {
+            tab_text += "<td>";
+            tab_text += nCampos[j].innerHTML;
+            tab_text += "</td>";
+        }
+        tab_text += "</tr>";
+    }
+    tab_text = tab_text + "</table>";
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html", "replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus();
+        sa = txtArea1.document.execCommand("SaveAs", true, "Nota_ingresos.xls");
+    }
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+    return (sa);
+}
 //
-//function CargarDetalleCompra(rpta) {
-//    var div = document.getElementById("contentArticulo");
-//    div.innerHTML = "";
-//    if (rpta != '') {
-//        var listas = rpta.split('↔');
-//        var Resultado = listas[0];
-//        var datos = listas[1].split('▲'); //lista Requerimientos
-//        var det = listas[2].split("▼");//lista Requerimiento Detalle        
-//        if (Resultado == 'OK') {
-//            for (var i = 0; i < det.length; i++) {
-//                var itemDet = det[i].split("▲");
-//                var cadena = "<div class='art row panel salt' data-id='0' tabindex='100' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-//                cadena += "<div class='col-12 col-md-1' style='display:none' data-id='" + (i + 1) + "'>" + (i + 1) + "</div>";
-//                cadena += "<div class='col-12 col-md-1'>" + (i + 1) + "</div>";
-//                cadena += "<div class='col-12 col-md-3' data-id='" + itemDet[0] + "'>" + itemDet[1] + "</div>";
-//                cadena += "<div class='col-12 col-md-2'>" + itemDet[2] + "</div>";
-//                cadena += "<div class='col-12 col-md-2'>" + itemDet[4] + "</div>";
-//                cadena += "<div class='col-12 col-md-2'>" + itemDet[5] + "</div>";
-//                cadena += "<div class='col-12 col-md-2' style='display:none'>" + itemDet[6] + "</div>";
-//                cadena += "<div class='col-12 col-md-1'>";
-//                cadena += "<div class='row saltbtn'>";
-//                cadena += "<div class='col-12'>";
-//                cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='borrarDetalle(this)'> <i class='fa fa-trash-o fs-11'></i> </button>";
-//                cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='mostrarDetalle(2, \"" + (i + 1) + "\")'> <i class='fa fa-pencil fs-11'></i></button>";
-//                cadena += "</div>";
-//                cadena += "</div>";
-//                cadena += "</div>";
-//                cadena += "</div>";
-//                div.innerHTML += cadena;
-//            }
-//        }
-//    }
-//}
-//Al editar
-//function addItem(tipo, data) {
-//    var contenido = "";
-//    var div = document.getElementById("contentArticulo");
-//    var cadena = "<div class='art row panel salt' id='gd" + (tipo == 1 ? data[0] : document.getElementsByClassName("art").length + 1) + "' data-id='0' tabindex='100' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-//    cadena += "<div class='col-12 col-md-1' style='display:none' data-id='" + (document.getElementsByClassName("art").length + 1) + "'>" + (document.getElementsByClassName("art").length + 1) + "</div>";
-//    cadena += "<div class='col-12 col-md-1'>" + (document.getElementsByClassName("art").length + 1) + "</div>";
-//    cadena += "<div class='col-12 col-md-3' data-id='" + (tipo == 1 ? data[2] : gbi("txtArticulo").dataset.id) + "'>" + (tipo == 1 ? data[2] : gvt("txtArticulo")) + "</div>";
-//    cadena += "<div class='col-12 col-md-2'>" + (tipo == 1 ? data[3] : gvt("txtMarca")) + "</div>";
-//    cadena += "<div class='col-12 col-md-2'>" + (tipo == 1 ? data[4] : gvt("txtCantidad")) + "</div>";
-//    cadena += "<div class='col-12 col-md-2'>" + (tipo == 1 ? data[5] : gvt("txtPrecio")) + "</div>";
-//    cadena += "<div class='col-12 col-md-1' style='display:none'>0</div>";
-//    cadena += "<div class='row saltbtn'>";
-//    cadena += "<div class='col-12'>";
-//    cadena += "<button type='button' onclick='borrarDetalle(this);'  class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' > <i class='fa fa-trash-o fs-11'></i> </button>";
-//    cadena += "<button type='button' onclick='editItem(\"gd" + (tipo == 1 ? data[0] : document.getElementsByClassName("rowDet").length + 1) + "\");'  class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' > <i class='fa fa-pencil fs-11'></i></button>";
-//    cadena += "</div>";
-//    cadena += "</div>";
-//    cadena += "</div>";
-//    cadena += "</div>";
-//    div.innerHTML += cadena;
-//    cancel_AddArticulo();
-//}
-////Detalle Articulo
-//function add_ItemArticulo() {
-//    var txtArticulo = document.getElementById("txtArticulo");
-//    var txtMarca = document.getElementById("txtMarca");
-//    var txtUnidadMedida = document.getElementById("txtUnidadMedida");
-//    var txtCantidad = document.getElementById("txtCantidad");
-//    var rows = gbi("contentArticulo").querySelectorAll(".art");
-//    var btnAgregarArticulo = document.getElementById("btnAgregarArticulo");
-//    var arti = rows.length + 1;
-//    var div = document.getElementById("contentArticulo");
-//    if (btnAgregarArticulo.dataset.row != undefined && btnAgregarArticulo.dataset.row != -1) {//editar
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[2].innerHTML = txtArticulo.value.toUpperCase().trim();
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[2].dataset.id = txtArticulo.dataset.id;
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[3].innerHTML = txtMarca.value.toUpperCase().trim();
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[4].innerHTML = txtUnidadMedida.value.toUpperCase().trim();
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[5].innerHTML = parseFloat(txtCantidad.value.trim()).toFixed(2);
-//        rows[(btnAgregarArticulo.dataset.row * 1)].children[6].innerHTML = parseFloat(txtPrecio.value.trim()).toFixed(2);
-//    } else {//nuevo
-//        var estaAgregado = false;
-//        for (var i = 0; i < rows.length; i++) {
-//            if (txtArticulo.dataset.id == rows[i].children[2].dataset.id) {
-//                var cantidad = parseFloat(rows[i].children[5].innerHTML);
-//                rows[i].children[5].innerHTML = (cantidad + parseFloat(txtCantidad.value));
-//                estaAgregado = true;
-//                break;
-//            }
-//        }
-//        if (!estaAgregado) {
-//            var cadena = "<div class='art row panel salt' id='gd" + (document.getElementsByClassName("art").length + 1) + "' data-id='0' tabindex='100' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-//            cadena += "<div class='col-12 col-md-1' style='display:none' data-id='" + (rows.length + 1) + "'>" + (rows.length + 1) + "</div>";
-//            cadena += "<div class='col-12 col-md-1'>" + (rows.length + 1) + "</div>";
-//            cadena += "<div class='col-12 col-md-3' data-id='" + txtArticulo.dataset.id + "'>" + txtArticulo.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2'>" + txtMarca.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2' style='display:none;'>" + txtUnidadMedida.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2'>" + txtCantidad.value + "</div>";
-//            cadena += "<div class='col-12 col-md-2'>" + txtPrecio.value + "</div>";
-//            cadena += "<div class='col-12 col-md-1' style='display:none'>0</div>";
-//            cadena += "<div class='row saltbtn'>";
-//            cadena += "<div class='col-12'>";
-//            cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='borrarDetalle(this);'> <i class='fa fa-trash-o fs-11'></i> </button>";
-//            cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='editItem(\"gd" + document.getElementsByClassName("rowDet").length + 1 + "\");'> <i class='fa fa-pencil fs-11'></i></button>";
-//            cadena += "</div>";
-//            cadena += "</div>";
-//            cadena += "</div>";
-//            cadena += "</div>";
-//            div.innerHTML += cadena;
-//            //var cadena = "<tr data-id='0'>";
-//            //cadena += "<td style='text-align: center;'><span class='fa fa-pencil' style='cursor: pointer;color: #03a9f4; font-size:13px;'></span></td>";//btnEditar
-//            //cadena += "<td style='text-align: center;'><span class='fa fa-trash-o' style='cursor: pointer;color: #03a9f4; font-size:13px;'></span></td>";//btnEliminar
-//            //cadena += "<td>" + (tbArticulo.rows.length + 1) + "</td>";//item
-//            //cadena += "<td data-id='" + txtArticulo.dataset.id + "'>" + txtArticulo.value.trim().toUpperCase() + "</td>";//Articulo
-//            //cadena += "<td>" + txtMarca.value.trim().toUpperCase() + "</td>";//Marca
-//            //cadena += "<td>" + txtUnidadMedida.value.trim().toUpperCase() + "</td>";//Unidad de Medida
-//            //cadena += "<td>" + parseFloat(txtCantidad.value).toFixed(2) + "</td>";//Cantidad
-//            //cadena += "</tr>";
-//            //tbArticulo.innerHTML += cadena;
-//        }
-//    }
-//    cancel_AddArticulo();
-//}
-//function cancel_AddArticulo() {
-//    var btnAgregarArticulo = document.getElementById("btnAgregarArticulo");
-//    var btnCancelarArticulo = document.getElementById("btnCancelarArticulo");
-//    //btnCancelarArticulo.style.visibility = "hidden";
-//    btnAgregarArticulo.dataset.row = -1;
-//    limpiarControl("txtArticulo");
-//    limpiarControl("txtMarca");
-//    limpiarControl("txtUnidadMedida");
-//    txtCantidad.value = "0.00";
-//    txtPrecio.value = "0.00";
-//    txtStock.value = "0.00";
-//    txtStockTotal.value = "0.00";
-//    btnAgregarArticulo.innerHTML = "Agregar";
-//    gbi("btnActualizarArticulo").style.display = "none";
-//    gbi("btnCancelarArticulo").style.display = "none";
-//    gbi("btnAgregarArticulo").style.display = "";
-//}
-//
-//Carga con botones de Modal sin URL (Con datos dat[])
-//function cbm(ds, t, tM, tM2, cab, dat, m) {
-//    comboConcepto = "";
-//    document.getElementById("div_Frm_Modals").innerHTML = document.getElementById("div_Frm_Detalles").innerHTML;
-//    document.getElementById("btnGrabar_Modal").dataset.grabar = ds;
-//    document.getElementById("lblTituloModal").innerHTML = t;
-//    var txtCodigo_FormaPago = document.getElementById("txtCodigo_Detalle");
-//    txtCodigo_FormaPago.disabled = true;
-//    txtCodigo_FormaPago.placeholder = "Autogenerado";
-//    var txtM1 = document.getElementById(tM);
-//    txtModal = txtM1;
-//    tM2 == null ? txtModal2 = tM2 : txtModal2 = document.getElementById(tM2);
-//    cabecera_Modal = cab;
-//    m(dat);
-//    combox = ds;
-//}
-////Carga con botones de Modal desde URL
-//function cbmu(ds, t, tM, tM2, cab, u, m) {
-//    document.getElementById("div_Frm_Modals").innerHTML = document.getElementById("div_Frm_Detalles").innerHTML;
-//    document.getElementById("btnGrabar_Modal").dataset.grabar = ds;
-//    document.getElementById("lblTituloModal").innerHTML = t;
-//    var txtCodigo_FormaPago = document.getElementById("txtCodigo_Detalle");
-//    txtCodigo_FormaPago.disabled = true;
-//    txtCodigo_FormaPago.placeholder = "Autogenerado";
-//    var txtM1 = document.getElementById(tM);
-//    txtModal = txtM1;
-//    tM2 == null ? txtModal2 = tM2 : txtModal2 = document.getElementById(tM2);
-//    cabecera_Modal = cab;
-//    enviarServidor(u, m);
-//    combox = ds;
-//}
-//function funcionModal(tr) {
-//    var num = tr.id.replace("numMod", "");
-//    var id = gbi("md" + num + "-0").innerHTML;
-//    if (tr.children.length == 2) {
-//        var value = gbi("md" + num + "-1").innerHTML;
-//    } else {
-//        var value = gbi("md" + num + "-2").innerHTML;
-//    }
-//    var value2 = gbi("md" + num + "-1").innerHTML;
-//    //var azx = gbi("md" + num + "-3").innerHTML;
-//    txtModal.value = value;
-//    txtModal.dataset.id = id;
-//    var next = accionModal2(url, tr, id);
-//    if (txtModal2) {
-//        txtModal2.value = value2;
-//    }
-//    CerrarModal("modal-Modal", next);
-//    gbi("txtFiltroMod").value = "";
-//    switch (combox) {
-//        case "almacen": almacenId = id; break;
-//        case "tipoMovimiento": tipoMovimientoId = id; MostrarxTipoMovimiento(); break;
-//        case "estadoMovimiento": estadoMovimientoId = id; break;
-//        case "Producto": ProductoId = id; document.getElementById("txtMarca").value = gbi("md" + num + "-3").innerHTML; 
-//            var url_2 = "/OperacionesStock/cargarStock?idProducto=" + ProductoId + "&idAlmacenO=" + almacenId;
-//            enviarServidor(url_2, cargarStock); break;
-//    }
-//}
-//function accionModal2(url, tr, id) {
-//    switch (txtModal.id) {
-//        case "txtLocalDet":
-//            return gbi("txtTipoMovimiento");
-//            break;
-//        case "txtEstadoMovimiento":
-//            return gbi("txtObservacion");
-//            break;
-//        case "txtTipoMovimiento":
-//            var tipoMov = gbi("txtTipoMovimiento").dataset.id;
-//            var p;
-//            switch (tipoMov) {
-//                case "9": p = "cboCompra"; gbi("txtPrecio").value = 0; gbi("txtPrecio").disabled = true;
-//                    gbi("art").style.display = "none"; gbi("art2").style.display = "none"; gbi("art3").style.display = "none";
-//                    gbi("contentArticulo").innerHTML = ""; gbi("cboCompra").value = ""; gbi("cboGuia").value = "";
-//                    break;
-//                case "6": p = "cboGuia"; gbi("txtPrecio").value = 0; gbi("txtPrecio").disabled = true; gbi("contentArticulo").innerHTML = "";
-//                    gbi("art").style.display = "none"; gbi("art2").style.display = "none"; gbi("art3").style.display = "none";
-//                    gbi("cboCompra").value = ""; gbi("cboGuia").value = ""; break;
-//                case "2": p = "txtEstadoMovimiento"; gbi("txtPrecio").value = ""; gbi("txtPrecio").disabled = false; gbi("contentArticulo").innerHTML = "";
-//                    gbi("art").style.display = ""; gbi("art2").style.display = ""; gbi("art3").style.display = "";
-//                    gbi("cboCompra").value = ""; gbi("cboGuia").value = ""; break;
-//                default: p = "txtEstadoMovimiento"; gbi("txtPrecio").disabled = true; gbi("contentArticulo").innerHTML = "";
-//                    gbi("art").style.display = ""; gbi("art2").style.display = ""; gbi("art3").style.display = "";
-//                    gbi("cboCompra").value = ""; gbi("cboGuia").value = ""; break;
-//            }
-//            return gbi(p);
-//            break;
-//        case "cboCompra":
-//            var idCompra = gbi("cboCompra").dataset.id;
-//            var url = '/OperacionesStock/cargarDetalleCompras?idCompras=' + idCompra;
-//            enviarServidor(url, CargarDetalleCompra);
-//            return gbi("txtEstadoMovimiento");
-//            break;
-//        case "cboGuia":
-//            var idGuia = gbi("cboGuia").dataset.id;
-//            var urlG = '/OperacionesStock/cargarDetalleGuias?idGuias=' + idGuia;
-//            enviarServidor(urlG, CargarDetalleCompra);
-//            return gbi("txtEstadoMovimiento");
-//            break;
-//        case "txtArticulo":
-//            var txtArt = gbi("txtArticulo").dataset.id;
-//            var url = '/Producto/ObtenerDatosxID?id=' + txtArt;
-//            enviarServidor(url, cLP);
-//            break;
-//    }
-//}
-//function CerrarModal(idModal, te) {
-//    ventanaActual = 1;
-//    $('#' + idModal).modal('hide');
-//    if (te) {
-//        te.focus();
-//    }
-//}
-//Modal cargar y grabar
-//function cargarLista(rpta) {
-//    if (rpta != "") {
-//        var data = rpta.split('↔');
-//        listaDatosModal = data[0].split("▼");
-//        mostrarModal(cabecera_Modal, listaDatosModal);
-//    }
-//}
-//function cargarListaArticulo(rpta) {
-//    if (rpta != "") {
-//        var data = rpta.split('↔');
-//        var res = data[0];
-//        var mensaje = data[1];
-//        listaDatosModal = data[2].split("▼");
-//        mostrarModal(cabecera_Modal, listaDatosModal);
-//    }
-//}
-//function adc(l, id, ctrl, c) {
-//    var ind;
-//    for (var i = 0; i < l.length; i++) {
-//        if (l[i].split('▲')[0] == id) {
-//            ind = i;
-//            break;
-//        }
-//    }
-//    gbi(ctrl).value = l[ind].split('▲')[c];
-//    gbi(ctrl).dataset.id = id;
-//}
-//function cfgKP(l, m) {
-//    for (var i = 0; i < l.length; i++) {
-//        gbi(l[i]).onkeyup = m;
-//    }
-//}
-//function cfgTMKP(evt) {
-//    var o = evt.srcElement.id;
-//    if (evt.keyCode === 13) {
-//        var n = o.replace("txt", "");
-//        gbi("btnModal" + n).click();
-//    }
-//}
-//function cfgTKP(evt) {
-//    //event.target || event.srcElement
-//    var o = evt.srcElement.id;
-//    if (evt.keyCode === 13) {
-//        switch (o) {
-//            case "txtObservacion":
-//                gbi("txtArticulo").focus();
-//                break;
-//            case "txtCantidad":
-//                gbi("txtPrecio").focus();
-//                break;
-//            case "txtPrecio":
-//                gbi("btnAgregarArticulo").focus();
-//                break;
-//            case "txtFecha":
-//                gbi("txtTipoMovimiento").focus();
-//                break;
-//            default:
-//        }
-//        return true;
-//    }
-//}
-
-var btnPDF = gbi("btnImprimirPDF");
-btnPDF.onclick = function () {
-    ExportarPDFs("p", "Operacion Entrada", cabeceras, matriz, "Operacion Entrada", "a4", "e");
-}
-var btnImprimir = document.getElementById("btnImprimir");
-btnImprimir.onclick = function () {
-    ExportarPDFs("p", "Operacion Entrada", cabeceras, matriz, "Operacion Entrada", "a4", "i");
-}
-var btnExcel = gbi("btnImprimirExcel");
-btnExcel.onclick = function () {
-    fnExcelReport(cabeceras, matriz);
-}
-
-function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
-    var texto = "";
-    var columns = [];
-    for (var i = 0; i < cabeceras.length; i++) {
-        if (i != 0) {
-            columns[i - 1] = cabeceras[i];
-        }
-    }
-    var data = [];
-    for (var i = 0; i < matriz.length; i++) {
-        data[i] = [];
-        for (var j = 0; j < matriz[i].length; j++) {
-            if (j != 0) {
-                data[i][j - 1] = matriz[i][j];
-            }
-        }
-    }
-    var doc = new jsPDF(orientation, 'pt', (tipo == undefined ? "a3" : "a4"));
-    var width = doc.internal.pageSize.width;
-    var height = doc.internal.pageSize.height;
-    var fec = new Date();
-    var d = fec.getDate().toString().length == 2 ? fec.getDate() : ("0" + fec.getDate());
-    var m = (fec.getMonth() + 1).length == 2 ? (fec.getMonth() + 1) : ("0" + (fec.getMonth() + 1));
-    var y = fec.getFullYear();
-
-    var h = fec.getHours().toString().length == 2 ? fec.getHours() : ("0" + fec.getHours());
-    var mm = fec.getMinutes().toString().length == 2 ? fec.getMinutes() : ("0" + fec.getMinutes());
-    var s = fec.getSeconds().toString().length == 2 ? fec.getSeconds() : ("0" + fec.getSeconds());
-    var fechaImpresion = d + '-' + m + '-' + y + ' ' + h + ':' + mm + ':' + s;
-    doc.setFont('helvetica')
-    doc.setFontSize(14);
-    doc.text(titulo, width / 2 - 80, 95);
-    doc.line(30, 125, width - 30, 125);
-    doc.setFontSize(10);
-    doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 10, 30);
-    doc.setFontSize(8);
-    doc.setFontType("normal");
-    doc.text("Ruc:", 10, 40);
-    doc.text("20565643143", 30, 40);
-    doc.text("Dirección:", 10, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 50, 50);
-    doc.setFontType("bold");
-    doc.text("Fecha Impresión", width - 90, 40)
-    doc.setFontType("normal");
-    doc.setFontSize(7);
-    doc.text(fechaImpresion, width - 90, 50)
-
-    doc.autoTable(columns, data, {
-        theme: 'plain',
-        startY: 110, showHeader: 'firstPage',
-        headerStyles: { styles: { overflow: 'linebreak', halign: 'center' }, fontSize: 7, },
-        bodyStyles: { fontSize: 6, valign: 'middle', cellPadding: 2, columnWidt: 'wrap' },
-        columnStyles: {},
-
-    });
-    if (v == "e") {
-        doc.save((nombre != undefined ? nombre : "table.pdf"));
-    }
-    else if (v == "i") {
-        doc.autoPrint();
-        var iframe = document.getElementById('iframePDF');
-        iframe.src = doc.output('dataurlstring');
-    }
-}
-function mostrarMatriz(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;cursor:pointer;'>";
-                for (var j = 0; j < cabeceras.length; j++) {
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0:
-                            contenido2 += "col-md-2' style='display:none;'>";
-                            break;
-                        case 2:
-                            contenido2 += "col-md-4' style='padding-top:5px;'>";
-                            break;
-                        case 5:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "<div class='col-12 col-md-2'>";
-
-                contenido2 += "<div class='row saltbtn'>";
-                contenido2 += "<div class='col-12'>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='eliminar(\"" + matriz[i][0] + "\")'> <i class='fa fa-trash-o fs-11'></i> </button>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='mostrarDetalle(2, \"" + matriz[i][0] + "\")'> <i class='fa fa-eye fs-11'></i></button>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
-        }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
-        });
-    }
-}
-//Precio Producto
-//Borrar Detalle
-//function borrarDetalle(elem) {
-//    var p = elem.parentNode.parentNode.parentNode.remove();
-//}
-//function editItem(id) {
-//    var row = gbi(id);
-//    gbi("txtArticulo").dataset.id = row.children[2].dataset.id;
-//    gbi("txtArticulo").value = row.children[2].innerHTML;
-//    gbi("txtMarca").value = row.children[3].innerHTML;
-//    gbi("txtCantidad").value = row.children[4].innerHTML;
-//    gbi("txtPrecio").value = row.children[5].innerHTML;
-//    gbi("btnAgregarArticulo").style.display = "none";
-//    gbi("btnActualizarArticulo").style.display = "";
-//    gbi("btnCancelarArticulo").style.display = "";
-//    idTablaDetalle = id;
-//}
-//function guardarItemDetalle() {
-//    var id = idTablaDetalle;
-//    var row = gbi(id);
-//    row.children[2].dataset.id = gbi("txtArticulo").dataset.id;
-//    row.children[2].innerHTML = gbi("txtArticulo").value;
-//    row.children[3].innerHTML = gbi("txtMarca").value;
-//    row.children[4].innerHTML = gbi("txtCantidad").value;
-//    row.children[5].innerHTML = gbi("txtPrecio").value;
-//    gbi("btnActualizarArticulo").style.display = "none";
-//    gbi("btnCancelarArticulo").style.display = "none";
-//    gbi("btnAgregarArticulo").style.display = "";
-//    cancel_AddArticulo();
-//}

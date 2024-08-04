@@ -2,75 +2,72 @@
 var matriz = [];
 var listaLocales;
 var listaAlmacenes;
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 
-$("#txtFilFecIn").datetimepicker({
-    format: 'DD-MM-YYYY',
+//$("#txtFilFecIn").datetimepicker({
+//    format: 'DD-MM-YYYY',
+//});
+//$("#txtFilFecFn").datetimepicker({
+//    format: 'DD-MM-YYYY',
+//});
+$(function () {
+    let urlMarcas = "/Marca/ObtenerDatos";
+    enviarServidor(urlMarcas, cargarDatosMarca);
+    configBM();
 });
-$("#txtFilFecFn").datetimepicker({
-    format: 'DD-MM-YYYY',
-});
+function cargarDatosMarca(r) {
+    let rd = r.split("↔");
+    let marcas = rd[2].split("▼");
+    $("#cboMarca").empty();
+    $("#cboMarca").append(`<option value="0">Seleccione</option>`);
+    $("#cboProducto").empty();
+    $("#cboProducto").append(`<option value="0">Seleccione</option>`);
 
-cfgKP(["txtCategoria", "txtArticulo"], cfgTMKP);
-//configNav();
-configBM();
-reziseTabla();
+    if (r && r.length > 0) {
+        marcas.forEach(element => {
+            $("#cboMarca").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+    $("#cboMarca").change(function () {
+        var selectedValue = $(this).val();
+        if (selectedValue !== "" && selectedValue !== null) {            
+            var url = "/OperacionesStock/cargarProductoxMarca?idMarca=" + selectedValue;
+            enviarServidor(url, cargarDatosProductos);
 
-function cfgKP(l, m) {
-    for (var i = 0; i < l.length; i++) {
-        gbi(l[i]).onkeyup = m;
-    }
+        }
+    });
 }
-function cfgTMKP(evt) {
-    var o = evt.srcElement.id;
-    if (evt.keyCode === 13) {
-        var n = o.replace("txt", "");
-        gbi("btnModal" + n).click();
+function cargarDatosProductos(r) {
+    let rd = r.split("↔");
+    let productos = rd[2].split("▼");
+    $("#cboProducto").empty();
+    $("#cboProducto").append(`<option value="0">Seleccione</option>`);
+    if (r && r.length > 0) {
+        productos.forEach(element => {
+            $("#cboProducto").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
     }
-}
-function cbmu(ds, t, tM, tM2, cab, u, m) {
-    document.getElementById("div_Frm_Modal").innerHTML = document.getElementById("div_Frm_Detalle").innerHTML;
-    document.getElementById("btnGrabar_Modal").dataset.grabar = ds;
-    document.getElementById("lblTituloModal").innerHTML = t;
-    var txtCodigo_FormaPago = document.getElementById("txtCodigo_Detalle");
-    txtCodigo_FormaPago.disabled = true;
-    txtCodigo_FormaPago.placeholder = "Autogenerado";
-    var txtM1 = document.getElementById(tM);
-    txtModal = txtM1;
-    tM2 == null ? txtModal2 = tM2 : txtModal2 = document.getElementById(tM2);
-    cabecera_Modal = cab;
-    enviarServidor(u, m);
 }
 function configBM() {
-    var btnModalCategoria = gbi("btnModalCategoria");
-    btnModalCategoria.onclick = function () {
-        cbmu("categoria", "Categoría", "txtCategoria", null,
-            ["idLaboratorio", "Descripción"], "/Laboratorio/ObtenerDatos", cargarLista);
-    }
+    
     var btnBuscar = gbi("btnBuscar");
     btnBuscar.onclick = function () {
         var error = true;
         if (validarControl("txtFilFecIn")) error = false;
         if (validarControl("txtFilFecFn")) error = false;
-        //if (validarControl("txtCategoria")) error = false;
         if (!error) return;
-        var url = "/Kardex/BuscarKardex?fI=" + gvt("txtFilFecIn") + "&fF=" + gvt("txtFilFecFn") + "&iC=0" + "&iA=" + (gbi("txtArticulo").dataset.id == undefined ? "0" : gbi("txtArticulo").dataset.id);
+        var url = "/Kardex/BuscarKardex?fI=" + gbi("txtFilFecIn").value + "&fF=" + gbi("txtFilFecFn").value + "&iC= " + gbi("cboMarca").value + "&iA=" + (gbi("cboProducto").value == "" ? "0" : gbi("cboProducto").value);
         enviarServidor(url, MostrarBusqueda)
     };
-    //var btnModalArticulo = document.getElementById("btnModalArticulo");
-    //btnModalArticulo.onclick = function () {
-    //    cbmu("Medicamento", "Medicamento", "txtArticulo", null,
-    //        ["idMedicamentos", "Codigo", "Descripcion", "Laboratorio", "Precio"], ' /OperacionesStock/cargarMedicamento', cargarListaArticulo);
-    //};
     var btnExcel = gbi("btnImprimirExcel");
     btnExcel.onclick = function () {
         window.addEventListener('focus', window_focus, false);
-        function window_focus() {
-            //ocultarLoader();
-        }
-
+       
         try {
             var cabecera = "Fecha,Doc,Articulo,U.M.,Stock Inicial,Precio,Cant. Entrada,Precio Entrada,Total Entrada";
-            window.location = "Kardex/exportarExcel?local=1&fechaInicio=" + gvt("txtFilFecIn") + "&fechaFin=" + gvt("txtFilFecFn") + "&cabecera=" + cabecera;
+            window.location = "Kardex/exportarExcel?local=1&fechaInicio=" + gbi("txtFilFecIn").value + "&fechaFin=" + gbi("txtFilFecFn").value + "&cabecera=" + cabecera;
         }
         catch (ex) {
             mostrarMensaje('Error', ex, 'error');
@@ -121,65 +118,6 @@ function MostrarBusqueda(r) {
         }
     }
 }
-function funcionModal(tr) {
-    var num = tr.id.replace("numMod", "");
-    var id = gbi("md" + num + "-0").innerHTML;
-    var value;
-    if (tr.children.length === 2) {
-        value = gbi("md" + num + "-1").innerHTML;
-    }
-    else {
-        value = gbi("md" + num + "-2").innerHTML;
-    }
-    var value2 = gbi("md" + num + "-1").innerHTML;
-    txtModal.value = value;
-    txtModal.dataset.id = id;
-    var next = accionModal2(tr, id);
-    if (txtModal2) {
-        txtModal2.value = value2;
-    }
-    CerrarModal("modal-Modal", next);
-    gbi("txtFiltroMod").value = "";
-}
-
-function accionModal2(tr, id) {
-    switch (txtModal.id) {
-        case "txtCategoria":
-            gbi("txtArticulo").value = "";
-            gbi("txtArticulo").dataset = "";
-
-            var btnModalArticulo = document.getElementById("btnModalArticulo");
-            btnModalArticulo.onclick = function () {
-                cbmu("Medicamento", "Medicamento", "txtArticulo", null,
-                    ["idMedicamentos", "Descripcion"], ' /OperacionesStock/cargarMedicamentoxLaboratorio?idLab=' + gbi("txtCategoria").dataset.id, cargarListaArticulo);
-            };
-            return gbi("txtArticulo");
-            break;
-        case "txtArticulo":
-            return gbi("btnBuscar");
-            break;
-        default:
-            break;
-    }
-}
-function CerrarModal(idModal, te) {
-    ventanaActual = 1;
-    $('#' + idModal).modal('hide');
-    if (te) {
-        te.focus();
-    }
-}
-function cargarListaArticulo(rpta) {
-    if (rpta != "") {
-        var data = rpta.split('↔');
-        var res = data[0];
-        var mensaje = data[1];
-        listaDatosModal = data[2].split("▼");
-        console.log(listaDatosModal);
-        mostrarModal(cabecera_Modal, listaDatosModal);
-    }
-}
-
 function ImprimirKardex(matriz) {
     var texto = "";
     var data = [];
@@ -201,13 +139,13 @@ function ImprimirKardex(matriz) {
     doc.setFont('helvetica')
     doc.setFontSize(10);
     doc.setFontType("bold");
-    doc.text("Dermosalud S.A.C", 30, 30);
+    doc.text(nombreEmpresa, 30, 30);
     doc.setFontSize(8);
     doc.setFontType("normal");
     doc.text("Ruc:", 30, 40);
-    doc.text("20565643143", 50, 40);
+    doc.text(rucEmpresa, 50, 40);
     doc.text("Dirección:", 30, 50);
-    doc.text("Avenida Manuel Cipriano Dulanto 1009, Cercado de Lima", 70, 50);
+    doc.text(direccionEmpresa, 70, 50);
     doc.setFontType("bold");
     doc.text("Fecha Impresión", width - 90, 40);
     doc.setFontType("normal");
@@ -342,3 +280,5 @@ function ImprimirKardex(matriz) {
     var iframe = document.getElementById('ifrmReport');
     iframe.src = doc.output('dataurlstring');
 }
+
+

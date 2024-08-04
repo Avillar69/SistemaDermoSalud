@@ -32,8 +32,6 @@ namespace SistemaDermoSalud.View.Controllers.Inventario
             string lista = Serializador.rSerializado(oResult.ListaResultado, new string[] { });
             return String.Format("{0}↔{1}↔{2}", oResult.Resultado, oResult.MensajeError, lista);
         }
-
-
         public ActionResult exportarExcel(string local, string fechaInicio, string fechaFin, string cabecera)
         {
             try

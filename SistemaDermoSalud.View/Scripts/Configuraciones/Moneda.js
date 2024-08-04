@@ -1,6 +1,9 @@
 var cabeceras = ['idMoneda', 'Codigo', 'Descripcion'];
 var listaDatos;
 var matriz = [];
+var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
+var rucEmpresa = "20612173452";
+var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 
 $(function () {
     var url = "Moneda/ObtenerDatos";

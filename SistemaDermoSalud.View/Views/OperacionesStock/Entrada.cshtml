@@ -11,7 +11,6 @@
 }
 
 <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="../node_modules/flatpickr/dist/flatpickr.min.css">
 
 <div class="row" id="rowTabla">
@@ -317,44 +316,44 @@
                             </div>
                         </div>
                         @*<div class="col-12 col-md-4">
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-4 control-label" for="txtArticulo">Medicamento</label>
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-10 p-0">
-                                <input id="txtArticulo" type="text" value="articulo1" class="form-control form-control-sm" readonly>
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtArticulo">Medicamento</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtArticulo" type="text" value="articulo1" class="form-control form-control-sm" readonly>
+                                            </div>
+                                            <button id="btnModalArticulo" type="button" tabindex="15" class="btn btn-info btn-sm pr-1 pl-1">
+                                                <i class="fa fa-ellipsis-v"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <button id="btnModalArticulo" type="button" tabindex="15" class="btn btn-info btn-sm pr-1 pl-1">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-4 control-label" for="txtCantidad">Cantidad</label>
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-10 p-0">
-                                <input id="txtCantidad" type="text" class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtCantidad">Cantidad</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtCantidad" type="text" class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-4 control-label" for="txtPrecio">Precio</label>
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-10 p-0">
-                                <input id="txtPrecio" type="text" class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtPrecio">Precio</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtPrecio" type="text" class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
                     </div>
                     <div class="row" id="art2" style="padding:0px;">
                         <div class="col-lg-4 col-sm-6 mb-2">
@@ -377,41 +376,41 @@
                         </div>
 
                         @*<div class="col-12 col-md-4">
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-4 control-label" for="txtMarca">Laboratorio</label>
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-10 p-0">
-                                <input id="txtMarca" type="text" value="m1" class="form-control form-control-sm" readonly>
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtMarca">Laboratorio</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtMarca" type="text" value="m1" class="form-control form-control-sm" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-4 control-label" for="txtStock">Stock Actual</label>
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-10 p-0">
-                                <input id="txtStock" type="text" class="form-control form-control-sm" readonly>
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtStock">Stock Actual</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtStock" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-4 control-label" for="txtStockTotal">Stock Total</label>
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-10 p-0">
-                                <input id="txtStockTotal" type="text" class="form-control form-control-sm" readonly>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
+                            <div class="col-12 col-md-4">
+                                <div class='form-group row m-b-5 p-l-10'>
+                                    <label class="col-md-4 control-label" for="txtStockTotal">Stock Total</label>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-10 p-0">
+                                                <input id="txtStockTotal" type="text" class="form-control form-control-sm" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
                     </div>
                     <div class="row mt-2" id="art3" style="padding:0px;">
                         <div class="col-lg-4 col-sm-6 mb-2" style="display:none">
@@ -423,15 +422,15 @@
                         <div class="col-lg-2 col-sm-6 mb-2">
                             <button type="button" id="btnAgregarArticulo" class="btn btn-dark">Agregar Detalle</button>
                             @*<button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" id='btnAgregarDetalle'>Agregar</button>
-                <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalle()' id='btnGrabarDetalle'>New</button>
-                <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalle()' id='btnCancelarDetalle'>Cancelar</button>*@
+                                <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalle()' id='btnGrabarDetalle'>New</button>
+                                <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalle()' id='btnCancelarDetalle'>Cancelar</button>*@
                         </div>
                         @*<div class="col-12 col-md-8"></div>
-            <div class="col-12 col-md-4 text-right" style="padding:0px;padding-right:60px;">
-                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnAgregarArticulo">Agregar</button>
-                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnActualizarArticulo" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
-                <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light col-md-6" id="btnCancelarArticulo" style="display:none">Cancelar</button>
-            </div>*@
+                            <div class="col-12 col-md-4 text-right" style="padding:0px;padding-right:60px;">
+                                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnAgregarArticulo">Agregar</button>
+                                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light col-md-6" id="btnActualizarArticulo" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
+                                <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light col-md-6" id="btnCancelarArticulo" style="display:none">Cancelar</button>
+                            </div>*@
                     </div>
                     <div class="row mt-2">
                         <div class="table-responsive table-card" style="min-height:200px;margin:0">
@@ -457,42 +456,42 @@
 
 
                     @*<div id="collapseOne-2" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div class="card-body">
-                            <div class="col-sm-12 hidden-sm-down" id="cabeTablaArticulo">
-                                <div class="row panel bg-info" style="color:white;margin-bottom:5px;padding:5px 20px 0px 20px;">
-                                    <div class="col-12 col-md-2" style="display:none;">
-                                        <label>id</label>
-                                    </div>
-                                    <div class="col-12 col-md-1">
-                                        <label>Item</label>
-                                    </div>
-                                    <div class="col-12 col-md-3">
-                                        <label>Articulo</label>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <label>Laboratorio</label>
-                                    </div>
-                                    <div class="col-12 col-md-3" style="display:none">
-                                        <label>Unid Medida</label>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <label>Cantidad</label>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <label>Precio</label>
-                                    </div>
-                                    <div class="col-12 col-md-3" style="display:none">
-                                        <label>idRefDetalle</label>
+                            <div class="card-body">
+                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaArticulo">
+                                    <div class="row panel bg-info" style="color:white;margin-bottom:5px;padding:5px 20px 0px 20px;">
+                                        <div class="col-12 col-md-2" style="display:none;">
+                                            <label>id</label>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <label>Item</label>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <label>Articulo</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Laboratorio</label>
+                                        </div>
+                                        <div class="col-12 col-md-3" style="display:none">
+                                            <label>Unid Medida</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Cantidad</label>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <label>Precio</label>
+                                        </div>
+                                        <div class="col-12 col-md-3" style="display:none">
+                                            <label>idRefDetalle</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 table-responsive" id="divTablaArticulo">
-                                <div id="contentArticulo" class="clusterize-content">
+                                <div class="col-sm-12 table-responsive" id="divTablaArticulo">
+                                    <div id="contentArticulo" class="clusterize-content">
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>*@
+                        </div>*@
                 </div>
             </div>
         </div>
@@ -575,8 +574,10 @@
 </div>
 
 @Scripts.Render("~/bundles/basics")
+<script src="~/assets/js/jspdf.debug.js"></script>
+<script src="~/assets/js/jspdf.min.js"></script>
+<script src="~/assets/js/jspdf.plugin.autotable.js"></script>
 <script src="/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="../node_modules/flatpickr/dist/flatpickr.min.js"></script>
 <script src="../assets/js/main.js"></script>
 <script src="/assets/libs/list.js/list.min.js"></script>
