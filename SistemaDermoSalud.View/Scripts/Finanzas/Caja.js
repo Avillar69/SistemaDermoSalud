@@ -28,6 +28,7 @@ var actualizarDetalle;
 var countDetalle
 var comboConcepto; var combox;
 var listaConcepto; var listaDEmpleado; var listaDBanco;
+var listaConcepto2;
 var listaDetalleCajaPDF = [];
 
 //$("#txtFilFecIn").datetimepicker({
@@ -61,8 +62,10 @@ function mostrarLista(rpta) {
         gbi("txtNroCaja").value = listas[8];
         gbi("txtFilFecIn").value = listas[9];
         gbi("txtFilFecFn").value = listas[10];
+        listaConcepto = listas[11].split("▼");
         listar(listaDatos);
         cargarDatosMonedas(listaMoneda);
+        cargarDatosConceptos(listaConcepto);
     }
 }
 function listar(r) {
@@ -87,7 +90,9 @@ function listar(r) {
     }
 
 }
-function mostrarDetalle(opcion, id) {
+function mostrarDetalle(opcion, idRow) {
+    let id = 0;
+    console.log(id);
     var lblTituloPanel = document.getElementById('lblTituloPanel');
     var aperturado = 0;
     //var contentPrincipal = gbi("contentPrincipal");
@@ -131,6 +136,7 @@ function mostrarDetalle(opcion, id) {
             break;
         case 2:
             OpcionCaja = "2";
+            id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
             lblTituloPanel.innerHTML = "Caja";//Titulo Modificar
             TraerDetalle(id);
             show_hidden_Formulario(true);
@@ -188,11 +194,7 @@ txtSaldoInicial.onkeyup = function () {
     gbi("txtSaldoFinal").value = parseFloat(mInicio).toFixed(2);
 }
 function configurarBotonesModal() {
-    var btnModalConcepto = document.getElementById("btnModalConcepto");
-    btnModalConcepto.onclick = function () {
-        cbmu("conceptosCaja", "Conceptos", "txtConcepto", null,
-            ["idConcepto", "Descripcion"], ' /Caja/ListaConceptosCaja', cargarListaConcepto);
-    }
+
     var btnModalEmpleado = document.getElementById("btnModalEmpleado");
     btnModalEmpleado.onclick = function () {
         cbmu("empleado", "Empleado", "txtEmpleado", null,
@@ -330,11 +332,11 @@ function configurarBotonesModal() {
 
     var btnCerrarCaja = document.getElementById("btnCerrarCaja");
     btnCerrarCaja.onclick = function () {
-            var url = "Caja/CerrarCaja";
-            var frm = new FormData();
-            frm.append("idCaja", txtID.value.length == 0 ? "0" : txtID.value);            
-            swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
-            enviarServidorPost(url, actualizarCerrarCaja, frm);        
+        var url = "Caja/CerrarCaja";
+        var frm = new FormData();
+        frm.append("idCaja", txtID.value.length == 0 ? "0" : txtID.value);
+        swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
+        enviarServidorPost(url, actualizarCerrarCaja, frm);
     };
 }
 function BuscarxFecha(f1, f2) {
@@ -386,7 +388,7 @@ function validarFormularioDetalle() {
     }
     return error;
 }
-function actualizarListar(rpta) { 
+function actualizarListar(rpta) {
     if (rpta != "") { //validar cuando respuesta sea vacio
         var data = rpta.split("↔");
         var res = data[0];
@@ -666,6 +668,16 @@ function cargarDatosMonedas(r) {
         });
     }
     document.getElementById("txtMoneda").selectedIndex = "1";
+} function cargarDatosConceptos(r) {
+    let conceptos = r;
+    $("#txtConcepto").empty();
+    $("#txtConcepto").append(`<option value="">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        conceptos.forEach(element => {
+            $("#txtConcepto").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
 }
 function CambiarConcepto() {
     var c1 = gbi("concepto1");

@@ -27,11 +27,13 @@ namespace MubaplastERP.Controllers.Finanzas
             DateTime fechaFin = DateTime.Today;
             Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
             //BL
+            FN_ConceptosCajaBL oFN_ConceptosCajaBL = new FN_ConceptosCajaBL();
             FN_CajaBL oFN_CajaBL = new FN_CajaBL();
             Ma_MonedaBL oMa_MonedaBL = new Ma_MonedaBL();
             //listas
             ResultDTO<Ma_MonedaDTO> lbeMa_MonedaDTO = oMa_MonedaBL.ListarTodo(eSEGUsuario.idEmpresa);
             ResultDTO<FN_CajaDTO> lbeFN_CajaDTO = oFN_CajaBL.ListarxFecha(fechaInicio,fechaFin);
+            ResultDTO<FN_ConceptosCajaDTO> lstFN_ConceptosCajaDTO = oFN_ConceptosCajaBL.ListarTodo();
             //cadenas
             string idUsuario = eSEGUsuario.idUsuario.ToString();
             string nombreUsuario = eSEGUsuario.Usuario.ToString();
@@ -40,8 +42,11 @@ namespace MubaplastERP.Controllers.Finanzas
             string Nrocaja = oFN_CajaBL.NroCajaUltimo(1);
             string listaFN_Caja = Serializador.rSerializado(lbeFN_CajaDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja" });
             string listaMa_Moneda = Serializador.rSerializado(lbeMa_MonedaDTO.ListaResultado, new string[] { "idMoneda", "Descripcion" });
-            return String.Format("{0}↔{1}↔{2}↔{3}↔{4}↔{5}↔{6}↔{7}↔{8}↔{9}↔{10}",
-                lbeFN_CajaDTO.Resultado, lbeFN_CajaDTO.MensajeError, listaFN_Caja, listaMa_Moneda, idUsuario, nombreUsuario, Periodo, Fecha, Nrocaja, fechaInicio.ToString("dd-MM-yyyy"), fechaFin.ToString("dd-MM-yyyy"));
+            string listaConceptos = Serializador.rSerializado(lstFN_ConceptosCajaDTO.ListaResultado, new string[] { "idConceptoCaja", "Descripcion", "AfectoIgv", "IngresoSalida" });
+
+
+            return String.Format("{0}↔{1}↔{2}↔{3}↔{4}↔{5}↔{6}↔{7}↔{8}↔{9}↔{10}↔{11}",
+                lbeFN_CajaDTO.Resultado, lbeFN_CajaDTO.MensajeError, listaFN_Caja, listaMa_Moneda, idUsuario, nombreUsuario, Periodo, Fecha, Nrocaja, fechaInicio.ToString("dd-MM-yyyy"), fechaFin.ToString("dd-MM-yyyy"), listaConceptos);
         }
         public string ObtenerPorFecha(string fechaInicio, string fechaFin)
         {

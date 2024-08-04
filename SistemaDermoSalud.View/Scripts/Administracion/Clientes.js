@@ -14,41 +14,41 @@ configBM();
 var url = "/SocioNegocio/ObtenerDatosCliente";
 enviarServidor(url, mostrarLista);
 configurarBotonesModal();
-var txtID = document.getElementById("txtID");
-var txtCodigo = document.getElementById("txtCodigo");
-var cboTipoPersona = document.getElementById("cboTipoPersona");
-var txtRazonSocial = document.getElementById("txtRazonSocial");
-var cboTipoDocumento = document.getElementById("cboTipoDocumento");
-var txtNroDocumento = document.getElementById("txtNroDocumento");
-var cboPais = document.getElementById("cboPais");
-var cboDepartamento = document.getElementById("cboDepartamento");
-var cboProvincia = document.getElementById("cboProvincia");
-var cboDistrito = document.getElementById("cboDistrito");
-var txtWeb = document.getElementById("txtWeb");
-var txtMail = document.getElementById("txtMail");
-var chkCliente = document.getElementById("chkCliente");
-var chkProveedor = document.getElementById("chkProveedor");
-var chkActivo = document.getElementById("chkActivo");
+let txtID = document.getElementById("txtID");
+let txtCodigo = document.getElementById("txtCodigo");
+let cboTipoPersona = document.getElementById("cboTipoPersona");
+let txtRazonSocial = document.getElementById("txtRazonSocial");
+let cboTipoDocumento = document.getElementById("cboTipoDocumento");
+let txtNroDocumento = document.getElementById("txtNroDocumento");
+let cboPais = document.getElementById("cboPais");
+let cboDepartamento = document.getElementById("cboDepartamento");
+let cboProvincia = document.getElementById("cboProvincia");
+let cboDistrito = document.getElementById("cboDistrito");
+let txtWeb = document.getElementById("txtWeb");
+let txtMail = document.getElementById("txtMail");
+let chkCliente = document.getElementById("chkCliente");
+let chkProveedor = document.getElementById("chkProveedor");
+let chkActivo = document.getElementById("chkActivo");
 
 //inputs TAB Contacto
 
-var txtNombre = document.getElementById("txtNombre");
-var txtCargo = document.getElementById("txtCargo");
-var txtTelefonoContacto = document.getElementById("txtTelefonoContacto");
-var txtMailContacto = document.getElementById("txtMailContacto");
+let txtNombre = document.getElementById("txtNombre");
+let txtCargo = document.getElementById("txtCargo");
+let txtTelefonoContacto = document.getElementById("txtTelefonoContacto");
+let txtMailContacto = document.getElementById("txtMailContacto");
 //inputs TAB Direccion
-var tbDireccion = document.getElementById("tbDireccion");
-var txtDireccion = document.getElementById("txtDireccion");
-var chkDirPrincipal = document.getElementById("chkDirPrincipal");
+let tbDireccion = document.getElementById("tbDireccion");
+let txtDireccion = document.getElementById("txtDireccion");
+let chkDirPrincipal = document.getElementById("chkDirPrincipal");
 //inputs TAB Telefono
-var tbTelefono = document.getElementById("tbTelefono");
-var txtTelefono = document.getElementById("txtTelefono");
+let tbTelefono = document.getElementById("tbTelefono");
+let txtTelefono = document.getElementById("txtTelefono");
 //inputs TAB Cuenta Banco
-var tbCuenta = document.getElementById("tbCuenta");
-var txtBanco = document.getElementById("txtBanco");
-var txtCuenta = document.getElementById("txtCuenta");
-var txtCuentaDescripcion = document.getElementById("txtCuentaDescripcion");
-var cboMoneda = document.getElementById("cboMoneda");
+let tbCuenta = document.getElementById("tbCuenta");
+let txtBanco = document.getElementById("txtBanco");
+let txtCuenta = document.getElementById("txtCuenta");
+let txtCuentaDescripcion = document.getElementById("txtCuentaDescripcion");
+let cboMoneda = document.getElementById("cboMoneda");
 
 //ListasGlobales
 var listaDepartamento;
@@ -127,7 +127,7 @@ function listar(r) {
             })
         });
         console.log(newDatos);
-        let cols = [ "documento", "razonSocial", "fechaModificacion", "estado"];
+        let cols = ["documento", "razonSocial", "fechaModificacion", "estado"];
         loadDataTable(cols, newDatos, "idSocioNegocio", "tbDatos", cadButtonOptions(), false);
     }
 
@@ -520,6 +520,42 @@ function cargarBusqueda(rpta) {
 }
 
 function CargarDetalles(rpta) {
+    let txtID = document.getElementById("txtID");
+    let txtCodigo = document.getElementById("txtCodigo");
+    let cboTipoPersona = document.getElementById("cboTipoPersona");
+    let txtRazonSocial = document.getElementById("txtRazonSocial");
+    let cboTipoDocumento = document.getElementById("cboTipoDocumento");
+    let txtNroDocumento = document.getElementById("txtNroDocumento");
+    let cboPais = document.getElementById("cboPais");
+    let cboDepartamento = document.getElementById("cboDepartamento");
+    let cboProvincia = document.getElementById("cboProvincia");
+    let cboDistrito = document.getElementById("cboDistrito");
+    let txtWeb = document.getElementById("txtWeb");
+    let txtMail = document.getElementById("txtMail");
+    let chkCliente = document.getElementById("chkCliente");
+    let chkProveedor = document.getElementById("chkProveedor");
+    let chkActivo = document.getElementById("chkActivo");
+
+    //inputs TAB Contacto
+
+    let txtNombre = document.getElementById("txtNombre");
+    let txtCargo = document.getElementById("txtCargo");
+    let txtTelefonoContacto = document.getElementById("txtTelefonoContacto");
+    let txtMailContacto = document.getElementById("txtMailContacto");
+    //inputs TAB Direccion
+    let tbDireccion = document.getElementById("tbDireccion");
+    let txtDireccion = document.getElementById("txtDireccion");
+    let chkDirPrincipal = document.getElementById("chkDirPrincipal");
+    //inputs TAB Telefono
+    let tbTelefono = document.getElementById("tbTelefono");
+    let txtTelefono = document.getElementById("txtTelefono");
+    //inputs TAB Cuenta Banco
+    let tbCuenta = document.getElementById("tbCuenta");
+    let txtBanco = document.getElementById("txtBanco");
+    let txtCuenta = document.getElementById("txtCuenta");
+    let txtCuentaDescripcion = document.getElementById("txtCuentaDescripcion");
+    let cboMoneda = document.getElementById("cboMoneda");
+
     if (rpta != "") {
         var listas = rpta.split('↔');
         var Resultado = listas[0];
@@ -532,8 +568,9 @@ function CargarDetalles(rpta) {
             var Tel = listas[5].split("▼");
             var Cuent = listas[6].split("▼");
             //Asignar valores a controles
-            txtID.value = lista[0];//idArticulo
-            txtCodigo.value = lista[1];//codigoGenerado
+            console.log(lista);
+            gbi("txtID").value = lista[0];//idArticulo
+            gbi("txtCodigo").value = lista[1];//codigoGenerado
             //input = lista[2];//idEmpresa
             cboTipoPersona.value = lista[3];//idTipoPersona
             txtRazonSocial.value = lista[4];//RazonSocial
@@ -597,7 +634,10 @@ function CargarDetalles(rpta) {
         }
     }
 }
-function mostrarDetalle(opcion, id) {
+function mostrarDetalle(opcion, idRow) {
+
+    let id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+    console.log(id);
     var lblTituloPanel = document.getElementById('lblTituloPanel');
     limpiarTodo();
     switch (opcion) {

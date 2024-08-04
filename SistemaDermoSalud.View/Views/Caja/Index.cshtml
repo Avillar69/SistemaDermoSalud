@@ -266,13 +266,11 @@
                     <div class="col-md-9 col-12">
                         <div class="row">
                             <div class="col-10 p-0">
-                                <input id="txtConcepto" type="text" class="form-control form-control-sm" readonly>
+                                <select id="txtConcepto" type="text" class="form-control form-control-sm"></select>
+
                                 <input id='txtTipoOperacion' type='text' style="display:none;" readonly>
                                 <input id='txtAfectoIGV' type='text' style="display:none;" readonly>
                             </div>
-                            <button id="btnModalConcepto" type="button" class="btn btn-info btn-sm pr-1 pl-1">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -430,9 +428,10 @@
                     <div class="col-md-9 col-12">
                         <div class="row">
                             <div class="col-11 p-0">
-                                <select id="cboTipoPago" type="text" class="form-control input-sm" style="height:23px;">
+                                <select id="cboTipoPago" type="text" class="form-control form-control-sm" style="height:23px;">
                                     <option value=1>EFECTIVO</option>
                                     <option value=2>TARJETA</option>
+                                    <option value=3>YAPE</option>
                                 </select>
                             </div>
                         </div>
@@ -443,7 +442,7 @@
                     <div class="col-md-9 col-12">
                         <div class="row">
                             <div class="col-11 p-0">
-                                <select id="cboTarjeta" type="text" class="form-control input-sm" style="height:23px;">
+                                <select id="cboTarjeta" type="text" class="form-control form-control-sm" style="height:23px;">
                                     <option value=1>VISA</option>
                                     <option value=2>MASTERCARD</option>
                                 </select>
