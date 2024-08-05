@@ -250,39 +250,17 @@ namespace SistemaDermoSalud.Helpers
                     }
                 }
         }
-        public string GetInfo(string r)
-        {
-            try
-            {
-                //A este link le pasamos los datos , RUC y valor del captcha
-                string myUrl = "https://ruc.com.pe/api/v1/ruc";
-                HttpWebRequest myWebRequest = (HttpWebRequest)WebRequest.Create(myUrl);
-                myWebRequest.ContentType = "application/json";
-                myWebRequest.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(myWebRequest.GetRequestStream()))
-                {
-                    string json = "{\"ruc\":\"" + r + "\"," +
-                                  "\"token\":\"ef40e7cd-17ee-476f-8a80-e641222075b1-bf011d2b-0b27-4f45-ae1d-b3df0469c4b9\"}";
-
-                    streamWriter.Write(json);
-                    streamWriter.Flush();
-                    streamWriter.Close();
-                }
-
-
-                HttpWebResponse myHttpWebResponse = (HttpWebResponse)myWebRequest.GetResponse();
-                Stream myStream = myHttpWebResponse.GetResponseStream();
-                StreamReader myStreamReader = new StreamReader(myStream);
-                //Leemos los datos
-                string xDat = HttpUtility.HtmlDecode(myStreamReader.ReadToEnd());
-                return xDat;
-            }
-            catch (Exception ex)
-            {
-                return "Error";
-            }
-        }
+        //public string GetInfo(string r)
+        //{
+        //    try
+        //    {
+               
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return "Error";
+        //    }
+        //}
 
         private Image ReadCapchaDNI()
         {

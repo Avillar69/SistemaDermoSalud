@@ -1,4 +1,5 @@
-﻿using SistemaDermoSalud.Business;
+﻿using DocumentFormat.OpenXml.Math;
+using SistemaDermoSalud.Business;
 using SistemaDermoSalud.Entities;
 using SistemaDermoSalud.Helpers;
 using System;
@@ -6,6 +7,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,7 +19,7 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
 {
     public class SocioNegocioController : Controller
     {
-        const string token= "apis-token-9728.Piv1HEdrbWHPGVTAaEo40wuIBXhtfOAH";
+        const string token= "apis-token-9812.E1ma96NzwuKcut7nmmojf0HZK5T7Ly9H";
         // GET: SocioNegocio
         public ActionResult Index()
         {
@@ -377,11 +382,44 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
             }
 
         }
-        public string bsn(string r)
+        public string bsn(string r,string t)
         {
-            Persona myinfo = new Persona();
-            string a = myinfo.GetInfo(r);
-            return a;
+            string ruta = "";
+            switch (t)
+            {
+                case "2":
+                    ruta = "reniec/dni?numero=" + r;
+                    break;
+                default:
+                    ruta = "sunat/ruc?numero=" + r;
+                    break;
+            }
+
+            try
+            {
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://api.apis.net.pe/v2/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+
+                    //HTTP GET
+                    var responseTask =  client.GetStringAsync(ruta);
+                    var result = responseTask.Result;
+
+                }
+            }
+            catch (WebException ex)
+            {
+                /// EN CASO EXISTA ALGUN ERROR, LO TOMAMOS
+                var respuesta = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                /// Y LO 'RETORNAMOS'
+                return respuesta;
+            }
+            //Persona myinfo = new Persona();
+            //string a = myinfo.GetInfo(r);
+            return "";
         }
         public JsonResult ConsultaRUC(string r)
         {

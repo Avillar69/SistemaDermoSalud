@@ -25,9 +25,9 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
         //////Prueba
         
         //DERMOSALUD
-        public const string ruta = "https://api.pse.pe/api/v1/a1250b5cc94242b680e39131d764348df035737e633f41148afe7aad1fa94501";
+        public const string ruta = "https://api.pse.pe/api/v1/3538db4eee244c76be698f746650fd56904ca4c787ec432bad1ac11226621987";
         // # TOKEN para enviar documentos
-        public const string token = "eyJhbGciOiJIUzI1NiJ9.IjI3ZTFkOTg0YWUxNzRlZmQ4MWM0ZWFhODZhZjM1MGRkYThiMzU1NzhlOGEwNGY1ZDkwOGYzYTY2YzI2NmE4NjAi.aRKBRDTRf3T56AAO7Y034ymZwcicivXsSkgemKoRVrY";
+        public const string token = "eyJhbGciOiJIUzI1NiJ9.ImMxYjI5NTJmN2M1YTRlNTE4ZTVhMjljMThjM2I5YmY4ZTA4ZGQxMzVlNjQ2NGJiNTlkYjEzZDQ2NTNiOTcwOTgi.4y3TUrIMP5GuVpeZNMdSqyu64I-daWr59liEka6Jq4E";
 
         // GET: DocumentoVenta
         public ActionResult Index()

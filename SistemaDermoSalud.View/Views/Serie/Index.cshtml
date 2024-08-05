@@ -11,47 +11,68 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
-<div class="content-header row">
-    <div class="content-header-left col-md-6 col-12 mb-2">
-        <h3 class="content-header-title mb-0">SERIE</h3>
-        <div class="row breadcrumbs-top">
-            <div class="breadcrumb-wrapper col-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="#">Ventas</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        SERIE
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <div class="content-header-right col-md-6 col-12">
-        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="fa fa-plus"></i></a>
-        </div>
-    </div>
-</div>
-<div class="row" id="rowTabla">
-    <div class="col-md-12">
-        <div class="card p-l-20 p-r-20 m-b-0">
-            <div class="card-body">
-                <div class="row">
-                    <div class="row col-12" style="margin-bottom:2px;">
-                        <input id="txtFiltro" class="form-control form-control-sm col-12 col-md-4" placeholder="Filtrar ... " />
-                    </div>
-                    <div class="col-sm-12 d-none d-md-block" id="cabeTabla"></div>
-                    <div class="col-sm-12 table-responsive" id="divTabla">
-                        <div id="contentPrincipal" class="clusterize-content">
 
+<div class="row" id="rowTabla">
+    <div class="col-lg-12">
+        <div class="card" id="orderList">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h3 class="content-header-title mb-0">Series</h3>
+                        <div class="row breadcrumbs-top">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="#">Ventas</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Series
+                                    </li>
+                                </ol>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-sm-auto">
+                        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+                            <a onclick="mostrarDetalle(1,0)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
+                            <a onclick="LabDescargarPDF('i')" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right material-shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Exportar
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                    <a id="btnImprimirPDF" class="btn dropdown-item"><i class="ri-file-pdf-fill"></i> Pdf</a>
+                                    <a id="btnImprimirExcel" class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0 pt-0">
+                <div class="row">
+                    <div class="">
+                        <table class="table table-bordered dt-responsive table-sm table-striped align-middle dtr-inline collapsed" id="tbDatos">
+                            <thead class="text-muted table-light">
+                                <tr class="">
+                                    <th>Tipo</th>
+                                    <th>Serie</th>
+                                    <th>Numero</th>
+                                    <th>Fecha</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--end col-->
 </div>
+
 <div class="row" id="rowFrm" style="display:none;">
     <div class="card col-sm-12">
         <div class="card-header p-b-0">

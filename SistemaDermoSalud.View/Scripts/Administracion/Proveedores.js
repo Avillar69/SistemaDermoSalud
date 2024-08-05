@@ -303,11 +303,11 @@ function configurarBotonesModal() {
     //            break;
     //    }
     //}
-    //var btnBSN = gbi("btnBSN");
-    //btnBSN.onclick = function () {
-    //    Buscar(gbi("cboTipoBusqueda").value);
-    //    CerrarModal("modal-Busqueda");
-    //}
+    var btnBSN = gbi("btnBSN");
+    btnBSN.onclick = function () {
+        BuscarxRuc(gbi("cboTipoBusqueda").value);
+        //CerrarModal("modal-Busqueda");
+    }
 }
 function limpiarTodo() {
     limpiarControl("txtID");
@@ -550,7 +550,7 @@ function addRowDireccion(tipo, data) {
         cad += "</tr>";
         document.getElementById("tbDirecciones").innerHTML += cad;
     }
-    
+
     cleanControl("direccion");
     idxDireccion = 0;
 }
@@ -597,7 +597,7 @@ function addRowTelefono(tipo, data) {
         cad += '<td class="">' + cadButton("Telefono") + '</td>';
         cad += "</tr>";
         document.getElementById("tbTelefonos").innerHTML += cad;
-    }    
+    }
     cleanControl("telefono");
     idxTelefono = 0;
 }
@@ -654,7 +654,7 @@ function addRowContacto(tipo, data) {
         cad += "</tr>";
         document.getElementById("tbContactos").innerHTML += cad;
     }
-    
+
     cleanControl("contacto");
     idxContacto = 0;
 }
@@ -717,7 +717,7 @@ function addRowCuenta(tipo, data) {
         cad += "</tr>";
         document.getElementById("tbCuentas").innerHTML += cad;
     }
-    
+
     cleanControl("cuenta");
     idxCuenta = 0;
 }
@@ -802,7 +802,7 @@ function CargarDetalles(rpta) {
             let lista = listas[2].split('▲');
             let lstDireccion = listas[4].split("▼");
             let lstTelefono = listas[5].split("▼");
-            let lstContacto = listas[3].split("▼");            
+            let lstContacto = listas[3].split("▼");
             let lstCuenta = listas[6].split("▼");
             //Asignar valores a controles
             gbi("txtID").value = lista[0];//idArticulo
@@ -815,8 +815,8 @@ function CargarDetalles(rpta) {
             gbi("txtMail").value = lista[12];//Mail
             gbi("cboPais").value = lista[7];//idPais
             setTimeout(function () { $("#cboDepartamento").val(lista[8]).trigger('change'); }, 200);
-            setTimeout(function () { $("#cboProvincia").val(lista[9]).trigger('change'); }, 500);            
-            setTimeout(function () { $("#cboDistrito").val(lista[10]).trigger('change'); }, 800);            
+            setTimeout(function () { $("#cboProvincia").val(lista[9]).trigger('change'); }, 500);
+            setTimeout(function () { $("#cboDistrito").val(lista[10]).trigger('change'); }, 800);
             gbi("chkCliente").checked = lista[13] == "TRUE" ? true : false;//Cliente
             gbi("chkProveedor").checked = lista[14] == "TRUE" ? true : false;//Proveedor
             gbi("chkActivo").checked = lista[19] == "ACTIVO" ? true : false;//Estado
@@ -1035,7 +1035,7 @@ function validate(css) {
 function BuscarxRuc() {
     if (txtNroDocumento.value.trim().length == 11) {
         var d = txtNroDocumento.value;
-        var url = "/SocioNegocio/bsn?r=" + d;
+        var url = "/SocioNegocio/bsn?r=" + d + "&t=" + gbi("cboTipoDocumento").value;
         enviarServidor(url, cargarBusqueda);
         gbi("txtNroDocumento").value = d;
     }

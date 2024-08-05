@@ -85,6 +85,8 @@
                                     <th>IGV</th>
                                     <th>Total</th>
                                     <th>Estado</th>
+                                    <th>Enlace</th>
+                                    <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -147,34 +149,23 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="control-label col-md-4" for="txtTipoVenta">Motivo</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtTipoVenta" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalTipoVenta" type="button" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Motivo</span>
+                                    <input class="d-none" placeholder='' id='txtID' type='text'>
                                 </div>
+                                <select class="form-control" id="cboTipoCompra">
+                                </select>
                             </div>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtTipoDocumento">Tipo Doc.</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtTipoDocumento" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalTipoDocumento" type="button" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Tipo Documento</span>
                                 </div>
+                                <select class="form-control" id="cboTipoDocumento">
+                                </select>
                             </div>
                         </div>
                         <div class="col-12 col-md-4" id="divCita" style="display:none">
@@ -192,146 +183,100 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Serie</span>
+                                </div>
+                                <select class="form-control" id="cboNroSerie">
+                                </select>
+                                <input id='txtNroSerie' class="form-control form-control-sm" type='text' style="display:none" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Nro Doc.</span>
+                                </div>
+                                <input id='txtNroComprobante' type='text' class="form-control form-control-sm" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Fecha</span>
+                                </div>
+                                <input id='txtFecha' type='text' class="form-control form-control-sm" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();">
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtNroSerie' class="control-label col-md-4">Serie</label>
-                                <div class="col-sm-7 p-0">
-                                    <select class="form-control form-control-sm" id="cboNroSerie"></select>
-                                    <input id='txtNroSerie' class="form-control form-control-sm" type='text' style="display:none" readonly>
+                        <div class="col-12 mb-2">
+                            <div class="input-group" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Observación</span>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtNroComprobante' class="control-label col-md-4">Nro Doc.</label>
-                                <div class="col-sm-7 p-0">
-                                    <input id='txtNroComprobante' type='text' class="form-control form-control-sm" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtFecha' class="control-label complex-colorpicker col-md-4" placeholder="dd-mm-yyyy">Fecha</label>
-                                <div class="col-sm-7 p-0">
-                                    <input id='txtFecha' type='text' class="form-control form-control-sm" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtObservacion' class="control-label col-md-2">Observación</label>
-                                <div class="col-sm-9 p-0">
-                                    <textarea rows="2" class="form-control form-control-sm" id="txtObservacion"></textarea>
-                                </div>
+                                <input id='txtObservacion' type='text' class="form-control form-control-sm" >
                             </div>
                         </div>
                         <br />
                     </div>
                     <hr />
                     <div class="row">
-                        <div class="form-group" style="display:none;">
-                            <input placeholder='' id='txtID' type='text' style="display:none;">
-                        </div>
-                        <div class="col-12 col-md-8">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-2 control-label" for="txtRazonSocial">Clientes</label>
-                                <div class="col-md-10">
-                                    <div class="row">
-                                        <div class="col-11 p-0">
-                                            <input id="txtRazonSocial" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalRazonSocial" type="button" tabindex="9" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
+                        <div class="col-lg-8 col-sm-6 mb-2">
+                            <div class="input-group" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Cliente</span>
+                                    <input type='text' class="d-none" placeholder='' id='txtFechaVencimiento'>
                                 </div>
+                                <select class="form-control" id="cboRazonSocial">
+                                </select>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtNroDocumento' class="control-label col-md-4">N° Doc.</label>
-                                <div class="col-md-7 p-0">
-                                    <div class="col-xs-11">
-                                        <input id='txtNroDocumento' type='text' class="form-control form-control-sm">
-                                    </div>
-                                </div>
+                            <div class="input-group">
+                                <div class="input-group-text">N° Doc</div>
+                                <input id='txtNroDocumento' type='text' class="form-control form-control-sm">
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-md-8">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-2 control-label" for="txtDireccion">Dirección</label>
-                                <div class="col-md-10">
-                                    <div class="row" style="display:none">
-                                        <div class="col-11 p-0">
-                                            <input id="txtDireccion" type="text" class="form-control form-control-sm">
-                                        </div>
-                                        <button id="btnModalDireccion" type="button" tabindex="9" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-11 p-0">
-                                            <input id="txtDireccionA" type="text" class="form-control form-control-sm">
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="col-lg-8 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Dirección</div>
+                                <select class="form-control" id="cboDireccion">
+                                </select>
                             </div>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtTipoCambio' class="control-label col-md-4">Tipo Cambio</label>
-                                <div class="col-sm-7 p-0">
-                                    <input id='txtTipoCambio' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
-                                </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Tipo Cambio</div>
+                                <input type="text" class="form-control" id="txtTipoCambio" autocomplete="off">
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="control-label col-md-4 " for="txtMoneda">Moneda</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtMoneda" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalMoneda" type="button" tabindex="11" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Moneda</div>
+                                <select class="form-control" id="cboMoneda">
+                                </select>
                             </div>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-4 control-label" for="txtFormaPago">Forma de Pago</label>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-10 p-0">
-                                            <input id="txtFormaPago" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalFormaPago" type="button" tabindex="12" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Forma Pago</div>
+                                <select class="form-control" id="cboFormaPago">
+                                </select>
                             </div>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboTipoAfectacion' class="control-label col-sm-4">Tipo IGV</label>
-                                <div class="col-sm-7 p-0">
-                                    <select id='cboTipoAfectacion' type='text' class="form-control input-sm" style="height:23px;"></select>
-                                </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Tipo IGV</div>
+                                <select id='cboTipoAfectacion' type='text' class="form-control form-control-sm"></select>
                             </div>
                         </div>
-                        <div class="col-12 col-md-4">
+                        <div class="col-12 col-md-4 d-none">
                             <div class='form-group row m-b-5 p-l-10'>
                                 <label for='txtIGV' class="control-label col-md-4">IGV Incluido</label>
                                 <div class="col-sm-7 p-0">
@@ -345,49 +290,38 @@
                     </div>
                     <hr />
                     <div class="row" id="divArticulos">
-                        <div class="col-12 col-md-6">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label class="col-md-3 control-label" for="txtArticulo">Articulo</label>
-                                <div class="col-md-9">
-                                    <div class="row">
-                                        <div class="col-8 p-0">
-                                            <input id="txtArticulo" type="text" class="form-control form-control-sm" readonly>
-                                        </div>
-                                        <button id="btnModalArticulo" type="button" tabindex="14" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
+                        <div class="col-lg-4 col-sm-6 mb-2">
+                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Producto</span>
                                 </div>
+                                <select class="form-control detalle vDetalle" id="cboProducto">
+                                </select>
                             </div>
                         </div>
-                        <div class="col-12 col-md-2">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtCantidad' class="control-label col-sm-6">Cantidad</label>
-                                <div class="col-sm-6 p-0">
-                                    <input id='txtCantidad' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
-                                </div>
+                        <div class="col-lg-2 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Cantidad</div>
+                                <input type="text" class="form-control detalle vDetalle" id="txtCantidad" autocomplete="off">
                             </div>
                         </div>
-                        <div class="col-12 col-md-2">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtPrecio' class="control-label col-sm-6">Precio</label>
-                                <div class="col-sm-6 p-0">
-                                    <input id='txtPrecio' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)">
-                                </div>
+                        <div class="col-lg-2 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Precio</div>
+                                <input type="text" class="form-control detalle vDetalle" id="txtPrecio" autocomplete="off">
                             </div>
                         </div>
-                        <div class="col-12 col-md-2">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtTotal' class="control-label col-sm-6">Total</label>
-                                <div class="col-sm-6 p-0">
-                                    <input id='txtTotal' type='text' class="form-control form-control-sm" onkeypress="return IngresoNumero(event)" readonly>
-                                </div>
+                        <div class="col-lg-2 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-text">Total</div>
+                                <input type="text" class="form-control detalle vDetalle" id="txtTotal" autocomplete="off">
                             </div>
                         </div>
-                        <div class="col-12 col-md-2 text-right">
-                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnAgregarArticulo">Agregar</button>
-                            <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" id="btnActualizarArticulo" onclick="guardarItemDetalle()" style="display:none">Actualizar</button>
-                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarArticulo" style="display:none">Cancelar</button>
+                        <div class="col-lg-2 col-sm-6 mb-2">
+                            <button type="button" id="btnAgregarDetalle" class="btn btn-dark">Agregar Detalle</button>
+                            @*<button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" id='btnAgregarDetalle'>Agregar</button>
+            <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalle()' id='btnGrabarDetalle'>New</button>
+            <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalle()' id='btnCancelarDetalle'>Cancelar</button>*@
                         </div>
                     </div>
                     <div class="row" id="divOtroServicio" style="display:none">
@@ -429,35 +363,24 @@
                     <div class="col-sm-9">
                         <div class="card m-b-10" id="tablaDeDetalles">
                             <div class="card-body">
-                                <div class="col-sm-12 hidden-sm-down" id="cabeTablaF">
-                                </div>
-                                <div class="table-responsive" style="height:150px;">
-                                    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
-                                        <div class="col-12 col-md-1" style="display:none;">
-                                            <label></label>
-                                        </div>
-                                        <div class="col-12 col-md-1" style="display:none;">
-                                            <label></label>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <label>Descripción</label>
-                                        </div>
-                                        <div class="col-12 col-md-2">
-                                            <label>Cantidad</label>
-                                        </div>
-                                        <div class="col-12 col-md-1" style="display:none;">
-                                            <label>U.M.</label>
-                                        </div>
-                                        <div class="col-12 col-md-2">
-                                            <label>Precio</label>
-                                        </div>
-                                        <div class="col-12 col-md-2">
-                                            <label>SubTotal</label>
-                                        </div>
-                                        <div class="col-12 col-md-2"></div>
-                                    </div>
-                                    <div class="" id="tb_DetalleF">
-
+                                <div class="row">
+                                    <div class="table-responsive table-card" style="min-height:200px;margin:0">
+                                        <table class="table table-nowrap table-sm align-middle">
+                                            <thead class="text-muted table-light">
+                                                <tr class="text-uppercase">
+                                                    <th class="d-none"></th>
+                                                    <th class="d-none"></th>
+                                                    <th>Descripción</th>
+                                                    <th>Cantidad</th>
+                                                    <th>U.M.</th>
+                                                    <th>Precio</th>
+                                                    <th>Sub Total</th>
+                                                    <th style="width:90px"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="list form-check-all" id="tbDetalle">
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

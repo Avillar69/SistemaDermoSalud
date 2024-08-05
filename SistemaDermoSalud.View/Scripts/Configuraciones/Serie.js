@@ -29,7 +29,6 @@ var url = "Serie/ObtenerDatos";
 enviarServidor(url, mostrarLista);
 //configNav();
 configBM();
-reziseTabla();
 cfgKP(["txtTipoDocumento"], cfgTMKP); //configuration  K P
 cfgKP(["txtSerie"], cfgTKP);
 function cfgKP(l, m) {
@@ -74,7 +73,6 @@ function cfgTKP(evt) {
 
 }
 function mostrarLista(rpta) {
-    crearTabla(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         var Resultado = listas[0];
@@ -90,9 +88,8 @@ function mostrarLista(rpta) {
         else {
             mostrarRespuesta(Resultado, mensaje, "error");
         }
-        listar();
+        listar(listaDatos);
     }
-    reziseTabla();
 }
 function mostrarDetalle(opcion, id) {
     var lblTituloPanel = document.getElementById('lblTituloPanel');
@@ -114,15 +111,23 @@ function mostrarDetalle(opcion, id) {
         enviarServidor(url, CargarDetalles);
     }
 }
-function listar() {
+function listar(r) {
+    if (r[0] !== '') {
+        let newDatos = [];
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idSerie: valor[0],
+                descripcion: valor[1],
+                nroSerie: valor[2],
+                numeroDoc: valor[3],
+                fechaCreacion: valor[4]
+            })
+        });
+        let cols = ["descripcion", "nroSerie", "numeroDoc", "fechaCreacion"];
+        loadDataTable(cols, newDatos, "idSerie", "tbDatos", cadButtonOptions(), false);
+    }
 
-    matriz = crearMatriz(listaDatos);
-    configurarFiltroGR(cabeceras);
-    mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
 
 }
 function mostrarMatriz(matriz, cabeceras, tabId, contentID) {

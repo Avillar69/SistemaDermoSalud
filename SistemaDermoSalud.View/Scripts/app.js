@@ -47,7 +47,7 @@ function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
                 },
                 {
                     "targets": columnas.length - 1,
-                    "width": "10%"
+                    "width": "10%",
                 }],
         searching: !0,
         bLengthChange: !0,

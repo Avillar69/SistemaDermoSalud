@@ -69,6 +69,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.Estado = Convert.ToBoolean(dr["Estado"] == null ? false : Convert.ToBoolean(dr["Estado"].ToString()));
                         oProductoDTO.Precio = Convert.ToDecimal(dr["Precio"].ToString());
                         oProductoDTO.CodigoProducto = dr["CodigoProducto"] == null ? "" : dr["CodigoProducto"].ToString();
+                        oProductoDTO.PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"].ToString());
                         oResultDTO.ListaResultado.Add(oProductoDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -113,6 +114,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.CodigoAutogenerado = dr["CodigoAutogenerado"].ToString();
                         oProductoDTO.idTalla = Convert.ToInt32(dr["idTalla"].ToString());
                         oProductoDTO.idColor = Convert.ToInt32(dr["idColor"].ToString());
+                        oProductoDTO.PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"].ToString());
                         oResultDTO.ListaResultado.Add(oProductoDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -154,6 +156,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         da.SelectCommand.Parameters.AddWithValue("@CodigoProducto", oProducto.CodigoProducto);
                         da.SelectCommand.Parameters.AddWithValue("@idTalla", oProducto.idTalla);
                         da.SelectCommand.Parameters.AddWithValue("@idColor", oProducto.idColor);
+                        da.SelectCommand.Parameters.AddWithValue("@PrecioVenta", oProducto.PrecioVenta);
 
                         int rpta = da.SelectCommand.ExecuteNonQuery();
                         if (rpta == 1)

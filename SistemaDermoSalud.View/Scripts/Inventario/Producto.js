@@ -17,6 +17,7 @@ var txtDescripcion = document.getElementById("txtDescripcion");
 var cboMarca = document.getElementById("cboMarca");
 var chkActivo = document.getElementById("chkActivo");
 var txtPrecio = document.getElementById("txtPrecio");
+var txtPrecioVenta = document.getElementById("txtPrecioVenta");
 var cboTalla = document.getElementById("cboTalla");
 var cboColor = document.getElementById("cboColor");
 var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA";
@@ -169,6 +170,7 @@ function limpiarTodo() {
     gbi("txtID").value = "";
     gbi("txtCodigoProducto").value = "";
     gbi("txtPrecio").value = "";
+    gbi("txtPrecioVenta").value = "";
     txtCodigo.value = "";
     txtDescripcion.value = "";
     cboMarca.value = "";
@@ -264,7 +266,8 @@ function configurarBotonesModal() {
             frm.append("Descripcion", txtDescripcion.value);
             frm.append("idMarca", cboMarca.value);
             frm.append("Estado", chkActivo.checked);
-            frm.append("Precio",txtPrecio.value);
+            frm.append("Precio", txtPrecio.value);
+            frm.append("PrecioVenta", txtPrecioVenta.value);
             frm.append("CodigoProducto", txtCodigoProducto.value);
             frm.append("idTalla", cboTalla.value);
             frm.append("idColor", cboColor.value);
@@ -280,6 +283,7 @@ function validarFormulario() {
     var error = true;
     if (validarControl("txtDescripcion")) error = false;
     if (validarControl("txtPrecio")) error = false;
+    if (validarControl("txtPrecioVenta")) error = false;
     if (validarControl("cboMarca")) error = false;
     return error;
 }
@@ -342,6 +346,7 @@ function CargarDetalles(rpta) {
         txtCodigoProducto.value = listaDetalle[10];
         cboTalla.value = listaDetalle[12];
         cboColor.value = listaDetalle[13];
+        txtPrecioVenta.value = listaDetalle[14];
     }
 }
 //
