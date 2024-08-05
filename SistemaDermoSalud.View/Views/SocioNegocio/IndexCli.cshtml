@@ -11,13 +11,12 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
-
 <div id="rowFrm" style="display:none;">
     <div class="card m-b-10">
         <div class="card-header p-b-0">
             <div class="row">
-                <div class="col-sm-9">
-                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Cliente</h4>
+                <div class="col-sm-9 mt-2">
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Proveedor</h4>
                 </div>
                 <div class="col-sm-3 pull-right">
                     <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
@@ -26,580 +25,361 @@
             </div>
         </div>
         <div class="card-body p-t-10 p-b-10">
-            <div class="col-md-12">
-                <div class='form-horizontal'>
-                    <div class="form-group row m-b-5 p-l-10" style="display:none;">
-                        <input placeholder='' id='txtID' type='text' style="display:none;">
+            <div class="row">
+                <div class="col-lg-2 col-sm-6 mb-2 d-none">
+                    <input placeholder='' id='txtID' type='text' style="display:none;">
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Codigo</span>
+                        </div>
+                        <input type="text" class="form-control" id="txtCodigo" placeholder='Autgenerado' autocomplete="off" readonly disabled>
                     </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10 row m-b-5 p-l-10'>
-                                <label for='txtCodigo' class="control-label col-4">Codigo</label>
-                                <div class="col-8">
-                                    <input placeholder='Autgenerado' readonly id='txtCodigo' type='text' maxlength="3" disabled class="form-control form-control-sm">
-                                </div>
-                            </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Tipo Persona</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboTipoPersona' class="control-label col-4">Tipo Persona</label>
-                                <div class="col-8">
-                                    <select id='cboTipoPersona' type='text' class="form-control form-control-sm"></select>
-                                </div>
-                            </div>
+                        <select class="form-control vFormulario" id="cboTipoPersona">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Tipo Documento</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboTipoDocumento' class="control-label col-4">Tipo Documento</label>
-                                <div class="col-8">
-                                    <select id='cboTipoDocumento' type='text' class="form-control form-control-sm"></select>
-                                </div>
-                            </div>
+                        <select class="form-control vFormulario" id="cboTipoDocumento">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">N° Documento</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtNroDocumento' class="control-label col-4">Nro Documento</label>
-                                <div class="col-md-8">
-                                    <div class="row p-0">
-                                        <div class="col-9 p-0" style="margin-left:6%">
-                                            <input id="txtNroDocumento" type="text" class="form-control form-control-sm">
-                                        </div>
-                                        <button id="btnModalBusqueda" type="button" class="btn btn-info btn-sm pr-1 pl-1">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control vFormulario" id="txtNroDocumento" onkeypress="return IngresoNumero(event)" autocomplete="off">
+                            <button class="btn btn-outline-success material-shadow-none" type="button" id="btnBSN">Reniec</button>
                         </div>
-                        <div class="col-12 col-sm-8">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtRazonSocial' class="control-label col-4 col-sm-2">Razon Social</label>
-                                <div class="col-8 col-sm-10">
-                                    <input id='txtRazonSocial' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Razón Social</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtWeb' class="control-label col-4">Web</label>
-                                <div class="col-8">
-                                    <input id='txtWeb' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
+                        <input type="text" class="form-control vFormulario" id="txtRazonSocial" autocomplete="off">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Web</span>
                         </div>
-
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtEstadoC' class="control-label col-4">Estado.C</label>
-                                <div class="col-8">
-                                    <input id='txtEstadoC' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
+                        <input type="text" class="form-control" id="txtWeb" autocomplete="off">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Estado.C</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtCondicionC' class="control-label col-4">Condicion.C</label>
-                                <div class="col-8">
-                                    <input id='txtCondicionC' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
+                        <input type="text" class="form-control" id="txtEstadoC" autocomplete="off">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Condicion.C</span>
                         </div>
-
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='txtMail' class="control-label col-4">Mail</label>
-                                <div class="col-8">
-                                    <input id='txtMail' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
+                        <input type="text" class="form-control" id="txtCondicionC" autocomplete="off">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Mail</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboPais' class="control-label col-4">Pais</label>
-                                <div class="col-8">
-                                    <select id='cboPais' type='text' class="form-control form-control-sm"></select>
-                                </div>
-                            </div>
+                        <input type="text" class="form-control" id="txtMail" autocomplete="off">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Pais</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboDepartamento' class="control-label col-4">Departamento</label>
-                                <div class="col-8">
-                                    <select id='cboDepartamento' type='text' class="form-control form-control-sm">
-                                        <option value="" selected>Seleccione</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <select class="form-control vFormulario" id="cboPais">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Departamento</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboProvincia' class="control-label col-4">Provincia</label>
-                                <div class="col-8">
-                                    <select id='cboProvincia' type='text' class="form-control form-control-sm">
-                                        <option value="" selected>Seleccione</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <select class="form-control" id="cboDepartamento">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Provincia</span>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-10'>
-                                <label for='cboDistrito' class="control-label col-4">Distrito</label>
-                                <div class="col-8">
-                                    <select id='cboDistrito' type='text' class="form-control form-control-sm">
-                                        <option value="" selected>Seleccione</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <select class="form-control" id="cboProvincia" disabled>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Distrito</span>
                         </div>
-                        <div class="col-12 col-sm-4" style="display:none">
-                            <div class='row m-b-5 p-l-10'>
-                                <label class="control-label col-4">¿Es Cliente ?</label>
-                                <div class="col-sm-8">
-                                    <input type="checkbox" id="chkCliente" class="filled-in chk-col-light-blue" checked="true">
-                                    <label for="chkCliente" class="control-label col-sm-2"></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4" style="display:none">
-                            <div class='row m-b-5 p-l-10'>
-                                <label class="control-label col-4">¿Es Proveedor ?</label>
-                                <div class="col-sm-8">
-                                    <input type="checkbox" id="chkProveedor" class="filled-in chk-col-light-blue" checked="">
-                                    <label for="chkProveedor" class="control-label col-sm-2"></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='row m-b-5 p-l-10'>
-                                <label class="control-label col-4">Activo</label>
-                                <div class="col-sm-8">
-                                    <input type="checkbox" id="chkActivo" class="filled-in chk-col-light-blue" checked="">
-                                    <label for="chkActivo" class="control-label col-sm-2"></label>
-                                </div>
-                            </div>
-                        </div>
+                        <select class="form-control" id="cboDistrito" disabled>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-6 mb-2">
+                    <div class="form-check form-switch form-switch-lg" dir="ltr">
+                        <input type="checkbox" class="form-check-input" id="chkCliente">
+                        <label class="form-check-label" for="chkCliente">¿Es Cliente?</label>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-6 mb-2 d-none">
+                    <div class="form-check form-switch form-switch-lg d-none" dir="ltr">
+                        <input type="checkbox" class="form-check-input" id="chkProveedor">
+                        <label class="form-check-label" for="chkProveedor">¿Es Proveedor?</label>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-6 mb-2">
+                    <div class="form-check form-switch form-switch-lg" dir="ltr">
+                        <input type="checkbox" class="form-check-input" id="chkActivo">
+                        <label class="form-check-label" for="chkActivo">Activo</label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="card">
-        <ul class="nav nav-tabs nav-underline no-hover-bg nav-justified" data-init-reponsive-tabs="dropdownfx" style="border-bottom-color:#2DCEE3; color:black">
-            <li class="nav-item">
-                <a href="#" class="nav-link active" data-toggle="tab" data-target="#direccion" aria-expanded="true" style="border-bottom-color:#2DCEE3"><span>Direcciones</span></a>
-            </li>
-            <li class="nav-item">
-                <a href="#" data-toggle="tab" data-target="#cuentas" class="nav-link " aria-expanded="false" style="border-bottom-color:#2DCEE3 "><span>Cuentas Bancarias</span></a>
-            </li>
-            <li class="nav-item">
-                <a href="#" data-toggle="tab" data-target="#contacto" class="nav-link" aria-expanded="false" style="border-bottom-color:#2DCEE3"><span>Contactos</span></a>
-            </li>
-            <li class="nav-item">
-                <a href="#" data-toggle="tab" data-target="#telefono" class="nav-link " aria-expanded="false" style="border-bottom-color:#2DCEE3"><span>Telefonos</span></a>
-            </li>
-        </ul>
-        <div class="tab-content" style="height:350px;">
-            <div class="tab-pane fade" id="contacto" aria-expanded="true">
-                <div class="card m-b-10" style="padding:10px 0px;">
-
-                    <div class="row  col-12 col-sm-12">
-                        <div class="col-12 col-sm-8">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='txtNombre' class="control-label col-4 col-sm-2 text-left">Nombre</label>
-                                <div class="col-8 col-sm-10">
-                                    <input id='txtNombre' type='text' class="form-control form-control-sm">
+    <div class="card m-b-10">
+        <div class="card-header">
+            <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0"
+                role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link text-body active" data-bs-toggle="tab" href="#direccion"
+                       role="tab">
+                        <i class="far fa-user"></i>
+                        Direcciones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-body" data-bs-toggle="tab" href="#telefono"
+                       role="tab">
+                        <i class="far fa-user"></i>
+                        Teléfonos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-body" data-bs-toggle="tab" href="#contacto"
+                       role="tab">
+                        <i class="far fa-envelope"></i>
+                        Contactos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-body" data-bs-toggle="tab" href="#cuentas"
+                       role="tab">
+                        <i class="far fa-envelope"></i>
+                        Cuentas Bancarias
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body p-4">
+            <div class="tab-content">
+                <div class="tab-pane active" id="direccion" role="tabpanel">
+                    <div class="row mb-3">
+                        <input type="text" class="form-control d-none" id="lblIdDireccion" autocomplete="off" disabled readonly>
+                        <div class="col-lg-11">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Dirección</span>
                                 </div>
+                                <input type="text" class="form-control direccion vDireccion" id="txtDireccion" autocomplete="off">
                             </div>
                         </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='txtCargo' class="control-label col-4 col-sm-3 text-left">Cargo</label>
-                                <div class="col-8 col-sm-9">
-                                    <input id='txtCargo' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
+                        <div class="col-lg-1 hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-dark" id="btnAgregarDireccion"> Agregar </button>
                         </div>
                     </div>
-                    <div class="row  col-12 col-sm-12">
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='txtTelefonoContacto' class="control-label col-4 col-sm-4 text-left">Telefono</label>
-                                <div class="col-8 col-sm-8">
-                                    <input id='txtTelefonoContacto' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='txtMailContacto' class="control-label col-4 col-sm-2 text-left">Mail</label>
-                                <div class="col-8 col-sm-10">
-                                    <input id='txtMailContacto' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-12">
-                        <div class="col-12 col-md-2">
-                            <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" onclick='agergarItemCt()' id='btnAgregarCt'>Agregar</button>
-                            <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalleCt()' id='btnGrabarDetalleCt'>New</button>
-                            <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalleCt()' id='btnCancelarDetalleCt'>Cancelar</button>
-                        </div>
-                        <div class="col-12 col-sm-2 text-center" style="display:none">
-                            <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" id="btnAgregarContacto">Agregar</button>
-                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarContacto" style="visibility:hidden">Cancelar</button>
-                        </div>
+                    <div class="table-responsive table-card" style="min-height:200px;margin:0">
+                        <table class="table table-nowrap table-sm align-middle">
+                            <thead class="text-muted table-light">
+                                <tr class="text-uppercase">
+                                    <th class="">N°</th>
+                                    <th class="">Dirección</th>
+                                    <th class=""></th>
+                                </tr>
+                            </thead>
+                            <tbody class="list form-check-all" id="tbDirecciones">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                @*ingresando la tabla de contacto*@
-                <div class="card m-b-10" id="tablaDeDetallesContacto">
-                    <div class="card-body">
-                        <div class="table-responsive" style="height:150px;">
-                            <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
-                                <div class="col-12 col-md-1" style="display:none;">
-                                    <label></label>
+                <!--end tab-pane-->
+                <div class="tab-pane" id="telefono" role="tabpanel">
+                    <div class="row mb-3">
+                        <input type="text" class="form-control d-none" id="lblIdTelefono" autocomplete="off" disabled readonly>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Teléfono</span>
                                 </div>
-                                <div class="col-12 col-md-1" style="display:none;">
-                                    <label></label>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label>Nombre</label>
-                                </div>
-                                <div class="col-12 col-md-2">
-                                    <label>Cargo</label>
-                                </div>
-                                <div class="col-12 col-md-2">
-                                    <label>Telefono</label>
-                                </div>
-                                <div class="col-12 col-md-2">
-                                    <label>Mail</label>
-                                </div>
-                            </div>
-                            <div class="text-uppercase" id="tb_DetalleFCont">
-
+                                <input type="text" class="form-control telefono vTelefono" id="txtTelefono" autocomplete="off">
                             </div>
                         </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="btn btn-dark" id="btnAgregarTelefono"> Agregar </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive table-card" style="min-height:200px;margin:0">
+                        <table class="table table-nowrap table-sm align-middle" id="">
+                            <thead class="text-muted table-light">
+                                <tr class="text-uppercase">
+                                    <th class="">N°</th>
+                                    <th class="">Teléfono</th>
+                                    <th class=""></th>
+                                </tr>
+                            </thead>
+                            <tbody class="list form-check-all" id="tbTelefonos">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade show active" id="direccion" aria-expanded="false">
-                <div class="card m-b-10" style="padding:10px 0px;">
-                    <div class="col-12 col-sm-12">
-                        <div class='form-group row m-b-5 p-l-10'>
-                            <label for='txtDireccion' class="control-label col-4 col-sm-1 text-left">Dirección</label>
-                            <div class="col-12 col-md-9">
-                                <input id='txtDireccion' type='text' class="form-control form-control-sm">
-                            </div>
-                            <div class="col-12 col-md-2">
-                                <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" onclick='agregarItemDir()' id='btnAgregarItemDir'>Agregar</button>
-                                <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalleDir()' id='btnGrabarDetalleDir'>New</button>
-                                <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalleDir()' id='btnCancelarDetalleDir'>Cancelar</button>
-                            </div>
-                        </div>
-                    </div>
-                    @*ingresando la tabla de direccion*@
-                    <div class="card m-b-10" id="tablaDeDetallesDireccion">
-                        <div class="card-body">
-
-                            <div class="table-responsive" style="height:150px;">
-                                <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
-                                    <div class="col-12 col-md-1" style="display:none;">
-                                        <label></label>
-                                    </div>
-                                    <div class="col-12 col-md-1" style="display:none;">
-                                        <label></label>
-                                    </div>
-                                    <div class="col-12 col-md-1">
-                                        <label>Direccion</label>
-                                    </div>
+                <!--end tab-pane-->
+                <div class="tab-pane" id="contacto" role="tabpanel">
+                    <div class="row mb-3">
+                        <input type="text" class="form-control d-none" id="lblIdContacto" autocomplete="off" disabled readonly>
+                        <div class="col-lg-8">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Nombre</span>
                                 </div>
-                                <div class="text-uppercase" id="tb_DetalleFDir">
-
+                                <input type="text" class="form-control contacto vContacto" id="txtNombre" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Cargo</span>
                                 </div>
+                                <input type="text" class="form-control contacto vContacto" id="txtCargo" autocomplete="off">
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-sm-2 text-center" style="display:none">
-                        <div class="checkbox checkbox-primary">
-                            <input id="chkDirPrincipal" type="checkbox">
-                            <label for="chkDirPrincipal">Principal</label>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-2 text-center" style="display:none">
-                        <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" id="btnAgregarDir">Agregar</button>
-                        <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarDir" style="visibility:hidden">Cancelar</button>
-                    </div>
-                </div>
-                <table class="table table-responsive table-bordered table-condensed table-hover" style="display:none">
-                    <thead>
-                        <tr style="background-color:#03a9f4;color:white;padding:20px 0px;">
-                            <td style="width:3%;"></td>
-                            <td style="width:3%;"></td>
-                            <td style="width:4%;">Item</td>
-                            <td style="width:50%;">Dirección</td>
-                            <td style="width:15%;">Fecha</td>
-                            <td style="width:15%;">Dirección Principal</td>
-                        </tr>
-                    </thead>
-                    <tbody id="tbDireccion"></tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade" id="telefono" aria-expanded="false">
-
-                <div class="card m-b-10" style="padding:10px 0px;">
-                    <div class="col-12 col-sm-12">
-                        <div class='form-group row m-b-5 p-l-10'>
-                            <label for='txtTelefono' class="control-label col-4 col-md-1">Telefono</label>
-                            <div class="col-12 col-md-4">
-                                <input id='txtTelefono' type='text' class="form-control form-control-sm">
-                            </div>
-                            <div class="col-12 col-md-2">
-                                <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" onclick='agregarItemTel()' id='btnAgregarItemTel'>Agregar</button>
-                                <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalleTel()' id='btnGrabarDetalleTel'>New</button>
-                                <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalleTel()' id='btnCancelarDetalleTel'>Cancelar</button>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Teléfono</span>
+                                </div>
+                                <input type="text" class="form-control contacto vContacto" id="txtTelefonoContacto" autocomplete="off">
                             </div>
                         </div>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Mail</span>
+                                </div>
+                                <input type="text" class="form-control contacto vContacto" id="txtMailContacto" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="btn btn-dark" id="btnAgregarContacto"> Agregar </button>
+                        </div>
                     </div>
-                    <div class="col-12 col-sm-2 text-center" style="display:none">
-                        <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" id="btnAgregarTel">Agregar</button>
-                        <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarTel" style="visibility:hidden">Cancelar</button>
+                    <div class="table-responsive table-card" style="min-height:200px;margin:0">
+                        <table class="table table-nowrap table-sm align-middle" id="">
+                            <thead class="text-muted table-light">
+                                <tr class="text-uppercase">
+                                    <th class="">N°</th>
+                                    <th class="">Nombre</th>
+                                    <th class="">Cargo</th>
+                                    <th class="">Teléfono</th>
+                                    <th class="">Mail</th>
+                                    <th class=""></th>
+                                </tr>
+                            </thead>
+                            <tbody class="list form-check-all" id="tbContactos">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="card m-b-10" id="tablaDeDetallesContacto">
-                    <div class="card-body">
-                        <div class="table-responsive" style="height:150px;">
-                            <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
-                                <div class="col-12 col-md-1" style="display:none;">
-                                    <label></label>
+                <!--end tab-pane-->
+                <div class="tab-pane" id="cuentas" role="tabpanel">
+                    <div class="row mb-3">
+                        <input type="text" class="form-control d-none" id="lblIdCuenta" autocomplete="off" disabled readonly>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Banco</span>
                                 </div>
-                                <div class="col-12 col-md-1" style="display:none;">
-                                    <label></label>
-                                </div>
-                                <div class="col-12 col-md-2">
-                                    <label>Telefono</label>
-                                </div>
-                            </div>
-                            <div class="text-uppercase" id="tb_DetalleFTel">
+                                <select class="form-control cuenta vCuenta" id="cboBanco">
+                                </select>
                             </div>
                         </div>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Cuenta</span>
+                                </div>
+                                <input type="text" class="form-control cuenta vCuenta" id="txtCuenta" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Moneda</span>
+                                </div>
+                                <select class="form-control cuenta vCuenta" id="cboMoneda">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text ">Descripción</span>
+                                </div>
+                                <input type="text" class="form-control cuenta vCuenta" id="txtCuentaDescripcion" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="btn btn-dark" id="btnAgregarCuenta"> Agregar </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive table-card" style="min-height:200px;margin:0">
+                        <table class="table table-nowrap table-sm align-middle" id="">
+                            <thead class="text-muted table-light">
+                                <tr class="text-uppercase">
+                                    <th class="">N°</th>
+                                    <th class="">Banco</th>
+                                    <th class="">Cuenta</th>
+                                    <th class="">Moneda</th>
+                                    <th class="">Descripción</th>
+                                    <th class=""></th>
+                                </tr>
+                            </thead>
+                            <tbody class="list form-check-all" id="tbCuentas">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <table class="table table-responsive table-bordered table-condensed table-hover" style="display:none">
-                    <thead>
-                        <tr style="background-color:#03a9f4;color:white;padding:20px 0px;">
-                            <td style="width:3%;"></td>
-                            <td style="width:3%;"></td>
-                            <td style="width:4%;">Item</td>
-                            <td style="width:65%;">Telefono</td>
-                            <td style="width:15%;">Fecha</td>
-                        </tr>
-                    </thead>
-                    <tbody id="tbTelefono"></tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade" id="cuentas" aria-expanded="false">
-                <div class="card m-b-10" style="padding:10px 0px;">
-
-                    <div class="row  col-12 col-md-12">
-                        <div class="col-12 col-md-4">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='txtBanco' class="control-label col-md-3 text-left">Banco</label>
-                                <div class="col-md-7">
-                                    <input id='txtBanco' type='text' class="form-control form-control-sm" readonly>
-                                </div>
-                                <button id="btnModalBanco" type="button" class="btn btn-info btn-sm pr-1 pl-1">
-                                    <i class="fa fa-ellipsis-v"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='txtCuenta' class="control-label col-md-3 text-left">Cuenta</label>
-                                <div class="col-md-5">
-                                    <input id='txtCuenta' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row  col-12 col-md-12">
-                        <div class="col-md-4">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='cboMoneda' class="control-label col-md-3">Moneda</label>
-                                <div class="col-md-9">
-                                    <select id='cboMoneda' class="form-control form-control-sm"></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class='form-group row m-b-5 p-l-6'>
-                                <label for='txtCuentaDescripcion' class="control-label col-md-3">Descripcion</label>
-                                <div class="col-md-9">
-                                    <input id='txtCuentaDescripcion' type='text' class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" onclick='agregarItemCuent()' id='btnAgregarItemCuent'>Agregar</button>
-                            <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalleCuent()' id='btnGrabarDetalleCuent'>New</button>
-                            <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalleCuent()' id='btnCancelarDetalleCuent'>Cancelar</button>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-2 text-center" style="display:none">
-                        <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" id="btnAgregarCuenta">Agregar</button>
-                        <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarCuenta" style="visibility:hidden">Cancelar</button>
-                    </div>
-                </div>
-                <div class="table-responsive" style="height:150px;">
-                    <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 20px 0px 20px;">
-                        <div class="col-12 col-md-1" style="display:none;">
-                            <label></label>
-                        </div>
-                        <div class="col-12 col-md-1" style="display:none;">
-                            <label></label>
-                        </div>
-                        <div class="col-12 col-md-3 ">
-                            <label>Banco</label>
-                        </div>
-                        <div class="col-12 col-md-2">
-                            <label>Cuenta</label>
-                        </div>
-                        <div class="col-12 col-md-2">
-                            <label>Moneda</label>
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <label>Descripcion</label>
-                        </div>
-                    </div>
-                    <div class="text-uppercase" id="tb_DetalleFCuent">
-
-                    </div>
-                </div>
-                <table class="table table-responsive table-bordered table-condensed table-hover" style="display:none">
-                    <thead>
-                        <tr style="background-color:#03a9f4;color:white;padding:20px 0px;">
-                            <td style="width:3%;"></td>
-                            <td style="width:3%;"></td>
-                            <td style="width:4%;">Item</td>
-                            <td style="width:25%;">Banco</td>
-                            <td style="width:15%;">Cuenta</td>
-                            <td style="width:30%;">Descripcion</td>
-                            <td style="width:10%;">Moneda</td>
-                        </tr>
-                    </thead>
-                    <tbody id="tbCuenta"></tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade" id="listaPrecioCompra" aria-expanded="false">
-                <div class="form-horizontal">
-                    <div class="card-body p-t-0 p-b-0">
-                        <div class="row p-t-10">
-                            <div class="col-12 col-md-4">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="control-label col-md-3" for="txtTipoProducto">Tipo</label>
-                                    <div class="col-md-9">
-                                        <div class="row">
-                                            <div class="col-10 p-0">
-                                                <input id="txtTipoProducto" type="text" class="form-control form-control-sm" readonly>
-                                            </div>
-                                            <button id="btnModalTipoProducto" type="button" class="btn waves-effect waves-light btn-info btn-xs">
-                                                <i class="pg-arrow_down"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="col-md-3 control-label" for="txtCategoria">Categoría</label>
-                                    <div class="col-md-9">
-                                        <div class="row">
-                                            <div class="col-10 p-0">
-                                                <input id="txtCategoria" type="text" class="form-control form-control-sm" readonly>
-                                            </div>
-                                            <button id="btnModalCategoria" type="button" class="btn waves-effect waves-light btn-info btn-xs" tabindex="13">
-                                                <i class="pg-arrow_down"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 col-md-4">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="col-md-3 control-label" for="txtArticulo">Producto</label>
-                                    <div class="col-md-9">
-                                        <div class="row">
-                                            <div class="col-10 p-0">
-                                                <input id="txtArticulo" type="text" class="form-control form-control-sm" readonly>
-                                            </div>
-                                            <button id="btnModalArticulo" type="button" class="btn waves-effect waves-light btn-info btn-xs" tabindex="14">
-                                                <i class="pg-arrow_down"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label class="control-label col-md-3 " for="txtMoneda">Moneda</label>
-                                    <div class="col-md-9">
-                                        <div class="row">
-                                            <div class="col-10 p-0">
-                                                <input id="txtMoneda" type="text" class="form-control form-control-sm" readonly>
-                                            </div>
-                                            <button id="btnModalMoneda" type="button" class="btn waves-effect waves-light btn-info btn-xs" tabindex="11"><i class="pg-arrow_down"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2">
-                                <div class='form-group row m-b-5 p-l-10'>
-                                    <label for='txtStock' class="control-label col-sm-4">Precio</label>
-                                    <div class="col-sm-7 p-0">
-                                        <input id='txtPrecio' type='text' class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-2 text-center">
-                                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" id="btnAgregarCuenta">Agregar</button>
-                                <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" id="btnCancelarCuenta">Cancelar</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="col-sm-12 hidden-sm-down" id="cabeTablaListaCompra">
-                            <div class="row panel bg-info" style="color:white;margin-bottom:5px;padding:5px 20px 0px 20px;">
-                                <div class="col-12 col-md-2" style="display:none;">
-                                    <label>id</label>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label>Fecha</label>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label>Categoria</label>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label>Producto</label>
-                                </div>
-                                <div class="col-12 col-md-2">
-                                    <label>Precio</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 table-responsive" id="divTablaListaCompra">
-                            <div id="contentLitaCompra" class="clusterize-content">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="listaPrecioVenta" aria-expanded="false">
-
+                <!--end tab-pane-->
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="row" id="rowTabla">
     <div class="col-lg-12">

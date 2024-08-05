@@ -2076,6 +2076,10 @@ function CargarSeriesVenta(rpta) {
     var listaSeries = rpta.split("▼");
     llenarCombo(listaSeries, "cboNroSerie", "Seleccione");
     gbi("cboNroSerie").selectedIndex = 1;
+
+    var cboSerie = gbi("cboNroSerie").value;
+    var url = 'DocumentoVenta/ObtenerNumeroDoc?id=' + gbi("cboTipoDocumento").value + "&Serie=" + cboSerie;
+    enviarServidor(url, CargarNumeroDocumento);
     //ObtenerNumeroDocumento();
 }
 function llenarCombo(lista, idCombo, primerItem) {

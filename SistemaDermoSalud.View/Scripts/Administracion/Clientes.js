@@ -9,7 +9,6 @@ var txtModal;//input para poner el valor
 var txtValor;//input para obtener el valor
 //idUsuario
 var idUsuario;
-configBM();
 //Inicializando
 var url = "/SocioNegocio/ObtenerDatosCliente";
 enviarServidor(url, mostrarLista);
@@ -26,9 +25,9 @@ let cboProvincia = document.getElementById("cboProvincia");
 let cboDistrito = document.getElementById("cboDistrito");
 let txtWeb = document.getElementById("txtWeb");
 let txtMail = document.getElementById("txtMail");
-let chkCliente = document.getElementById("chkCliente");
-let chkProveedor = document.getElementById("chkProveedor");
-let chkActivo = document.getElementById("chkActivo");
+var chkCliente = document.getElementById("chkCliente");
+var chkProveedor = document.getElementById("chkProveedor");
+var chkActivo = document.getElementById("chkActivo");
 
 //inputs TAB Contacto
 
@@ -447,30 +446,7 @@ function funcionModal(tr) {
     CerrarModalR("modal-Modal", next);
 
 }
-function configBM() {
 
-    var btnModalBanco = gbi("btnModalBanco");
-    btnModalBanco.onclick = function () {
-        cbmu("banco", "Banco", "txtBanco", null,
-            ["id", "Codigo", "Descripcion"], "/Banco/ListarBancos", cargarLista);
-    };
-
-    let txtTelefonoContacto = gbi("txtTelefonoContacto");
-    txtTelefonoContacto.onkeypress = function (e) {
-        var reg = /^[0-9]+$/;
-        if (!reg.test(e.key)) return false;
-    }
-    let txtCuenta = gbi("txtCuenta");
-    txtCuenta.onkeypress = function (e) {
-        var reg = /^[0-9-]+$/;
-        if (!reg.test(e.key)) return false;
-    }
-    let txtTelefono = gbi("txtTelefono");
-    txtTelefono.onkeypress = function (e) {
-        var reg = /^[0-9]+$/;
-        if (!reg.test(e.key)) return false;
-    }
-}
 function cargarBusqueda(rpta) {
     if (rpta != "") {
         if (rpta == "Error") {
@@ -634,20 +610,21 @@ function CargarDetalles(rpta) {
         }
     }
 }
-function mostrarDetalle(opcion, idRow) {
 
-    let id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
-    console.log(id);
+function mostrarDetalle(opcion, id) {
     var lblTituloPanel = document.getElementById('lblTituloPanel');
     limpiarTodo();
     switch (opcion) {
         case 1:
             show_hidden_Formulario();
-            lblTituloPanel.innerHTML = "Nuevo Cliente";
+            gbi("txtID").value = "0";
+            lblTituloPanel.innerHTML = "Nuevo Proveedor";
+            gbi("cboPais").value = "1";
             break;
         case 2:
-            lblTituloPanel.innerHTML = "Modificar Cliente";
-            TraerDetalle(id);
+            let idProv = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+            lblTituloPanel.innerHTML = "Modificar Proveedor";
+            TraerDetalle(idProv);
             show_hidden_Formulario();
             break;
     }
@@ -656,38 +633,45 @@ function limpiarTodo() {
     limpiarControl("txtID");
     limpiarControl("txtCodigo");
     limpiarControl("cboTipoPersona");
-    limpiarControl("txtRazonSocial");
     limpiarControl("cboTipoDocumento");
     limpiarControl("txtNroDocumento");
+    limpiarControl("txtRazonSocial");
+    limpiarControl("txtWeb");
+    limpiarControl("txtEstadoC");
+    limpiarControl("txtCondicionC");
+    limpiarControl("txtMail");
     limpiarControl("cboPais");
     limpiarControl("cboDepartamento");
-    limpiarControl("txtNroDocumento");
     limpiarControl("cboProvincia");
     limpiarControl("cboDistrito");
-    limpiarControl("txtWeb");
-    limpiarControl("txtMail");
-    limpiarControl("cboDistrito");
-    limpiarControl("txtBanco");
-    limpiarControl("txtCuenta");
-    limpiarControl("txtCuentaDescripcion");
-    limpiarControl("cboMoneda");
-    limpiarControl("txtNombre");
-    limpiarControl("txtCargo");
-    limpiarControl("txtTelefonoContacto");
-    limpiarControl("txtMailContacto");
-    limpiarControl("txtDireccion");
+    //chkCliente.checked = true;
+    //chkProveedor.checked = false;
+    gbi("tbDirecciones").innerHTML = "";
+    gbi("tbTelefonos").innerHTML = "";
+    gbi("tbContactos").innerHTML = "";
+    gbi("tbCuentas").innerHTML = "";
+    cleanControl("direccion");
+    cleanControl("telefono");
+    cleanControl("contacto");
+    cleanControl("cuenta");
+}
 
-    gbi("tb_DetalleFCont").innerHTML = "";
-    gbi("tb_DetalleFDir").innerHTML = "";
-    gbi("tb_DetalleFTel").innerHTML = "";
-    gbi("tb_DetalleFCuent").innerHTML = "";
-    gbi("chkCliente").checked = false;
-    gbi("chkProveedor").checked = false;
-    gbi("chkActivo").checked = true;
-
-    gbi("tbDireccion").innerHTML = "";
-    gbi("tbTelefono").innerHTML = "";
-    gbi("tbCuenta").innerHTML = "";
+function cleanControl(css) {
+    $("." + css).each(function (index) {
+        switch ($(this)[0].localName) {
+            case "select":
+                $(this).val("");
+                break;
+            case "input": case "textarea":
+                $(this).val("");
+                break;
+            case "img":
+                $(this).attr("src", "/assets/images/image-placeholder.jpg");
+                break;
+            default:
+                break;
+        }
+    });
 }
 function eliminar(id) {
     //if (confirm("¿Está seguro que desea eliminar?") == false) return false;
