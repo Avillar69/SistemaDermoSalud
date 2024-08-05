@@ -70,6 +70,12 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.Precio = Convert.ToDecimal(dr["Precio"].ToString());
                         oProductoDTO.CodigoProducto = dr["CodigoProducto"] == null ? "" : dr["CodigoProducto"].ToString();
                         oProductoDTO.PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"].ToString());
+                        oProductoDTO.PrecioOriginal = Convert.ToDecimal(dr["PrecioOriginal"].ToString());
+                        oProductoDTO.MargenGananciaDeseado = Convert.ToDecimal(dr["MargenGananciaDeseado"].ToString());
+                        oProductoDTO.MargenGananciaPermitido = Convert.ToDecimal(dr["MargenGananciaPermitido"].ToString());
+                        oProductoDTO.PorcDescuentoMaximo = Convert.ToDecimal(dr["PorcDescuentoMaximo"].ToString());
+                        oProductoDTO.Genero = dr["Genero"] == null ? "" : dr["Genero"].ToString();
+                        oProductoDTO.CodigoBarras = dr["CodigoBarras"] == null ? "" : dr["CodigoBarras"].ToString();
                         oResultDTO.ListaResultado.Add(oProductoDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -115,6 +121,12 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.idTalla = Convert.ToInt32(dr["idTalla"].ToString());
                         oProductoDTO.idColor = Convert.ToInt32(dr["idColor"].ToString());
                         oProductoDTO.PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"].ToString());
+                        oProductoDTO.PrecioOriginal = Convert.ToDecimal(dr["PrecioOriginal"].ToString());
+                        oProductoDTO.MargenGananciaDeseado = Convert.ToDecimal(dr["MargenGananciaDeseado"].ToString());
+                        oProductoDTO.MargenGananciaPermitido = Convert.ToDecimal(dr["MargenGananciaPermitido"].ToString());
+                        oProductoDTO.PorcDescuentoMaximo = Convert.ToDecimal(dr["PorcDescuentoMaximo"].ToString());
+                        oProductoDTO.Genero = dr["Genero"] == null ? "" : dr["Genero"].ToString();
+                        oProductoDTO.CodigoBarras = dr["CodigoBarras"] == null ? "" : dr["CodigoBarras"].ToString();
                         oResultDTO.ListaResultado.Add(oProductoDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -157,6 +169,12 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         da.SelectCommand.Parameters.AddWithValue("@idTalla", oProducto.idTalla);
                         da.SelectCommand.Parameters.AddWithValue("@idColor", oProducto.idColor);
                         da.SelectCommand.Parameters.AddWithValue("@PrecioVenta", oProducto.PrecioVenta);
+                        da.SelectCommand.Parameters.AddWithValue("@PrecioOriginal", oProducto.PrecioOriginal);
+                        da.SelectCommand.Parameters.AddWithValue("@MargenGananciaDeseado", oProducto.MargenGananciaDeseado);
+                        da.SelectCommand.Parameters.AddWithValue("@MargenGananciaPermitido", oProducto.MargenGananciaPermitido);
+                        da.SelectCommand.Parameters.AddWithValue("@PorcDescuentoMaximo", oProducto.PorcDescuentoMaximo);
+                        da.SelectCommand.Parameters.AddWithValue("@Genero", oProducto.Genero);
+                        da.SelectCommand.Parameters.AddWithValue("@CodigoBarras", oProducto.CodigoBarras);
 
                         int rpta = da.SelectCommand.ExecuteNonQuery();
                         if (rpta == 1)
