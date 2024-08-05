@@ -177,6 +177,12 @@ function limpiarTodo() {
     chkActivo.checked = true;
     cboTalla.value = "";
     cboColor.value = "";
+    gbi("txtPrecioOriginal").value = "";
+    gbi("txtMargenGananciaDeseado").value = "";
+    gbi("txtMargenGananciaPermitido").value = "";
+    gbi("txtPorcDescuentoMaximo").value = "";
+    gbi("cboGenero").value = "";
+    gbi("txtCodigoBarras").value = "";
 }
 function eliminar(id) {
     let idProducto = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
@@ -190,7 +196,7 @@ function eliminar(id) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.value) {
-            var url = "Producto/Eliminar?idProductos=" + idProducto;
+            var url = "Producto/Eliminar?idProducto=" + idProducto;
             enviarServidor(url, eliminarListar);
         } else {
             Swal.fire('Cancelado', 'No se elminó el Producto', 'error');
@@ -271,6 +277,13 @@ function configurarBotonesModal() {
             frm.append("CodigoProducto", txtCodigoProducto.value);
             frm.append("idTalla", cboTalla.value);
             frm.append("idColor", cboColor.value);
+
+            frm.append("PrecioOriginal", gbi("txtPrecioOriginal").value);
+            frm.append("MargenGananciaDeseado", gbi("txtMargenGananciaDeseado").value);
+            frm.append("MargenGananciaPermitido", gbi("txtMargenGananciaPermitido").value);
+            frm.append("PorcDescuentoMaximo", gbi("txtPorcDescuentoMaximo").value);
+            frm.append("Genero", gbi("cboGenero").value);
+            frm.append("CodigoBarras", gbi("txtCodigoBarras").value);
             enviarServidorPost(url, actualizarListar, frm);
         }
     };
@@ -347,6 +360,12 @@ function CargarDetalles(rpta) {
         cboTalla.value = listaDetalle[12];
         cboColor.value = listaDetalle[13];
         txtPrecioVenta.value = listaDetalle[14];
+        gbi("txtPrecioOriginal").value = listaDetalle[15];
+        gbi("txtMargenGananciaDeseado").value = listaDetalle[16];
+        gbi("txtMargenGananciaPermitido").value = listaDetalle[17];
+        gbi("txtPorcDescuentoMaximo").value = listaDetalle[18];
+        gbi("cboGenero").value = listaDetalle[19];
+        gbi("txtCodigoBarras").value = listaDetalle[20];
     }
 }
 //
