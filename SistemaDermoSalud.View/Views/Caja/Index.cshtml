@@ -261,23 +261,23 @@
                 <div class="form-group row m-b-5 p-l-10" style="display:none;">
                     <input placeholder='' id='txtIDdetalle' type='text' style="display:none;" readonly>
                 </div>
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-3 col-12 control-label" for="txtConcepto">Concepto</label>
-                    <div class="col-md-9 col-12">
-                        <div class="row">
-                            <div class="col-10 p-0">
-                                <select id="txtConcepto" type="text" class="form-control form-control-sm"></select>
 
-                                <input id='txtTipoOperacion' type='text' style="display:none;" readonly>
-                                <input id='txtAfectoIGV' type='text' style="display:none;" readonly>
-                            </div>
+                <div class="col-lg-12 col-md-12 mb-2 pt-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Concepto</span>
                         </div>
+                        <select id="txtConcepto" type="text" class="form-control form-control-sm"></select>
+                        <input id='txtTipoOperacion' type='text' style="display:none;" readonly>
+                        <input id='txtAfectoIGV' type='text' style="display:none;" readonly>
                     </div>
                 </div>
                 <div id="concepto1" style="display:none;">
-                    <div class='form-group row m-b-5 p-l-10'>
-                        <label class="col-md-3 col-12 control-label" for="txtEmpleado">Empleado</label>
-                        <div class="col-md-9 col-12">
+                    <div class="col-lg-12 col-sm-12 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Empleado</span>
+                            </div>
                             <div class="row">
                                 <div class="col-10 p-0">
                                     <input id="txtEmpleado" type="text" class="form-control form-control-sm" readonly>
@@ -288,9 +288,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class='form-group row m-b-5 p-l-10'>
-                        <label class="col-md-3 col-12 control-label" for="txtRecibo">Recibo</label>
-                        <div class="col-md-9 col-12">
+                    <div class="col-lg-12 col-sm-12 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Recibo</span>
+                            </div>
                             <div class="row">
                                 <div class="col-4 p-0">
                                     <input id="txtSerieRecibo" type="text" class="form-control form-control-sm">
@@ -423,96 +425,69 @@
                         </div>
                     </div>
                 </div>
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-3 col-12 control-label" for="cboTipoPago">Tipo de Pago</label>
-                    <div class="col-md-9 col-12">
-                        <div class="row">
-                            <div class="col-11 p-0">
-                                <select id="cboTipoPago" type="text" class="form-control form-control-sm" style="height:23px;">
-                                    <option value=1>EFECTIVO</option>
-                                    <option value=2>TARJETA</option>
-                                    <option value=3>YAPE</option>
-                                </select>
-                            </div>
+
+                <div class="col-lg-12 col-sm-12 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Tipo de Pago</span>
                         </div>
+                        <select id="cboTipoPago" type="text" class="form-control form-control-sm">
+                            <option value=1>EFECTIVO</option>
+                            <option value=2>TARJETA</option>
+                            <option value=3>YAPE</option>
+                        </select>
                     </div>
                 </div>
-                <div class='form-group row m-b-5 p-l-10' id="divTarjeta" style="display:none">
-                    <label class="col-md-3 col-12 control-label" for="cboTarjeta">Tarjeta</label>
-                    <div class="col-md-9 col-12">
-                        <div class="row">
-                            <div class="col-11 p-0">
-                                <select id="cboTarjeta" type="text" class="form-control form-control-sm" style="height:23px;">
-                                    <option value=1>VISA</option>
-                                    <option value=2>MASTERCARD</option>
-                                </select>
-                            </div>
+                <div class="col-lg-12 col-sm-12 mb-2" id="divTarjeta" style="display:none">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Tarjeta</span>
                         </div>
+                        <select id="cboTarjeta" type="text" class="form-control form-control-sm">
+                            <option value=1>VISA</option>
+                            <option value=2>MASTERCARD</option>
+                        </select>
                     </div>
                 </div>
-                <div class='form-group row m-b-5 p-l-10' id="divOperacion" style="display:none">
-                    <label class="col-md-3 col-12 control-label" for="cboTipoPago">N° Operacion</label>
-                    <div class="col-md-9 col-12">
-                        <div class="row">
-                            <div class="col-11 p-0">
-                                <input id="txtNroOperacion" type="text" class="form-control form-control-sm">
-                            </div>
+                <div class="col-lg-12 col-sm-12 mb-2" id="divOperacion" style="display:none">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">N° Operación</span>
                         </div>
+                        <input id="txtNroOperacion" type="text" class="form-control form-control-sm">
                     </div>
                 </div>
-                <div class='form-group row m-b-5 p-l-10'>
-                    <label class="col-md-3 col-12 control-label" for="txtObservacion">Observacion</label>
-                    <div class="col-md-9 col-12">
-                        <div class="row">
-                            <div class="col-11 p-0">
-                                <input id="txtObservacion" type="text" class="form-control form-control-sm">
-                            </div>
+                <div class="col-lg-12 col-sm-12 mb-2">
+                    <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Observación</span>
                         </div>
+                        <input id="txtObservacion" type="text" class="form-control form-control-sm">
                     </div>
                 </div>
-                <div class='form-group row m-b-5 p-l-10'>
-                    <div class="col-md-4 col-12">
-                        <div class="row" style="padding-left:15px;">
-                            <label class="control-label" for="txtSubTotal">SubTotal</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-12">
-                        <div class="row" style="padding-left:15px;">
-                            <label class="control-label" for="txtIgv">IGV</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-12">
-                        <div class="row" style="padding-left:15px;">
-                            <label class="control-label" for="txtTotal">Total</label>
-                        </div>
-                    </div>
-                </div>
-                <div class='form-group row m-b-5 p-l-10'>
-                    <div class="col-md-4 col-12">
-                        <div class="col-md-11 col-12">
-                            <div class="row">
-                                <div class="col-11 p-0">
-                                    <input id="txtSubTotalSoles" type="text" class="form-control form-control-sm" readonly>
-                                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-12 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">SubTotal</span>
                             </div>
+                            <input id="txtSubTotalSoles" type="text" class="form-control form-control-sm" readonly>
                         </div>
                     </div>
-                    <div class="col-md-4 col-12">
-                        <div class="col-md-11 col-12">
-                            <div class="row">
-                                <div class="col-11 p-0">
-                                    <input id="txtIgvSoles" type="text" class="form-control form-control-sm" readonly>
-                                </div>
+                    <div class="col-lg-4 col-sm-12  mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">IGV</span>
                             </div>
+                            <input id="txtIgvSoles" type="text" class="form-control form-control-sm" readonly>
                         </div>
                     </div>
-                    <div class="col-md-4 col-12">
-                        <div class="col-md-11 col-12">
-                            <div class="row">
-                                <div class="col-11 p-0">
-                                    <input id="txtTotalSoles" type="text" class="form-control form-control-sm">
-                                </div>
+                    <div class="col-lg-4 col-sm-12 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Total</span>
                             </div>
+                            <input id="txtTotalSoles" type="text" class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
@@ -520,46 +495,30 @@
                     <div class="col-12">
                         <div class='form-group row m-b-5 p-l-10'>
                             <div class="col-md-7"></div>
-                            <button type='button' class='btn btn-cyan pull-right waves-effect waves-light col-md-2' id='btnAgregarDetalle' style="margin-right:10px;height:33px;">Agregar</button>
-                            <button type='button' class='btn btn-amber pull-right waves-effect waves-light col-md-2' id='btnCancelarDetalle' style="margin-right:10px;height:33px;">Cancelar</button>
+                            <button type='button' class='btn btn-success col-md-2' id='btnAgregarDetalle' style="margin-right:10px;height:33px;">Agregar</button>
+                            <button type='button' class='btn btn-danger pull-right waves-effect waves-light col-md-2' id='btnCancelarDetalle' style="margin-right:10px;height:33px;">Cancelar</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-6">
                 <div class="card m-b-12" id="tablaDeDetalles">
-                    <div class="col-sm-12 hidden-sm-down" id="cabeTablaCaja">
-                    </div>
                     <div class="table-responsive" style="height:350px;padding-right:10px;">
-                        <div class="row panel bg-info" style="color:white;margin:0px;margin-bottom:5px;padding:5px 0px;">
-                            <div class="col-12 col-md-1" style="display:none;">
-                                <label></label>
-                            </div>
-                            <div class="col-12 col-md-1" style="display:none;">
-                                <label></label>
-                            </div>
-                            <div class="col-12 col-md-1">
-                                <label>Item</label>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <label>Concepto</label>
-                            </div>
-                            <div class="col-12 col-md-2" style="display:none;">
-                                <label>SubTotal</label>
-                            </div>
-                            <div class="col-12 col-md-2" style="display:none;">
-                                <label>Igv</label>
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label>Tipo Pago</label>
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label>Total</label>
-                            </div>
-                        </div>
-                        <div class="" id="tb_DetalleCaja">
-
-                        </div>
+                        <table class="table table-bordered dt-responsive table-sm table-striped align-middle dtr-inline collapsed" id="tb_DetalleCaja">
+                            <thead class="text-muted table-light">
+                                <tr class="">
+                                    <th>#</th>
+                                    <th>Concepto</th>
+                                    <th>SubTotal</th>
+                                    <th>Igv</th>
+                                    <th>Total</th>
+                                    <th>Tipo Pago</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -642,6 +601,9 @@
 </div>
 
 @Scripts.Render("~/bundles/basics")
+<script src="~/assets/js/jspdf.debug.js"></script>
+<script src="~/assets/js/jspdf.min.js"></script>
+<script src="~/assets/js/jspdf.plugin.autotable.js"></script>
 <script src="~/Scripts/Finanzas/Caja.js"></script>
 
 

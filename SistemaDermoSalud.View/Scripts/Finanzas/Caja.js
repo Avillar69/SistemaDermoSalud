@@ -29,6 +29,7 @@ var countDetalle
 var comboConcepto; var combox;
 var listaConcepto; var listaDEmpleado; var listaDBanco;
 var listaConcepto2;
+var listaDetalleCajaReal = [];
 var listaDetalleCajaPDF = [];
 
 //$("#txtFilFecIn").datetimepicker({
@@ -193,8 +194,12 @@ txtSaldoInicial.onkeyup = function () {
     gbi("txtInicial").value = parseFloat(mInicio).toFixed(2);
     gbi("txtSaldoFinal").value = parseFloat(mInicio).toFixed(2);
 }
-function configurarBotonesModal() {
 
+function configurarBotonesModal() {
+    let txtConcepto = gbi("txtConcepto");
+    txtConcepto.onchange = function () {
+        CambiarConcepto()
+    }
     var btnModalEmpleado = document.getElementById("btnModalEmpleado");
     btnModalEmpleado.onclick = function () {
         cbmu("empleado", "Empleado", "txtEmpleado", null,
@@ -238,22 +243,22 @@ function configurarBotonesModal() {
             frm.append("idCaja", gbi("txtID").value);
             frm.append("PeriodoAno", gbi("txtPeriodo").value);
             frm.append("NroCaja", gbi("txtNroCaja").value);
-            frm.append("idConcepto", gbi("txtConcepto").dataset.id);
-            frm.append("DescripcionConcepto", gbi("txtConcepto").value);
-            frm.append("idMoneda", gbi("txtMoneda").dataset.id);
+            frm.append("idConcepto", gbi("txtConcepto").value);
+            frm.append("DescripcionConcepto", gbi("txtConcepto").options[gbi("txtConcepto").selectedIndex].text);
+            frm.append("idMoneda", gbi("txtMoneda").value);
             frm.append("SubTotalNacional", gbi("txtSubTotalSoles").value);
             frm.append("IGVNacional", gbi("txtIgvSoles").value);
             frm.append("TotalNacional", gbi("txtTotalSoles").value);
-            var idC = gbi("txtConcepto").dataset.id;
+            var idC = gbi("txtConcepto").value;
             switch (idC) {
-                case "9": frm.append("idProvCliEmpl", gbi("txtEmpleado").dataset.id);
+                case "9": frm.append("idProvCliEmpl", gbi("txtEmpleado").value);
                     frm.append("NombreProvCliEmpl", gbi("txtRazonSocial").value.length == 0 ? "-" : gbi("txtRazonSocial").value);
                     break;
                 case "10": frm.append("NombreProvCliEmpl", gbi("txtEmpleado").value.length == 0 ? "-" : gbi("txtEmpleado").value);
                     break;
             }
             frm.append("Observaciones", gbi("txtObservacion").value.length == 0 ? " " : gbi("txtObservacion").value);
-            frm.append("idTipoDocumento", gbi("txtListaDocumento").dataset.id);
+            frm.append("idTipoDocumento", gbi("txtListaDocumento").value);
             var numeroDocumento = gbi("txtListaDocumento").value;
             var DatosDcto = numeroDocumento.split("-");
             frm.append("SerieDcto", DatosDcto.length == 0 ? " " : DatosDcto[0]);//gbi("txtSerieRecibo").value.length == 0 ? " " : gbi("txtSerieRecibo").value);
@@ -276,7 +281,7 @@ function configurarBotonesModal() {
             frm.append("idTipoEmpleado", 1);
             frm.append("SerieRecibo", gbi("txtSerieRecibo").value.length == 0 ? " " : gbi("txtSerieRecibo").value);
             frm.append("NroRecibo", gbi("txtNroRecibo").value.length == 0 ? " " : gbi("txtNroRecibo").value);
-            swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
+            //Swal.fire({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
             enviarServidorPost(url, actualizarDetalle, frm);
 
         }
@@ -306,12 +311,15 @@ function configurarBotonesModal() {
     }
     var btnModalListaDocumento = gbi("btnModalListaDocumento");
     btnModalListaDocumento.onclick = function () {
-        var concepto = gbi("txtConcepto").dataset.id;
+        var concepto = gbi("txtConcepto").value;
+        let urlProducto;
         switch (concepto) {
-            case "7": cbmuDoc("listadcto", "Documentos", "txtRazonSocial", null,
-                ["idDocumentoCompra", "RUC", "Razon Social", "Documento", "Total"], '/Caja/ListaCompras', cargarListaDoc); break;
-            case "9": cbmuDoc("venta", "Documentos", "txtRazonSocial", null,
-                ["idDocumentoCompra", "RUC", "Razon Social", "Documento", "Total"], '/Caja/ListaVentas', cargarListaDoc); break;
+            case "7":
+                urlProducto = '/Caja/ListaCompras';
+                enviarServidor(urlProducto, cargarListaDoc); break;
+            case "9":
+                urlProducto = '/Caja/ListaVentas';
+                enviarServidor(urlProducto, cargarListaDoc); break;
         }
     }
     gbi("txtTotalSoles").onfocus = function () {
@@ -335,7 +343,7 @@ function configurarBotonesModal() {
         var url = "Caja/CerrarCaja";
         var frm = new FormData();
         frm.append("idCaja", txtID.value.length == 0 ? "0" : txtID.value);
-        swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
+        //swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
         enviarServidorPost(url, actualizarCerrarCaja, frm);
     };
 }
@@ -533,40 +541,38 @@ function DesbloquearCaja() {
     //$("#btnGrabar").show();
     gbi("divMovimientoCaja").querySelectorAll("input, select, button:not(.btn-info)").forEach(item => { item.disabled = false; });
 }
-function CargarDetalleCaja(lista) {
-    var tb_DetalleCaja = gbi("tb_DetalleCaja");
-    gbi("tb_DetalleCaja").innerHTML = "";
+function CargarDetalleCaja(r) {
+
     var montoIngreso = 0; var montoIngresoEfectivo = 0; var montoIngresoTarjeta = 0;
     var montoSalida = 0;
-    if (lista[0] != "") {
-        for (var i = 0; i < lista.length; i++) {
-            var item = lista[i].split("▲");
-            var cadena = "<div class='art row panel salt' data-id='0' tabindex='100' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-            cadena += "<div class='col-12 col-md-1' style='display:none' data-id='" + (tb_DetalleCaja.children.length + 1) + "'>" + (tb_DetalleCaja.children.length + 1) + "</div>";
-            cadena += "<div class='col-12 col-md-1' style='display:none'>" + item[6] + "</div>";
-            cadena += "<div class='col-12 col-md-1'>" + (tb_DetalleCaja.children.length + 1) + "</div>";
-            cadena += "<div class='col-12 col-md-4'>" + item[2] + "</div>";
-            cadena += "<div class='col-12 col-md-2' style='display:none'>" + item[3] + "</div>";
-            cadena += "<div class='col-12 col-md-2' style='display:none'>" + item[4] + "</div>";
-            cadena += "<div class='col-12 col-md-3'>" + item[8] + "</div>";
-            cadena += "<div class='col-12 col-md-2'>" + item[5] + "</div>";
-            cadena += "<div class='col-12 col-md-2'>";
-            cadena += "<div class='row saltbtn'>";
-            cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='eliminarDetalle(\"" + item[1] + "\"" + ",\"" + item[0] + "\")'> <i class='fa fa-trash-o fs-11'></i> </button>";
-            cadena += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='mostrarDetalleCaja(2, \"" + item[0] + "\")'> <i class='fa fa-pencil fs-11'></i></button>";
-            cadena += "</div>";
-            cadena += "</div>";
-            cadena += "</div>";
-            cadena += "</div>";
-            gbi("tb_DetalleCaja").innerHTML += cadena;
+    if (r[0] !== '') {
+        let newDatos = [];
+        let indx = 0;
+        r.forEach(function (e) {
+            indx++;
+            let valor = e.split("▲");
+            newDatos.push({
+                Index: indx,
+                idCajaDetalle: valor[0],
+                idCaja: valor[1],
+                DescripcionConcepto: valor[2],
+                SubTotalNacional: valor[3],
+                IGVNacional: valor[4],
+                TotalNacional: valor[5],
+                TipoOperacion: valor[6],
+                idTipoPago: valor[7],
+                TipoPago: valor[8],
+                idTarjeta: valor[9],
+                Tarjeta: valor[10]
+            })
 
             var ingreso; var salida; var ingresoEfectivo; var ingresoTarjeta;
-            ingreso = item[5]; ingresoEfectivo = item[5]; ingresoTarjeta = item[5];
-            salida = item[5];
-            if (item[6] == "I") {
+            ingreso = valor[5]; ingresoEfectivo = valor[5]; ingresoTarjeta = valor[5];
+            salida = valor[5];
+            if (valor[6] == "I") {
                 montoIngreso = parseFloat(montoIngreso) + parseFloat(ingreso);
 
-                switch (item[7]) {
+                switch (valor[7]) {
                     case "1": montoIngresoEfectivo = parseFloat(montoIngresoEfectivo) + parseFloat(ingresoEfectivo); break;
                     case "2": montoIngresoTarjeta = parseFloat(montoIngresoTarjeta) + parseFloat(ingresoEfectivo); break;
                 }
@@ -579,10 +585,13 @@ function CargarDetalleCaja(lista) {
             txtSaldoFinal.value = (montoInicial + montoIngreso - montoSalida).toFixed(2);
             gbi("txtIngresoEfectivo").value = montoIngresoEfectivo.toFixed(2);
             gbi("txtIngresoTarjeta").value = montoIngresoTarjeta.toFixed(2);
-            limpiarTodo();
 
-        }
+        });
+        listaDetalleCajaReal = newDatos;
+        let cols = ["Index", "DescripcionConcepto", "SubTotalNacional", "IGVNacional", "TotalNacional","TipoPago"];
+        loadDataTable(cols, newDatos, "idCajaDetalle", "tb_DetalleCaja", cadButtonOptions(), false);
     }
+
 }
 function actualizarDetalle(rpta) { //rpta es mi lista de colores
     if (rpta != "") { //validar cuando respuesta sea vacio
@@ -685,7 +694,7 @@ function CambiarConcepto() {
     var c3 = gbi("concepto3");
     var c4 = gbi("concepto4");
     var c5 = gbi("concepto5");
-    var idConcepto = gbi("txtConcepto").dataset.id;
+    var idConcepto = gbi("txtConcepto").value;
     switch (idConcepto) {
         case "10": case "2": c1.style.display = ""; c2.style.display = "none";
             c3.style.display = "none"; c4.style.display = "none"; c5.style.display = "none";
@@ -706,8 +715,8 @@ function CambiarConcepto() {
             c3.style.display = "none"; c4.style.display = "none"; c5.style.display = "none";
             break;
     }
-    for (var i = 0; i < listaConceptosCaja.length; i++) {
-        var tipoConcepto = listaConceptosCaja[i].split("▲");
+    for (var i = 0; i < listaConcepto.length; i++) {
+        var tipoConcepto = listaConcepto[i].split("▲");
         if (idConcepto == tipoConcepto[0]) {
             txtTipoOperacion.value = tipoConcepto[3];
             txtAfectoIGV.value = tipoConcepto[2];
@@ -792,7 +801,7 @@ function CargarCajaDetalles(rpta) {
             listaDBanco = listas[5].split('▼');
 
             //Asignar valores a controles
-            gbi("txtConcepto").dataset.id = listaDCaja[1];//Concepto            
+            gbi("txtConcepto").value = listaDCaja[1];//Concepto            
             adc(listaConceptosCaja, listaDCaja[1], "txtConcepto", 1);
             CambiarConcepto();
             gbi("txtIDdetalle").value = listaDCaja[0];//idCajaDetalle            

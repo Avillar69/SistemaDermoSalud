@@ -28,7 +28,7 @@ namespace SistemaDermoSalud.Controllers
             ResultDTO<Ma_ProductoDTO> oResultDTO = oProductoBL.ListarTodo(1);
             ResultDTO<Ma_MarcaDTO> oResultMarcaDTO = oMarcaBL.ListarTodo(1);
             
-            string listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProducto","Descripcion","Marca","Estado"});
+            string listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProducto","Descripcion","Marca","Estado","CodigoProducto"});
             string listaMarca = Serializador.rSerializado(oResultMarcaDTO.ListaResultado, new string[] { "idMarca","Marca"});
             return String.Format("{0}↔{1}↔{2}↔{3}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMarca, listaProducto);
         }

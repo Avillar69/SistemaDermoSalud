@@ -49,20 +49,21 @@ function mostrarLista(rpta) {
         }
     }
 }
-function listar(r) {   
+function listar(r) {
     let newDatos = [];
-    if (r[0] !== '') {      
+    if (r[0] !== '') {
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
                 idProducto: valor[0],
                 producto: valor[1],
                 marca: valor[2],
-                estado: valor[3]
+                estado: valor[3],
+                codigoProducto: valor[4]
             })
-        });                
+        });
     }
-    let cols = ["producto", "marca", "estado"];
+    let cols = ["codigoProducto", "producto", "marca", "estado"];
     loadDataTable(cols, newDatos, "idProducto", "tbDatos", cadButtonOptions(), false);
 }
 function cadButtonOptions() {
@@ -201,7 +202,7 @@ function eliminar(id) {
         } else {
             Swal.fire('Cancelado', 'No se elminó el Producto', 'error');
         }
-    });    
+    });
 }
 function eliminarListar(rpta) {
     if (rpta != "") {
@@ -290,7 +291,7 @@ function configurarBotonesModal() {
     var btnCancelar = document.getElementById("btnCancelar");
     btnCancelar.onclick = function () {
         show_hidden_Formulario();
-    }    
+    }
 }
 function validarFormulario() {
     var error = true;
@@ -301,7 +302,7 @@ function validarFormulario() {
     return error;
 }
 function actualizarListar(rpta) {
-    if (rpta != "") { 
+    if (rpta != "") {
         var data = rpta.split("↔");
         var res = data[0];
         var mensaje = "";
@@ -349,7 +350,7 @@ function CargarDetalles(rpta) {
     if (rpta != "") {
         var datos = rpta.split("↔");
         var a = datos[0].split("▲");
-        var listaDetalle = datos[2].split("▲");  
+        var listaDetalle = datos[2].split("▲");
         txtID.value = listaDetalle[0];
         txtDescripcion.value = listaDetalle[1];
         cboMarca.value = listaDetalle[2];

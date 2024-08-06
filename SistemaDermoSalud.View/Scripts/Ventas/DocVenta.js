@@ -386,7 +386,7 @@ function mostrarDetalle(opcion, idRow) {
             break;
         case 9:
             id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
-            //enviarServidorPost("caja/ValidarCajaAperturada", rptaValidacion);
+            enviarServidorPost("DocumentoVenta/DownloadPDF?idDocumento=" + id, redirectPDF);
             break;
         case 2:
             limpiarTodo();
@@ -401,6 +401,9 @@ function mostrarDetalle(opcion, idRow) {
             gbi("btnEnviarSunat").style.display = "";
             break;
     }
+}
+function redirectPDF(r) {
+    window.open(r);
 }
 function TraerDetalle(id) {
     var url = 'DocumentoVenta/ObtenerDatosxID?id=' + id;

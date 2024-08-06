@@ -70,7 +70,7 @@ function mostrarDashboard(r) {
                 //    borderWidth: 1
                 //},
                 //{
-                label: 'Citas',
+                label: 'Ventas',
                 data: [parseFloat(datos[6]), parseFloat(datos[7]), parseFloat(datos[8]), parseFloat(datos[9]), parseFloat(datos[10]), parseFloat(datos[11]),
                 parseFloat(datos[12]), parseFloat(datos[13]), parseFloat(datos[14]), parseFloat(datos[15]), parseFloat(datos[16]), parseFloat(datos[17])],
                 backgroundColor: [
