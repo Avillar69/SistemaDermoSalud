@@ -11,12 +11,78 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
+
+<link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+
+<div class="row" id="rowTabla">
+    <div class="col-lg-12">
+        <div class="card" id="orderList">
+            <div class="card-header border-0">
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h3 class="content-header-title mb-0">Clientes</h3>
+                        <div class="row breadcrumbs-top">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="#">Ventas</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Clientes
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-auto">
+                        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
+                            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
+                            <a id="btnImprimir" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right material-shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Exportar
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                    <a id="btnImprimirPDF" class="btn dropdown-item"><i class="ri-file-pdf-fill"></i> Pdf</a>
+                                    <a id="btnImprimirExcel" class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0 pt-0">
+                <div class="row">
+                    <div class="table-responsive mt-3 mb-1 col-12" style="min-height:450px;">
+                        <table class="table table-condensed table-bordered table-hover" id="tbDatos">
+                            <thead class="text-muted table-light">
+                                <tr class="">
+                                    <th class="sort" data-sort="nroDocumento">N° Documento</th>
+                                    <th class="sort" data-sort="razonSocial">Razón Social</th>
+                                    <th class="sort" data-sort="fecha">Fecha</th>
+                                    <th class="sort" data-sort="estado">Estado</th>
+                                    <th class="sort" data-sort="action"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end col-->
+</div>
 <div id="rowFrm" style="display:none;">
     <div class="card m-b-10">
         <div class="card-header p-b-0">
             <div class="row">
                 <div class="col-sm-9 mt-2">
-                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Proveedor</h4>
+                    <h4 class='panel-title' id='lblTituloPanel'>Nuevo Cliente</h4>
                 </div>
                 <div class="col-sm-3 pull-right">
                     <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
@@ -142,13 +208,13 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2 col-sm-6 mb-2">
+                <div class="col-lg-2 col-sm-6 mb-2  d-none">
                     <div class="form-check form-switch form-switch-lg" dir="ltr">
                         <input type="checkbox" class="form-check-input" id="chkCliente">
                         <label class="form-check-label" for="chkCliente">¿Es Cliente?</label>
                     </div>
                 </div>
-                <div class="col-lg-2 col-sm-6 mb-2 d-none">
+                <div class="col-lg-2 col-sm-6 mb-2">
                     <div class="form-check form-switch form-switch-lg d-none" dir="ltr">
                         <input type="checkbox" class="form-check-input" id="chkProveedor">
                         <label class="form-check-label" for="chkProveedor">¿Es Proveedor?</label>
@@ -381,66 +447,86 @@
 </div>
 
 
-<div class="row" id="rowTabla">
-    <div class="col-lg-12">
-        <div class="card" id="orderList">
-            <div class="card-header border-0">
-                <div class="row align-items-center gy-3">
-                    <div class="col-sm">
-                        <h3 class="content-header-title mb-0">Clientes</h3>
-                        <div class="row breadcrumbs-top">
-                            <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <a href="#">Ventas</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">
-                                        Clientes
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-auto">
-                        <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-                            <a onclick="mostrarDetalle(1,0)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
-                            <a onclick="LabDescargarPDF('i')" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
-                            <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle dropdown-menu-right material-shadow-none" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Exportar
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
-                                    <a id="btnImprimirPDF" class="btn dropdown-item"><i class="ri-file-pdf-fill"></i> Pdf</a>
-                                    <a id="btnImprimirExcel" class="btn dropdown-item"><i class="ri-file-excel-2-fill"></i> Excel</a>
+
+<div id='modal-Busqueda' class='modal' tabindex='-1' role='dialog' aria-labelledby='gridSystemModalLabel'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <br />
+                        <div class="form-horizontal">
+                            <div class='row'>
+                                <div class="col-12">
+                                    <div class='form-group row m-b-5 p-l-10'>
+                                        <label for='cboTipoBusqueda' class="control-label col-4">Busqueda</label>
+                                        <div class="col-8">
+                                            <select id='cboTipoBusqueda' type='text' class="form-control form-control-sm">
+                                                <option value="" selected>Seleccione</option>
+                                                <option value="1">Buscar en Reniec</option>
+                                                <option value="2">Buscar en Sunat</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 rnc" style="display:none;">
+                                    <div class='form-group row m-b-5 p-l-10'>
+                                        <label for="" class="control-label col-sm-4 left-align">Captcha</label>
+                                        <div class="col-8" id="imgCaptchaReniec" style="height:14px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 snt" style="display:none;">
+                                    <div class='form-group row m-b-5 p-l-10'>
+                                        <label for="" class="control-label col-4 left-align">Captcha</label>
+                                        <div class="col-8" id="imgCaptcha" style="height:14px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 rnc" style="display:none;">
+                                    <div class='form-group row m-b-5 p-l-10'>
+                                        <label for="" class="control-label col-sm-4 left-align">Captcha</label>
+                                        <div class="col-8">
+                                            <input type="text" maxlength="4" id="txtCaptchaReniec" class="form-control form-control-sm" style="text-transform:uppercase;" tabindex="5" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 snt" style="display:none;">
+                                    <div class='form-group row m-b-5 p-l-10'>
+                                        <label for="" class="control-label col-sm-4">Captcha</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" maxlength="4" id="txtCaptcha" class="form-control form-control-sm" style="text-transform:uppercase;" tabindex="5" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class='form-group row m-b-5 p-l-10'>
+                                        <label for='txtDocuBusqueda' class="control-label col-4">N° Documento</label>
+                                        <div class="col-8">
+                                            <input id='txtDocuBusqueda' type='text' class="form-control form-control-sm">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body border border-dashed border-end-0 border-start-0 pt-0">
-                <div class="row">
-                    <div class="">
-                        <table class="table table-bordered dt-responsive table-sm table-striped align-middle dtr-inline collapsed" id="tbDatos">
-                            <thead class="text-muted table-light">
-                                <tr class="">
-                                    <th>Nº Documento</th>
-                                    <th>Razon Social</th>
-                                    <th>Fecha Mod.</th>
-                                    <th>Estado</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-info waves-effect waves-light" id="btnBSN">Buscar</button>
             </div>
         </div>
     </div>
-    <!--end col-->
 </div>
+<script src="~/assets/js/jspdf.debug.js"></script>
+<script src="~/assets/js/jspdf.min.js"></script>
+<script src="~/assets/js/jspdf.plugin.autotable.js"></script>
+<script src="/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="/assets/libs/list.js/list.min.js"></script>
