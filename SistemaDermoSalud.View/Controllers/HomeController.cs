@@ -46,24 +46,16 @@ namespace SistemaDermoSalud.View.Controllers
             ResultDTO<DashboardDTO> lstDashboard = oDashboardBL.ListarTodo();
             ResultDTO<VEN_DocumentoVentaDTO> oListaDocumentoVentas = oVEN_DocumentoVentaBL.ListarVentasDashboard();
             string listaDashboard = Serializador.rSerializado(lstDashboard.ListaResultado, new string[] { });
-            string listaCompras = "";// Serializador.rSerializado(lstDashboard.ListaResultado[0].listaCompras, new string[] { });
-            string listasVentas = "";
-            string listaCitas = "";
-
-            string listaVentasDoc = "";
-            string listaComprasDoc = "";
+            string listaTopArticulos = "";// Serializador.rSerializado(lstDashboard.ListaResultado[0].listaCompras, new string[] { });
+            string listaTopClientes = "";
 
             if (lstDashboard.ListaResultado.Count>0)
             {
-                listasVentas = Serializador.rSerializado(lstDashboard.ListaResultado[0].listaVentas, new string[] { });
-                listaCitas = Serializador.rSerializado(lstDashboard.ListaResultado[0].listaCitas, new string[] { });
-                listaComprasDoc = Serializador.rSerializado(lstDashboard.ListaResultado[0].listaCompraDoc, new string[] {
-                "FechaDocumento", "SerieDocumento", "ProveedorRazon", "MonedaDesc", "TotalNacional" });
-                listaVentasDoc = Serializador.rSerializado(oListaDocumentoVentas.ListaResultado, new string[] {
-                "FechaDocumento", "SerieDocumento", "ClienteRazon", "MonedaDesc", "TotalNacional" });
+                listaTopArticulos = Serializador.rSerializado(lstDashboard.ListaResultado[0].listaTopArticulos, new string[] { });
+                listaTopClientes = Serializador.rSerializado(lstDashboard.ListaResultado[0].listaVentas, new string[] { });
             }
 
-            return String.Format("{0}↔{1}↔{2}↔{3}↔{4}↔{5}", listaDashboard, listaCompras, listasVentas, listaCitas, listaVentasDoc, listaComprasDoc);
+            return String.Format("{0}↔{1}↔{2}", listaDashboard, listaTopArticulos, listaTopClientes);
         }
         public string DashboardCircular()
         {

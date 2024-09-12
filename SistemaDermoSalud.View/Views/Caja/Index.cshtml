@@ -74,9 +74,12 @@
                         <table class="table table-bordered dt-responsive table-sm table-striped align-middle dtr-inline collapsed" id="tbDatos">
                             <thead class="text-muted table-light">
                                 <tr class="">
+                                    <th>Tipo Caja</th>
                                     <th>Descripcion</th>
                                     <th>Fecha Apertura</th>
+                                    <th>Hora Apertura</th>
                                     <th>Fecha Cierre</th>
+                                    <th>Hora Cierre</th>
                                     <th>Inicio</th>
                                     <th>Saldo Final</th>
                                     <th>Estado</th>
@@ -115,7 +118,7 @@
                         <input placeholder='' id='txtID' type='text' style="display:none;">
                     </div>
                     <div class="row">
-                        <div class="col-12 col-sm-4">
+                        <div class="col-12 col-sm-4 d-none">
                             <div class='form-group row'>
                                 <label for='txtCodigo' class="control-label col-4">Codigo</label>
                                 <div class="col-8">
@@ -141,6 +144,18 @@
                         </div>
                         <div class="col-12 col-sm-4">
                             <div class='form-group row m-b-5 p-l-10'>
+                                <label for='txtNroCaja' class="control-label col-4">Tipo de Caja</label>
+                                <div class="col-8">
+                                    <select id="cboTipoCaja" class="form-control form-control-sm">
+                                        <option value="0">SELECCIONE</option>
+                                        <option value="1">CAJA VENTAS</option>
+                                        <option value="2">CAJA GASTOS</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class='form-group row m-b-5 p-l-10'>
                                 <label for='dtpFechaInicio' class="control-label col-4">Fecha Inicio</label>
                                 <div class="col-8">
                                     <input id='dtpFechaInicio' type='text' disabled class="form-control form-control-sm">
@@ -159,11 +174,7 @@
                             <div class='form-group row m-b-5 p-l-10'>
                                 <label class="col-4 control-label" for="txtMoneda">Moneda</label>
                                 <div class="col-8">
-                                    <div class="row">
-                                        <div class="col-10">
-                                            <select id="txtMoneda" class="form-control form-control-sm" readonly disabled></select>
-                                        </div>
-                                    </div>
+                                    <select id="txtMoneda" class="form-control form-control-sm" readonly disabled></select>
                                 </div>
                             </div>
                         </div>
@@ -191,56 +202,60 @@
     </div>
     <div class="card m-b-10">
         <div class="card-body p-t-10 p-b-10">
-            <div class="col-md-12">
-                <div class='form-horizontal'>
-                    <div class="row">
-                        <div class="col-12 col-sm-2">
-                            <div class='form-group row'>
-                                <label for='txtInicial' class="control-label col-6 p-0">Monto Inicial</label>
-                                <div class="col-6 p-0">
-                                    <input readonly id='txtInicial' type='text' value="0.00" disabled class="form-control form-control-sm">
-                                </div>
-                            </div>
+            <div class="row">
+                <div class="col-12 col-sm-2">
+                    <div class='form-group row'>
+                        <label for='txtInicial' class="control-label col-6 p-0">Monto Inicial</label>
+                        <div class="col-6 p-0">
+                            <input readonly id='txtInicial' type='text' value="0.00" disabled class="form-control form-control-sm">
                         </div>
-                        <div class="col-12 col-sm-2" style="display:none">
-                            <div class='form-group row'>
-                                <label for='txtMontoIngreso' class="control-label col-6">Ingreso</label>
-                                <div class="col-6 p-0">
-                                    <input id='txtMontoIngreso' type='text' value="0.00" disabled class="form-control form-control-sm">
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-2" style="display:none">
+                    <div class='form-group row'>
+                        <label for='txtMontoIngreso' class="control-label col-6">Ingreso</label>
+                        <div class="col-6 p-0">
+                            <input id='txtMontoIngreso' type='text' value="0.00" disabled class="form-control form-control-sm">
                         </div>
-                        <div class="col-12 col-sm-2">
-                            <div class='form-group row'>
-                                <label for='txtIngresoEfectivo' class="control-label col-6">Efectivo</label>
-                                <div class="col-6 p-0">
-                                    <input id='txtIngresoEfectivo' type='text' value="0.00" disabled class="form-control form-control-sm">@*txtMontoIngreso*@
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-2">
+                    <div class='form-group row'>
+                        <label for='txtIngresoEfectivo' class="control-label col-6">Efectivo</label>
+                        <div class="col-6 p-0">
+                            <input id='txtIngresoEfectivo' type='text' value="0.00" disabled class="form-control form-control-sm">@*txtMontoIngreso*@
                         </div>
-                        <div class="col-12 col-sm-2">
-                            <div class='form-group row'>
-                                <label for='txtIngresoTarjeta' class="control-label col-6">Tarjeta</label>
-                                <div class="col-6 p-0">
-                                    <input id='txtIngresoTarjeta' type='text' value="0.00" disabled class="form-control form-control-sm">
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-2">
+                    <div class='form-group row'>
+                        <label for='txtIngresoTarjeta' class="control-label col-6">Tarjeta</label>
+                        <div class="col-6 p-0">
+                            <input id='txtIngresoTarjeta' type='text' value="0.00" disabled class="form-control form-control-sm">
                         </div>
-                        <div class="col-12 col-sm-2">
-                            <div class='form-group row'>
-                                <label for='txtMontoSalida' class="control-label col-6">Salida</label>
-                                <div class="col-6 p-0">
-                                    <input id='txtMontoSalida' type='text' value="0.00" disabled class="form-control form-control-sm">
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-2">
+                    <div class='form-group row'>
+                        <label for='txtIngresoTarjeta' class="control-label col-6">Yape / Plin</label>
+                        <div class="col-6 p-0">
+                            <input id='txtIngresoYape' type='text' value="0.00" disabled class="form-control form-control-sm">
                         </div>
-                        <div class="col-12 col-sm-2">
-                            <div class='form-group row'>
-                                <label for='txtSaldoFinal' class="control-label col-6" style="padding-right:0px">Saldo Final</label>
-                                <div class="col-6 p-0">
-                                    <input id='txtSaldoFinal' type='text' value="0.00" disabled class="form-control form-control-sm">
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-2">
+                    <div class='form-group row'>
+                        <label for='txtMontoSalida' class="control-label col-6">Salida</label>
+                        <div class="col-6 p-0">
+                            <input id='txtMontoSalida' type='text' value="0.00" disabled class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-2">
+                    <div class='form-group row'>
+                        <label for='txtSaldoFinal' class="control-label col-6" style="padding-right:0px">Saldo Final</label>
+                        <div class="col-6 p-0">
+                            <input id='txtSaldoFinal' type='text' value="0.00" disabled class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>

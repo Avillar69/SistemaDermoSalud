@@ -40,7 +40,7 @@ namespace MubaplastERP.Controllers.Finanzas
             string Periodo = DateTime.Now.Year.ToString();
             string Fecha = DateTime.Now.ToString().Substring(0, 10);
             string Nrocaja = oFN_CajaBL.NroCajaUltimo(1);
-            string listaFN_Caja = Serializador.rSerializado(lbeFN_CajaDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja" });
+            string listaFN_Caja = Serializador.rSerializado(lbeFN_CajaDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja","HoraApertura","HoraCierre","TipoCaja" });
             string listaMa_Moneda = Serializador.rSerializado(lbeMa_MonedaDTO.ListaResultado, new string[] { "idMoneda", "Descripcion" });
             string listaConceptos = Serializador.rSerializado(lstFN_ConceptosCajaDTO.ListaResultado, new string[] { "idConceptoCaja", "Descripcion", "AfectoIgv", "IngresoSalida" });
 
@@ -58,7 +58,7 @@ namespace MubaplastERP.Controllers.Finanzas
             ResultDTO<Ma_MonedaDTO> lbeMa_MonedaDTO = oMa_MonedaBL.ListarTodo(eSEGUsuario.idEmpresa);
             ResultDTO<FN_CajaDTO> lbeFN_CajaDTO = oFN_CajaBL.ListarxFecha(Convert.ToDateTime(fechaInicio), Convert.ToDateTime(fechaFin));
             //cadenas
-            string listaFN_Caja = Serializador.rSerializado(lbeFN_CajaDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja" });
+            string listaFN_Caja = Serializador.rSerializado(lbeFN_CajaDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja", "HoraApertura", "HoraCierre", "TipoCaja" });
             return String.Format("{0}↔{1}↔{2}",lbeFN_CajaDTO.Resultado, lbeFN_CajaDTO.MensajeError, listaFN_Caja);
         }
         public string ObtenerDatosxID(int id)
@@ -74,7 +74,7 @@ namespace MubaplastERP.Controllers.Finanzas
             ResultDTO<FN_CajaDTO> oResultDTO = oFN_CajaBL.ListarxID(id);
             ResultDTO<FN_CajaDetalleDTO> lbeFN_CajaDetalleDTO = oFN_CajaDetalleBL.ListarxIDCaja(id);
             string listaCaja = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idCaja","CodigoGenerado","PeriodoAno","NroCaja","FechaApertura","FechaCierre","idMoneda","MontoInicio","Usuario",
-                "MontoIngreso","MontoSalida","MontoSaldo","Moneda","EstadoCaja"});
+                "MontoIngreso","MontoSalida","MontoSaldo","Moneda","EstadoCaja","idTipoCaja"});
             string listaCaja_Detalle = Serializador.rSerializado(lbeFN_CajaDetalleDTO.ListaResultado, new string[] { "idCajaDetalle","idCaja","DescripcionConcepto","SubTotalNacional",
                 "IGVNacional","TotalNacional","TipoOperacion","idTipoPago","TipoPago","idTarjeta","Tarjeta"});
             string listaFN_ConceptosCaja = Serializador.rSerializado(lbeFN_ConceptosCajaDTO.ListaResultado, new string[] { "idConceptoCaja", "Descripcion", "AfectoIgv", "IngresoSalida" });
@@ -101,7 +101,7 @@ namespace MubaplastERP.Controllers.Finanzas
             //}
             //else { oFN_CajaDTO.EstadoCaja = "A"; }
             oResultDTO = oFN_CajaBL.UpdateInsert(oFN_CajaDTO);
-            string listaFN_CajaCabecera = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja" });
+            string listaFN_CajaCabecera = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja", "HoraApertura", "HoraCierre", "TipoCaja" });
             return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaFN_CajaCabecera);
         }
         public string CerrarCaja(FN_CajaDTO oFN_CajaDTO)
@@ -110,7 +110,7 @@ namespace MubaplastERP.Controllers.Finanzas
             Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
             FN_CajaBL oFN_CajaBL = new FN_CajaBL();
             oResultDTO = oFN_CajaBL.CerrarCaja(oFN_CajaDTO);
-            string listaFN_CajaCabecera = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja" });
+            string listaFN_CajaCabecera = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idCaja", "Descripcion", "FechaApertura", "FechaCierre", "MontoInicio", "MontoSaldo", "EstadoCaja", "HoraApertura", "HoraCierre", "TipoCaja" });
             return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaFN_CajaCabecera);
         }
         public string Eliminar(FN_CajaDTO oFN_CajaDTO)

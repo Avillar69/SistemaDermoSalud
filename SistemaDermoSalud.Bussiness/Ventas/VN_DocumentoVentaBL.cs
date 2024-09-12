@@ -44,9 +44,9 @@ namespace SistemaDermoSalud.Business
         {
             return oVEN_DocumentoVentaDAO.ValidarDocumento(oVEN_DocumentoVentaDTO);
         }
-        public ResultDTO<VEN_DocumentoVentaDTO> Anular(VEN_DocumentoVentaDTO oVEN_DocumentoVentaDTO, DateTime fechaInicio, DateTime fechaFin)
+        public ResultDTO<VEN_DocumentoVentaDTO> Anular(int idDocumentoVenta, DateTime fechaInicio, DateTime fechaFin)
         {
-            return oVEN_DocumentoVentaDAO.Anular(oVEN_DocumentoVentaDTO, fechaInicio, fechaFin);
+            return oVEN_DocumentoVentaDAO.Anular(idDocumentoVenta, fechaInicio, fechaFin);
         }
         public VEN_DocumentoVentaDTO ListarxIDVenta(int idDocumentoVenta)
         {

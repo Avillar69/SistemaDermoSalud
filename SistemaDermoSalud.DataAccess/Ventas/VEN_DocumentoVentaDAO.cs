@@ -357,31 +357,45 @@ namespace SistemaDermoSalud.DataAccess
                             int FormaPago = oVEN_DocumentoVenta.idFormaPago;
                             if (FormaPago == 2)
                             {
-                                //SqlDataAdapter pd = new SqlDataAdapter("SP_FN_PagosDetalle_UpdateInsert", cn);
-                                //pd.SelectCommand.CommandType = CommandType.StoredProcedure;
-                                //pd.SelectCommand.Parameters.AddWithValue("@idPagoDetalle", oVEN_DocumentoVenta.idPagoDetalle);
-                                //pd.SelectCommand.Parameters.AddWithValue("@idPago", IDPAGO);
-                                //pd.SelectCommand.Parameters.AddWithValue("@idEmpresa", oVEN_DocumentoVenta.idEmpresa);
-                                //pd.SelectCommand.Parameters.AddWithValue("@idCajaDetalle", oVEN_DocumentoVenta.idCajaDetalle);
-                                //pd.SelectCommand.Parameters.AddWithValue("@Observacion", "Pago al Contado");
-                                //pd.SelectCommand.Parameters.AddWithValue("@idTipoOperacion", oVEN_DocumentoVenta.idTipoOperacion);
-                                //pd.SelectCommand.Parameters.AddWithValue("@NumeroOperacion", 0);
-                                //pd.SelectCommand.Parameters.AddWithValue("@DescripcionOperacion", "Contado");
-                                //pd.SelectCommand.Parameters.AddWithValue("@idDocumento", id_output.Value);
-                                //pd.SelectCommand.Parameters.AddWithValue("@idConcepto", oVEN_DocumentoVenta.idConcepto);
-                                //pd.SelectCommand.Parameters.AddWithValue("@Concepto", "CONTADO");
-                                //pd.SelectCommand.Parameters.AddWithValue("@idFormaPago", oVEN_DocumentoVenta.idFormaPago);
-                                //pd.SelectCommand.Parameters.AddWithValue("@DescripcionFormaPago", "-");
-                                //pd.SelectCommand.Parameters.AddWithValue("@idCuentaBancario", oVEN_DocumentoVenta.idCuentaBancario);
-                                //pd.SelectCommand.Parameters.AddWithValue("@NumeroCuenta", oVEN_DocumentoVenta.NumeroCuenta);
-                                //pd.SelectCommand.Parameters.AddWithValue("@Monto", oVEN_DocumentoVenta.TotalNacional);
-                                //pd.SelectCommand.Parameters.AddWithValue("@UsuarioCreacion", oVEN_DocumentoVenta.UsuarioCreacion);
-                                //pd.SelectCommand.Parameters.AddWithValue("@UsuarioModificacion", oVEN_DocumentoVenta.UsuarioModificacion);
-                                //pd.SelectCommand.Parameters.AddWithValue("@Estado", oVEN_DocumentoVenta.Estado);
-                                //pd.SelectCommand.Parameters.AddWithValue("@idCuentaBancarioDestino", oVEN_DocumentoVenta.idCuentaBancarioDestino);
-                                //pd.SelectCommand.Parameters.AddWithValue("@NumeroCuentaDestino", oVEN_DocumentoVenta.NumeroCuentaDestino);
-                                //pd.SelectCommand.Parameters.AddWithValue("@FechaDetalle", oVEN_DocumentoVenta.FechaDocumento);
-                                //int rpta1 = pd.SelectCommand.ExecuteNonQuery();
+                                SqlDataAdapter pd = new SqlDataAdapter("SP_FN_CajaDetalle_UpdateInsertDV", cn);
+                                pd.SelectCommand.CommandType = CommandType.StoredProcedure;
+
+                                pd.SelectCommand.Parameters.AddWithValue("@idCajaDetalle", 0);
+                                pd.SelectCommand.Parameters.AddWithValue("@idEmpresa", oVEN_DocumentoVenta.idEmpresa);
+                                pd.SelectCommand.Parameters.AddWithValue("@PeriodoAno", DateTime.Now.Year);
+                                pd.SelectCommand.Parameters.AddWithValue("@NroCaja", 0);
+                                pd.SelectCommand.Parameters.AddWithValue("@TipoOperacion", "I");
+                                pd.SelectCommand.Parameters.AddWithValue("@idConcepto", 9);
+                                pd.SelectCommand.Parameters.AddWithValue("@DescripcionConcepto", "COBRO DE COMPROBANTE");
+                                pd.SelectCommand.Parameters.AddWithValue("@idMoneda", 1);
+                                if (oVEN_DocumentoVenta.TipoPago == "TARJETA")
+                                {
+                                    pd.SelectCommand.Parameters.AddWithValue("@SubTotalNacional", Decimal.Round(oVEN_DocumentoVenta.SubTotalNacional * Convert.ToDecimal(96.46 / 100), 2));
+                                    pd.SelectCommand.Parameters.AddWithValue("@IgvNacional", Decimal.Round(oVEN_DocumentoVenta.IGVNacional * Convert.ToDecimal(96.46 / 100), 2));
+                                    pd.SelectCommand.Parameters.AddWithValue("@TotalNacional", Decimal.Round(oVEN_DocumentoVenta.TotalNacional * Convert.ToDecimal(96.46 / 100), 2));
+                                }
+                                else
+                                {
+                                    pd.SelectCommand.Parameters.AddWithValue("@SubTotalNacional", oVEN_DocumentoVenta.SubTotalNacional);
+                                    pd.SelectCommand.Parameters.AddWithValue("@IgvNacional", oVEN_DocumentoVenta.IGVNacional);
+                                    pd.SelectCommand.Parameters.AddWithValue("@TotalNacional", oVEN_DocumentoVenta.TotalNacional);
+                                }
+                                pd.SelectCommand.Parameters.AddWithValue("@idTipoEmpleado", 1);
+                                pd.SelectCommand.Parameters.AddWithValue("@idProvCliEmpl", oVEN_DocumentoVenta.idCliente);
+                                pd.SelectCommand.Parameters.AddWithValue("@NombreProvCliEmpl", oVEN_DocumentoVenta.ClienteRazon);
+                                pd.SelectCommand.Parameters.AddWithValue("@Ruc", oVEN_DocumentoVenta.ClienteDocumento);
+                                pd.SelectCommand.Parameters.AddWithValue("@Observaciones", "Cobro Venta " + oVEN_DocumentoVenta.SerieDocumento + "-" + oVEN_DocumentoVenta.NumDocumento);
+                                pd.SelectCommand.Parameters.AddWithValue("@idTipoDocumento", oVEN_DocumentoVenta.idTipoDocumento);
+                                pd.SelectCommand.Parameters.AddWithValue("@idCompraVenta", id_output.Value);
+                                pd.SelectCommand.Parameters.AddWithValue("@SerieDcto", oVEN_DocumentoVenta.SerieDocumento);
+                                pd.SelectCommand.Parameters.AddWithValue("@NroDcto", oVEN_DocumentoVenta.NumDocumento);
+                                pd.SelectCommand.Parameters.AddWithValue("@MontoPendiente", 0.00);
+                                pd.SelectCommand.Parameters.AddWithValue("@idTipoPago", oVEN_DocumentoVenta.idTipoPago);
+                                pd.SelectCommand.Parameters.AddWithValue("@TipoPago", oVEN_DocumentoVenta.TipoPago);
+                                pd.SelectCommand.Parameters.AddWithValue("@Tarjeta", oVEN_DocumentoVenta.Tarjeta);
+                                pd.SelectCommand.Parameters.AddWithValue("@UsuarioCreacion", oVEN_DocumentoVenta.UsuarioCreacion);
+                                pd.SelectCommand.Parameters.AddWithValue("@UsuarioModificacion", oVEN_DocumentoVenta.UsuarioModificacion);
+                                int rpta1 = pd.SelectCommand.ExecuteNonQuery();
                             }
                             oResultDTO.Resultado = "OK";
                             oResultDTO.ListaResultado = ListarRangoFecha(oVEN_DocumentoVenta.idEmpresa, fechaInicio, fechaFin, cn).ListaResultado;
@@ -444,7 +458,7 @@ namespace SistemaDermoSalud.DataAccess
             }
             return oResultDTO;
         }
-        public ResultDTO<VEN_DocumentoVentaDTO> Anular(VEN_DocumentoVentaDTO oVEN_DocumentoVenta, DateTime fechaInicio, DateTime fechaFin)
+        public ResultDTO<VEN_DocumentoVentaDTO> Anular(int idDocumentoVenta, DateTime fechaInicio, DateTime fechaFin)
         {
             ResultDTO<VEN_DocumentoVentaDTO> oResultDTO = new ResultDTO<VEN_DocumentoVentaDTO>();
             var option = new TransactionOptions
@@ -461,12 +475,12 @@ namespace SistemaDermoSalud.DataAccess
                         cn.Open();
                         SqlDataAdapter da = new SqlDataAdapter("SP_VEN_DocumentoVenta_Anular", cn);
                         da.SelectCommand.CommandType = CommandType.StoredProcedure;
-                        da.SelectCommand.Parameters.AddWithValue("@idDocumentoVenta", oVEN_DocumentoVenta.idDocumentoVenta);
+                        da.SelectCommand.Parameters.AddWithValue("@idDocumentoVenta", idDocumentoVenta);
                         int rpta = da.SelectCommand.ExecuteNonQuery();
                         if (rpta >= 1)
                         {
                             oResultDTO.Resultado = "OK";
-                            oResultDTO.ListaResultado = ListarRangoFecha(oVEN_DocumentoVenta.idEmpresa, fechaInicio, fechaFin, cn).ListaResultado;
+                            oResultDTO.ListaResultado = ListarRangoFecha(1, fechaInicio, fechaFin, cn).ListaResultado;
                             transactionScope.Complete();
                         }
                         else
@@ -810,7 +824,7 @@ namespace SistemaDermoSalud.DataAccess
         //    {
         //        listaDocumento.ListaResultado = new List<VEN_DocumentoVentaDTO>();
         //    }      
-           
+
         //    using ((cn == null ? cn = new Conexion().conectar() : cn))
         //    {
         //        try
@@ -966,7 +980,7 @@ namespace SistemaDermoSalud.DataAccess
                         da.SelectCommand.Parameters.AddWithValue("@Enlace", oVEN_DocumentoVenta.Enlace);
                         int rpta = da.SelectCommand.ExecuteNonQuery();
                         if (rpta >= 1)
-                        {                           
+                        {
                             oResultDTO.Resultado = "OK";
                             oResultDTO.ListaResultado = ListarRangoFecha(oVEN_DocumentoVenta.idEmpresa, fechaInicio, fechaFin, cn).ListaResultado;
                             transactionScope.Complete();
@@ -989,7 +1003,7 @@ namespace SistemaDermoSalud.DataAccess
         }
 
 
-        public ResultDTO<VEN_DocumentoVentaDetalleDTO> ReporteVentaFecha(DateTime FechaInicio,DateTime FechaFin)
+        public ResultDTO<VEN_DocumentoVentaDetalleDTO> ReporteVentaFecha(DateTime FechaInicio, DateTime FechaFin)
         {
             ResultDTO<VEN_DocumentoVentaDetalleDTO> oResultDTO = new ResultDTO<VEN_DocumentoVentaDetalleDTO>();
             oResultDTO.ListaResultado = new List<VEN_DocumentoVentaDetalleDTO>();

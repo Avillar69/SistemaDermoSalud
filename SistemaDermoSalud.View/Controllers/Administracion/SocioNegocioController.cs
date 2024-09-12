@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Math;
+using Newtonsoft.Json;
 using SistemaDermoSalud.Business;
 using SistemaDermoSalud.Entities;
 using SistemaDermoSalud.Helpers;
@@ -11,6 +12,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Policy;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -19,7 +21,6 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
 {
     public class SocioNegocioController : Controller
     {
-        const string token= "apis-token-9812.E1ma96NzwuKcut7nmmojf0HZK5T7Ly9H";
         // GET: SocioNegocio
         public ActionResult Index()
         {
@@ -382,44 +383,23 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
             }
 
         }
-        public string bsn(string r,string t)
+
+        public async Task<Reniec> ConsultaDni(string dni)
         {
-            string ruta = "";
-            switch (t)
+            HttpClient _httpClientReniec = new HttpClient();
+            _httpClientReniec.BaseAddress = new Uri("https://catfact.ninja/");
+            //_httpClientReniec.DefaultRequestHeaders.Add("Authorization", new List<string>() { $"Bearer {token}" });
+            HttpResponseMessage response = await _httpClientReniec.GetAsync($"dni?numero={dni}");
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                case "2":
-                    ruta = "reniec/dni?numero=" + r;
-                    break;
-                default:
-                    ruta = "sunat/ruc?numero=" + r;
-                    break;
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Reniec>(json);
             }
-
-            try
+            else
             {
-
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("https://api.apis.net.pe/v2/");
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-
-                    //HTTP GET
-                    var responseTask =  client.GetStringAsync(ruta);
-                    var result = responseTask.Result;
-
-                }
+                var json = await response.Content.ReadAsStringAsync();
+                throw new Exception(json);
             }
-            catch (WebException ex)
-            {
-                /// EN CASO EXISTA ALGUN ERROR, LO TOMAMOS
-                var respuesta = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-                /// Y LO 'RETORNAMOS'
-                return respuesta;
-            }
-            //Persona myinfo = new Persona();
-            //string a = myinfo.GetInfo(r);
-            return "";
         }
         public JsonResult ConsultaRUC(string r)
         {
@@ -490,4 +470,13 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
             public string direccion_completa { get; set; }
         }
     }
+}
+public class Reniec
+{
+    public string Nombres { get; set; }
+    public string ApellidoPaterno { get; set; }
+    public string ApellidoMaterno { get; set; }
+    public string TipoDocumento { get; set; }
+    public string NumeroDocumento { get; set; }
+    public string DigitoVerificador { get; set; }
 }

@@ -11,52 +11,30 @@ var txtCodigo = document.getElementById("txtCodigo");
 var chkActivo = document.getElementById("chkActivo");
 
 function mostrarLista(rpta) {
-    crearTablaRol(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         var resultado = listas[0];
         if (resultado == "OK") {
             listaDatos = listas[2].split("▼");
-            listar();
+            listar(listaDatos);
         }
     }
 }
-function crearTablaRol(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info d-none d-md-flex' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-    for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0:
-                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-                break;
-            case 2:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-            case 6:
-                contenido += "              <div class='col-12 col-md-1'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
+function listar(r) {
+    let newDatos = [];
+    if (r[0] !== '') {
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idRol: valor[0],
+                Descripcion: valor[1],
+                FechaModificacion: valor[2],
+                Estado: valor[3]
+            })
+        });
     }
-    contenido += "          </div>";
-
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
-}
-function listar() {
-    matriz = crearMatriz(listaDatos);
-    configurarFiltro(cabeceras);
-    mostrarMatrizUsuario(matriz, cabeceras, "divTabla", "contentPrincipal");
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
+    let cols = ["Descripcion", "FechaModificacion", "Estado"];
+    loadDataTable(cols, newDatos, "idRol", "tbDatos", cadButtonOptions(), false);
 }
 function mostrarMatrizUsuario(matriz, cabeceras, tabId, contentID) {
     var nRegistros = matriz.length;
@@ -143,7 +121,7 @@ function actualizarListar(rpta) { //rpta es mi lista de colores
         }
         mostrarRespuesta(res, mensaje, tipo);
         listaDatos = data[2].split("▼");
-        listar();
+        listar(listaDatos);
     }
 }
 function configurarBotonesModal() {
@@ -182,8 +160,9 @@ function mostrarDetalle(opcion, id) {
             lblTituloPanel.innerHTML = "Nuevo Rol";//Titulo Insertar
             break;
         case 2:
+            let idRol = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
             lblTituloPanel.innerHTML = "Editar Rol";//Titulo Modificar
-            TraerDetalle(id);
+            TraerDetalle(idRol);
             show_hidden_Formulario();
             break;
     }
@@ -199,25 +178,25 @@ function validarFormulario() {
     if (validarControl("txtRol")) error = false;
     return error;
 }
+
 function eliminar(id) {
-    //if (confirm("¿Está seguro que desea eliminar?") == false) return false;
-    swal({
-        title: "Desea Eliminar este Rol?",
-        text: "No se podrá recuperar los datos eliminados.",
-        type: "warning",
+    let idRol = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
+    Swal.fire({
+        title: '¿Estás seguro de eliminar este Rol?',
+        text: '¡No podrás revertir esto!',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Si, Eliminar",
-        closeOnConfirm: false,
-        closeOnCancel: false,
-    },
-        function (isConfirm) {
-            if (isConfirm) {
-                var url = "Seg_Rol/Eliminar?idRol=" + id;
-                enviarServidor(url, eliminarListar);
-            } else {
-                swal("Cancelado", "No se elminó el Rol", "error");
-            }
-        });
+        confirmButtonText: 'Si, Eliminalo!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            var url = "Seg_Rol/Eliminar?idRol=" + idRol;
+            enviarServidor(url, eliminarListar);
+        } else {
+            Swal.fire('Cancelado', 'No se eliminó la marca', 'error');
+        }
+    });
 }
 function eliminarListar(rpta) {
     if (rpta != "") {
@@ -238,5 +217,5 @@ function eliminarListar(rpta) {
     }
     mostrarRespuesta(res, mensaje, tipo);
     listaDatos = data[2].split("▼");
-    listar();
+    listar(listaDatos);
 }

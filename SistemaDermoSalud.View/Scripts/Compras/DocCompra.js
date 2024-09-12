@@ -29,6 +29,23 @@ $(function () {
     configBM();
 });
 //Listar DctoCompras
+
+$("#txtFilFecIn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
+$("#txtFechaVencimiento").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
+$("#txtFilFecFn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
+$("#txtFecha").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
 function mostrarLista(rpta) {
     if (rpta != "") {
         var listas = rpta.split("↔");

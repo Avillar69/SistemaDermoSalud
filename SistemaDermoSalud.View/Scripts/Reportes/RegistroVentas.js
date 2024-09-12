@@ -18,17 +18,20 @@ var listarCuentasO;
 var listarBanco;
 /*fin de objetos globales pago detalle*/
 var lp2;
-var url = "Reportes/ObtenerDatos_RegistroVenta";
+var url = "/Reportes/ObtenerDatos_RegistroVenta";
 enviarServidor(url, mostrarLista);
 configBM();
-$("#txtFilFecIn").datetimepicker({
-    format: 'DD-MM-YYYY',
+
+$("#txtFilFecIn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
 });
-$("#txtFilFecFn").datetimepicker({
-    format: 'DD-MM-YYYY',
+$("#txtFilFecFn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
 });
 function mostrarLista(rpta) {
-    crearTablaCompras(cabeceras, "cabeTabla");
+    console.log(rpta);
     if (rpta != "") {
         var listas = rpta.split("↔");
         var Resultado = listas[0];
@@ -42,15 +45,30 @@ function mostrarLista(rpta) {
             mostrarRespuesta(Resultado, mensaje, "error");
         }
     }
-    reziseTabla();
 }
-function listar() {
-    matriz = crearMatriz(listaDatos);
-    mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
+function listar(r) {
+    console.log(r);
+    if (r[0] !== '') {
+        let newDatos = [];
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                fechaDocumento: valor[1],
+                serieDocumento: valor[2],
+                numDocumento: valor[3],
+                clienteRazon: valor[4],
+                subTotalNacional: valor[5],
+                iGVNacional: valor[6],
+                totalNacional: valor[7],
+                estado: valor[8],
+                enlace: valor[9]
+            })
+        });
+        console.log(newDatos);
+        let cols = ["fechaDocumento", "serieDocumento", "numDocumento", "clienteRazon", "subTotalNacional", "iGVNacional", "totalNacional", "estado"];
+        loadDataTable(cols, newDatos, "idDocumentoVenta", "tbDatos", cadButtonOptions(), false);
+    }
+
 }
 //Tabla
 function crearMatriz(listaDatos) {
@@ -86,59 +104,6 @@ function crearMatriz(listaDatos) {
         document.getElementById("contentPrincipal").innerHTML = "";
     }
     return matriz;
-}
-function mostrarMatriz(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                if (matriz[i][8] == "INACTIVO") {
-                    var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;color:red; 'ondblclick=mostrarDetalle(2,\"" + matriz[i][0] + "\") >";
-                } else {
-                    var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer; 'ondblclick=mostrarDetalle(2,\"" + matriz[i][0] + "\") >";
-                }
-                for (var j = 0; j < cabeceras.length; j++) {
-                    var enlaceDoc = (matriz[i][9]).toLowerCase();
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0: case 8:
-                            contenido2 += "col-md-2' style='display:none;'>";
-                            break;
-                        case 1:
-                            contenido2 += "col-md-2'>";
-                            break;
-                        case 4:
-                            contenido2 += "col-md-3' style='padding-top:5px;'>";
-                            break;
-                        case 3: case 2: case 5: case 6: case 7:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "<div class='col-12 col-md-2'>";
-                contenido2 += "<div class='row saltbtn'>";
-                contenido2 += "<div class='col-12'>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
-        }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
-        });
-    }
 }
 function crearTablaCompras(cabeceras, div) {
     var contenido = "";
@@ -189,27 +154,21 @@ function configBM() {
 function mostrarBusqueda(rpta) {
     if (rpta != '') {
         var listas = rpta.split('↔');
-        listaDatos = listas[2].split('▼');
-
-        matriz = crearMatriz(listaDatos);
-        mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
-        reziseTabla();
-        fnExcelReport(cabeceras, matriz);
-
+        listaDatos = listas[2].split('▼'); listar(listaDatos);
     }
 }
 function BuscarxFecha(f1, f2) {
-    var chkConTicket = document.getElementById("chkTicket").checked;
+    //var chkConTicket = document.getElementById("chkTicket").checked;
     //var chkSinTicket = document.getElementById("chkSinTicket").checked;
     //var chkTickets = document.getElementById("chkTickets").checked;
-    var Documentos;
-    if (chkConTicket == true) {
-        Documentos = 1;
-    } else {
-        Documentos = 2
-    }
+    //var Documentos;
+    //if (chkConTicket == true) {
+    //    Documentos = 1;
+    //} else {
+    //    Documentos = 2
+    //}
     //var Documentos = chkFacturas + "-" + chkBoletas + "-" + chkTickets;
 
-    var url = 'Reportes/ObtenerPorFecha_RegistroVentas?fechaInicio=' + f1 + '&fechaFin=' + f2 + '&idTipoDctos=' + Documentos;
+    var url = '/Reportes/ObtenerPorFecha_RegistroVentas?fechaInicio=' + f1 + '&fechaFin=' + f2 + '&idTipoDctos=' + 2;
     enviarServidor(url, mostrarBusqueda);
 }

@@ -9,7 +9,186 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
+<div class="row mb-3 pb-1">
+    <div class="col-12">
+        <div class="d-flex align-items-lg-center flex-lg-row flex-column">
+            <div class="flex-grow-1">
+                <h4 class="fs-16 mb-1">Bienvenido !</h4>
+                <p class="text-muted mb-0">Este es el resumen de hoy</p>
+            </div>
+            <div class="mt-3 mt-lg-0">
+                <form action="javascript:void(0);">
+                    <div class="row g-3 mb-0 align-items-center">
+                        <div class="col-sm-auto">
+                            <div class="input-group">
+                                <input type="text" class="form-control border-0 minimal-border dash-filter-picker shadow flatpickr-input" data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y" data-deafult-date="01 Jan 2022 to 31 Jan 2022" readonly="readonly">
+                                <div class="input-group-text bg-primary border-primary text-white">
+                                    <i class="ri-calendar-2-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-soft-info btn-icon waves-effect material-shadow-none waves-light layout-rightside-btn"><i class="ri-pulse-line"></i></button>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </form>
+            </div>
+        </div><!-- end card header -->
+    </div>
+    <!--end col-->
+</div>
 <div class="row">
+    <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Total Compras del Mes</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">S/.<span id="cmpS"></span> </h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-success-subtle rounded fs-3">
+                            <i class="bx bx-dollar-circle text-success"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Total Ventas del Mes</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">S/.<span id="vntS">0</span></h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-info-subtle rounded fs-3">
+                            <i class="bx bx-shopping-bag text-info"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Pagos Pendientes</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">S/.<span id="pgS">0</span></h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-primary-subtle rounded fs-3">
+                            <i class="bx bx-wallet text-primary"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Cobros Pendientes</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">S/.<span id="cbS">0</span></h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-primary-subtle rounded fs-3">
+                            <i class="bx bx-wallet text-primary"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+</div>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Top 10 Productos más vendidos</h4>
+            </div><!-- end card header -->
+
+            <div class="card-body">
+                <div class="table-responsive table-card">
+                    <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                        <tbody id="tbArticulosVendidos">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card card-height-100">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Top 10 Clientes frecuentes</h4>
+            </div><!-- end card header -->
+
+            <div class="card-body">
+                <div class="table-responsive table-card">
+                    <table class="table table-centered table-hover align-middle table-nowrap mb-0">
+                        <tbody id="tbClientesFrecuentes">
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <h5 class="fs-14 my-1 fw-medium">
+                                                <a href="apps-ecommerce-seller-details.html" class="text-reset">Cliente Demo</a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0">20-08-2024</p>
+                                    <span class="text-muted">Última compra</span>
+                                </td>
+                                <td>
+                                    <p class="mb-0">S/.350.00</p>
+                                    <span class="text-muted">Valor</span>
+                                </td>
+                            </tr><!-- end -->
+                        </tbody>
+                    </table><!-- end table -->
+                </div>
+            </div> <!-- .card-body-->
+        </div> <!-- .card-->
+    </div> <!-- .col-->
+</div>
+<div class="row d-none">
     <div class="col-xl-3 col-lg-6 col-12">
         <div class="card">
             <div class="card-content">
@@ -22,7 +201,7 @@
                         </div>
                     </div>
                     <div class="p-l-20 p-b-10  p-2 bg-gradient-x-primary white media-body" style="text-align:center">
-                        <h3 class="no-margin p-b-5">S/.<span id="cmpS"></span></h3>
+                        <h3 class="no-margin p-b-5"></h3>
                         <span class="hint-text">$ <span id="cmpD"></span></span>
                     </div>
                 </div>
@@ -88,7 +267,7 @@
         </div>
     </div>
 </div>
-<div class="row match-height">
+<div class="row match-height d-none">
     <div class="col-xl-8 col-lg-12">
         <div class="card">
             <div class="card-header">

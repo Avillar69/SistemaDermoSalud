@@ -24,11 +24,11 @@ var txtCantidad = document.getElementById("txtCantidad");
 var txtPrecio = document.getElementById("txtPrecio");
 var txtStock = document.getElementById("txtStock");
 var txtStockTotal = document.getElementById("txtStockTotal");
-$(function () {    
+$(function () {
     var url = "/OperacionesStock/ObtenerDatos?Tipo=" + Tipo;
     enviarServidor(url, mostrarLista);
     configurarBotonesModal();
-    configBM();   
+    configBM();
 });
 
 //Listar Stock Entrada
@@ -75,7 +75,7 @@ function mostrarLista(rpta) {
 
             let urlCompras = "/OperacionesStock/cargarCompras";
             enviarServidor(urlCompras, cargarDatosCompras);
-            
+
             listar(listaDatos);
         }
         else {
@@ -236,7 +236,7 @@ function configurarBotonesModal() {
             frm.append("idDocumento", gbi("cboCompra").value);
             frm.append("idGuiaRemision", "0");
             frm.append("Lista_Articulo", lista_Articulo());
-            //swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
+            Swal.fire({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
             enviarServidorPost(url, actualizarListar, frm);
         }
     };
@@ -244,7 +244,7 @@ function configurarBotonesModal() {
     btnCancelar.onclick = function () {
         show_hidden_Formulario(true);
     }
-        
+
     //Detalle de Articulo
     var btnAgregarArticulo = document.getElementById("btnAgregarArticulo");
     btnAgregarArticulo.onclick = function () {
@@ -274,10 +274,10 @@ function limpiarTodo() {
     limpiarControl("cboTipoMovimiento");
     $("#cboCompra").val(null).trigger('change');
     limpiarControl("cboEstadoMovimiento");
-    limpiarControl("txtObservacion");   
+    limpiarControl("txtObservacion");
     gbi("tbDetalle").innerHTML = "";
     limpiarCampoDetalle();
-    
+
     var fec = new Date().toLocaleDateString();
     var fecha;
     if (fec.includes("/")) { fecha = fec.split("/"); }
@@ -302,7 +302,7 @@ function eliminar(id) {
         } else {
             Swal.fire('Cancelado', 'No se elminó la Entrada de Mercancia', 'error');
         }
-    });    
+    });
 }
 function eliminarListar(rpta) {
     if (rpta != "") {
@@ -359,14 +359,14 @@ function cargarDatosTipoMovimiento(r) {
                     gbi("cboCompra").value = "";
                     gbi("TCompra").style.display = "";
                     break;
-                case "2":gbi("txtPrecio").value = ""; gbi("txtPrecio").disabled = false; 
+                case "2": gbi("txtPrecio").value = ""; gbi("txtPrecio").disabled = false;
                     gbi("art").style.display = ""; gbi("art2").style.display = ""; gbi("art3").style.display = "";
                     gbi("cboCompra").value = "";
                     gbi("TCompra").style.display = "none";
                     break;
-                default: gbi("txtPrecio").disabled = true; 
+                default: gbi("txtPrecio").disabled = true;
                     gbi("art").style.display = ""; gbi("art2").style.display = ""; gbi("art3").style.display = "";
-                    gbi("cboCompra").value = ""; 
+                    gbi("cboCompra").value = "";
                     gbi("TCompra").style.display = "none";
                     break;
             }
@@ -415,7 +415,7 @@ function cargarDatosProductos(r) {
             enviarServidor(url_2, cargarStock);
         }
     });
-   
+
 }
 function cargarDatosCompras(r) {
     let dataP = r.split("↔");
@@ -456,7 +456,7 @@ function cLP(r) {
         var UnidadMedida = lp[0];
         var Precio = lp[9];
         gbi("txtMarca").dataset.id = lp[2];
-        gbi("txtMarca").value = lp[3];        
+        gbi("txtMarca").value = lp[3];
         gbi("txtPrecio").value = Precio == null ? 0 : Precio;
         gbi("txtCantidad").focus();
         precioProducto = gbi("txtPrecio").value;
@@ -536,11 +536,11 @@ function addRowDetalle(tipo, data, idTipoMov) {
         if (idxDetalle == 0 && !estaAgregado) {
             cad += "<tr class='rowDetalle'>";
             cad += '<td class="d-none">0</td>';
-            cad += '<td class="" data-id="0">' + (rows.length + 1) +'</td>';
+            cad += '<td class="" data-id="0">' + (rows.length + 1) + '</td>';
             cad += '<td class="" data-id="' + $("#cboProducto").val() + '">' + $("#cboProducto option:selected").text() + '</td>';
             cad += '<td class="" data-id="' + $("#txtMarca").data("id") + '">' + $("#txtMarca").val() + '</td>';
             cad += '<td class="d-none">' + $("#txtUnidadMedida").val() + '</td>';
-            cad += '<td class="">' + parseFloat($("#txtCantidad").val()).toFixed(2) + '</td>';            
+            cad += '<td class="">' + parseFloat($("#txtCantidad").val()).toFixed(2) + '</td>';
             cad += '<td class="">' + parseFloat($("#txtPrecio").val()).toFixed(2) + '</td>';
             cad += '<td class="d-none">0</td>';
             cad += '<td class="">' + cadButtonDet("Detalle") + '</td>';
@@ -548,7 +548,7 @@ function addRowDetalle(tipo, data, idTipoMov) {
             document.getElementById("tbDetalle").innerHTML += cad;
         }
         else {
-            cad += '<td class="d-none">' + $("#lblDetalleId").html() +'</td>';
+            cad += '<td class="d-none">' + $("#lblDetalleId").html() + '</td>';
             cad += '<td class="" data-id="' + $("#lblMovimientoId").html() + '">' + $("#lblRowItem").html() + '</td>';
             cad += '<td class="" data-id="' + $("#cboProducto").val() + '">' + $("#cboProducto option:selected").text() + '</td>';
             cad += '<td class="" data-id="' + $("#txtMarca").data("id") + '">' + $("#txtMarca").val() + '</td>';
@@ -571,7 +571,7 @@ function addRowDetalle(tipo, data, idTipoMov) {
         cad += '<td class="d-none">0</td>';
         if (idTipoMov !== "9") {
             cad += '<td class="">' + cadButtonDet("Detalle") + '</td>';
-        }        
+        }
         cad += "</tr>";
         document.getElementById("tbDetalle").innerHTML += cad;
     }
@@ -594,7 +594,7 @@ function CargarDetalleCompra(rpta) {
                 cadDet += '<td class="d-none">UNI</td>';
                 cadDet += '<td class="">' + parseFloat(itemDet[4]).toFixed(2) + '</td>';
                 cadDet += '<td class="">' + parseFloat(itemDet[5]).toFixed(2) + '</td>';
-                cadDet += '<td class="d-none">'+itemDet[6]+'</td>';
+                cadDet += '<td class="d-none">' + itemDet[6] + '</td>';
                 cadDet += "</tr>";
             }
             document.getElementById("tbDetalle").innerHTML = cadDet;
@@ -612,9 +612,9 @@ function editDetalle(e) {
     $("#cboProducto").val($("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[2].dataset.id).trigger('change');
     gbi("txtMarca").dataset.id = $("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[3].dataset.id;
     $("#txtMarca").val($("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[3].innerHTML);
-    $("#txtUnidadMedida").val($("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[4].innerHTML);    
+    $("#txtUnidadMedida").val($("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[4].innerHTML);
     $("#txtCantidad").val($("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[5].innerHTML);
-    $("#txtPrecio").val($("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[6].innerHTML);    
+    $("#txtPrecio").val($("#tbDetalle")[0].rows[idxDetalle - 1].childNodes[6].innerHTML);
 }
 function deleteRowDet(e) {
     e.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
@@ -628,7 +628,7 @@ function validarFormulario() {
     if (validarControl("txtFecha")) error = false;
     if (error && rows.length == 0) {
         error = false;
-        swal("Error", "Debe agregar productos al detalle", "error")
+        Swal.fire("Error", "Debe agregar productos al detalle", "error")
     }
     return error;
 }

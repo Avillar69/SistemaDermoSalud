@@ -10,9 +10,6 @@
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
 
-<div class="row">
-    <div id="error"></div>
-</div>
 <div class="row" id="rowTabla">
     <div class="col-lg-12">
         <div class="card" id="orderList">
@@ -59,7 +56,7 @@
                             <div class="input-group-text bg-primary border-primary text-white">
                                 <i class="ri-calendar-2-line"></i>
                             </div>
-                            <input type="text" class="form-control flatpickr flatpickr-input" id="txtFilFecFn" data-provider="flatpickr" data-date-format="d/m/Y" autocomplete="off" />
+                            <input type="text" class="form-control flatpickr-input" id="txtFilFecFn" data-provider="flatpickr" data-date-format="d/m/Y" autocomplete="off" />
                         </div>
                     </div>
                     <div class="col-12 col-md-2 col-lg-2 mb-2">
@@ -216,7 +213,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Observación</span>
                                 </div>
-                                <input id='txtObservacion' type='text' class="form-control form-control-sm" >
+                                <input id='txtObservacion' type='text' class="form-control form-control-sm" autocomplete="off">
                             </div>
                         </div>
                         <br />
@@ -224,19 +221,20 @@
                     <hr />
                     <div class="row">
                         <div class="col-lg-8 col-sm-6 mb-2">
-                            <div class="input-group" style="flex-wrap: nowrap;">
+                            <div class="input-group" style="flex-wrap:nowrap;">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Cliente</span>
-                                    <input type='text' class="d-none" placeholder='' id='txtFechaVencimiento'>
                                 </div>
-                                <select class="form-control" id="cboRazonSocial">
-                                </select>
+                                <div class="input-group">
+                                    <select class="form-control" id="cboRazonSocial"></select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="input-group">
                                 <div class="input-group-text">N° Doc</div>
                                 <input id='txtNroDocumento' type='text' class="form-control form-control-sm">
+                                <button class="btn btn-outline-success material-shadow-none" type="button" id="btnModalCliente">+</button>
                             </div>
                         </div>
                     </div>
@@ -290,38 +288,60 @@
                     </div>
                     <hr />
                     <div class="row" id="divArticulos">
-                        <div class="col-lg-4 col-sm-6 mb-2">
-                            <div class="input-group mb-2" style="flex-wrap: nowrap;">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Producto</span>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6 mb-2">
+                                <div class="input-group">
+                                    <div class="input-group-text">Codigo Barras</div>
+                                    <input type="text" class="form-control" id="txtCodigoBarras" autocomplete="off">
                                 </div>
-                                <select class="form-control detalle vDetalle" id="cboProducto">
-                                </select>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 mb-2">
+                                <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Producto</span>
+                                    </div>
+                                    <select class="form-control detalle vDetalle" id="cboProducto">
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-sm-6 mb-2">
-                            <div class="input-group">
-                                <div class="input-group-text">Cantidad</div>
-                                <input type="text" class="form-control detalle vDetalle" id="txtCantidad" autocomplete="off">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-6 mb-2">
+                                <div class="input-group">
+                                    <div class="input-group-text">Cantidad</div>
+                                    <input type="text" class="form-control detalle vDetalle" id="txtCantidad" autocomplete="off">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2 col-sm-6 mb-2">
-                            <div class="input-group">
-                                <div class="input-group-text">Precio</div>
-                                <input type="text" class="form-control detalle vDetalle" id="txtPrecio" autocomplete="off">
+                            <div class="col-lg-2 col-sm-6 mb-2">
+                                <div class="input-group">
+                                    <div class="input-group-text">Precio</div>
+                                    <input type="text" class="form-control detalle vDetalle" id="txtPrecio" autocomplete="off">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2 col-sm-6 mb-2">
-                            <div class="input-group">
-                                <div class="input-group-text">Total</div>
-                                <input type="text" class="form-control detalle vDetalle" id="txtTotal" autocomplete="off">
+                            <div class="col-lg-2 col-sm-6 mb-2">
+                                <div class="input-group">
+                                    <div class="input-group-text">Total 1</div>
+                                    <input type="text" class="form-control detalle vDetalle" id="txtTotal" autocomplete="off" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2 col-sm-6 mb-2">
-                            <button type="button" id="btnAgregarDetalle" class="btn btn-dark">Agregar Detalle</button>
-                            @*<button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" id='btnAgregarDetalle'>Agregar</button>
-            <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalle()' id='btnGrabarDetalle'>New</button>
-            <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalle()' id='btnCancelarDetalle'>Cancelar</button>*@
+                            <div class="col-lg-2 col-sm-6 mb-2">
+                                <div class="input-group">
+                                    <div class="input-group-text">% Descuento</div>
+                                    <input type="text" class="form-control" id="txtPorDescuentoDet" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-6 mb-2">
+                                <div class="input-group">
+                                    <div class="input-group-text">Total</div>
+                                    <input type="text" class="form-control" id="txtTotalDesc" autocomplete="off" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-6 mb-2">
+                                <button type="button" id="btnAgregarDetalle" class="btn btn-dark">Agregar Detalle</button>
+                                @*<button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="margin-left:10px;" id='btnAgregarDetalle'>Agregar</button>
+                                    <button type='button' class='btn btn-sm btn-success pull-right waves-effect waves-light' style="display:none;margin-left:10px;" onclick='guardarItemDetalle()' id='btnGrabarDetalle'>New</button>
+                                    <button type='button' class='btn btn-sm btn-danger pull-right waves-effect waves-light' style="display:none;" onclick='eliminarDetalle()' id='btnCancelarDetalle'>Cancelar</button>*@
+                            </div>
                         </div>
                     </div>
                     <div class="row" id="divOtroServicio" style="display:none">
@@ -510,38 +530,87 @@
     <div class='modal-dialog modal-lg' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h4 class="modal-title" id="lblTituloModal">Marcas Registradas</h4>
+                <h4 class="modal-title" id="lblTituloModal">Agregar Cliente</h4>
                 <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="col-sm-12">
-                    <div class="row" style="display:none;">
-                        <div class='col-sm-12' id="div_Frm_Modal">
-                            <!-- formulario del modal -->
+                <div class="row">
+                    <div class="col-lg-2 col-sm-6 mb-2 d-none">
+                        <input placeholder='' id='txtIDCli' type='text' style="display:none;">
+                    </div>
+                    <div class="col-lg-6 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Codigo</span>
+                            </div>
+                            <input type="text" class="form-control" id="txtCodigo" placeholder='Autgenerado' autocomplete="off" readonly disabled>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <input id="txtFiltroMod" class="form-control form-control-sm" placeholder="Filtrar ... " />
+                    <div class="col-lg-6 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Tipo Persona</span>
+                            </div>
+                            <select class="form-control vFormulario" id="cboTipoPersona">
+                            </select>
                         </div>
                     </div>
-                    <div class="row" id="rowTabla" style="font-size:12px;">
-                        <div class="col-sm-12">
-                            <div class="col-md-12 m-t-10 p-0" id="divTablaCabecera_Modal"></div>
-                            <div class="col-md-12 table-responsive p-0" id="divTabla_Modal" style="max-height:350px;overflow-y:scroll;overflow-x:hidden;background-color:#f2f2f2">
-                                <div id="contentArea" class="clusterize-content">
-
-                                </div>
+                    <div class="col-lg-6 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Tipo Documento</span>
+                            </div>
+                            <select class="form-control vFormulario" id="cboTipoDocumentoP">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">N° Documento</span>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control vFormulario" id="txtNroDocumentoP" onkeypress="return IngresoNumero(event)" autocomplete="off">
+                                <button class="btn btn-outline-success material-shadow-none" type="button" id="btnBSN" disabled>-</button>
                             </div>
                         </div>
-                        @*<div id="scrollArea" class="clusterize-scroll">
-
-                            </div>*@
+                    </div>
+                    <div class="col-lg-12 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Razón Social</span>
+                            </div>
+                            <input type="text" class="form-control vFormulario" id="txtRazonSocial" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Estado.C</span>
+                            </div>
+                            <input type="text" class="form-control" id="txtEstadoC" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Condicion.C</span>
+                            </div>
+                            <input type="text" class="form-control" id="txtCondicionC" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-6 mb-2">
+                        <div class="input-group mb-2" style="flex-wrap: nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Dirección</span>
+                            </div>
+                            <input type="text" class="form-control vFormulario" id="txtDireccion" autocomplete="off">
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default waves-effect waves-light" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger waves-effect" id="btnCancelarCli">Cancelar</button>
                 <button type="button" class="btn btn-primary waves-effect waves-light" id="btnGrabar_Modal" data-grabar="">Guardar</button>
             </div>
         </div>

@@ -28,6 +28,8 @@ namespace SistemaDermoSalud.DataAccess
                     {
                         FN_CajaDTO oFN_CajaDTO = new FN_CajaDTO();
                         oFN_CajaDTO.idCaja = Convert.ToInt32(dr["idCaja"] == null ? 0 : Convert.ToInt32(dr["idCaja"].ToString()));
+                        oFN_CajaDTO.idTipoCaja = Convert.ToInt32(dr["idTipoCaja"] == null ? 0 : Convert.ToInt32(dr["idTipoCaja"].ToString()));
+                        oFN_CajaDTO.TipoCaja = dr["TipoCaja"] == null ? "" : dr["TipoCaja"].ToString();
                         oFN_CajaDTO.CodigoGenerado = dr["CodigoGenerado"] == null ? "" : dr["CodigoGenerado"].ToString();
                         oFN_CajaDTO.idEmpresa = Convert.ToInt32(dr["idEmpresa"] == null ? 0 : Convert.ToInt32(dr["idEmpresa"].ToString()));
                         oFN_CajaDTO.PeriodoAno = dr["PeriodoAno"] == null ? "" : dr["PeriodoAno"].ToString();
@@ -80,6 +82,8 @@ namespace SistemaDermoSalud.DataAccess
                     {
                         FN_CajaDTO oFN_CajaDTO = new FN_CajaDTO();
                         oFN_CajaDTO.idCaja = Convert.ToInt32(dr["idCaja"] == null ? 0 : Convert.ToInt32(dr["idCaja"].ToString()));
+                        oFN_CajaDTO.idTipoCaja = Convert.ToInt32(dr["idTipoCaja"] == null ? 0 : Convert.ToInt32(dr["idTipoCaja"].ToString()));
+                        oFN_CajaDTO.TipoCaja = dr["TipoCaja"] == null ? "" : dr["TipoCaja"].ToString();
                         oFN_CajaDTO.CodigoGenerado = dr["CodigoGenerado"] == null ? "" : dr["CodigoGenerado"].ToString();
                         oFN_CajaDTO.idEmpresa = Convert.ToInt32(dr["idEmpresa"] == null ? 0 : Convert.ToInt32(dr["idEmpresa"].ToString()));
                         oFN_CajaDTO.PeriodoAno = dr["PeriodoAno"] == null ? "" : dr["PeriodoAno"].ToString();
@@ -99,6 +103,8 @@ namespace SistemaDermoSalud.DataAccess
                         oFN_CajaDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioCreacion"].ToString()));
                         oFN_CajaDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioModificacion"].ToString()));
                         oFN_CajaDTO.Estado = Convert.ToBoolean(dr["Estado"] == null ? false : Convert.ToBoolean(dr["Estado"].ToString()));
+                        oFN_CajaDTO.HoraApertura = dr["HoraApertura"] == null ? "" : dr["HoraApertura"].ToString();
+                        oFN_CajaDTO.HoraCierre = dr["HoraCierre"] == null ? "" : dr["HoraCierre"].ToString();
                         oResultDTO.ListaResultado.Add(oFN_CajaDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -130,6 +136,8 @@ namespace SistemaDermoSalud.DataAccess
                     {
                         FN_CajaDTO oFN_CajaDTO = new FN_CajaDTO();
                         oFN_CajaDTO.idCaja = Convert.ToInt32(dr["idCaja"].ToString());
+                        oFN_CajaDTO.idTipoCaja = Convert.ToInt32(dr["idTipoCaja"] == null ? 0 : Convert.ToInt32(dr["idTipoCaja"].ToString()));
+                        oFN_CajaDTO.TipoCaja = dr["TipoCaja"] == null ? "" : dr["TipoCaja"].ToString();
                         oFN_CajaDTO.CodigoGenerado = dr["CodigoGenerado"].ToString();
                         oFN_CajaDTO.idEmpresa = Convert.ToInt32(dr["idEmpresa"].ToString());
                         oFN_CajaDTO.PeriodoAno = dr["PeriodoAno"].ToString();
@@ -181,6 +189,7 @@ namespace SistemaDermoSalud.DataAccess
                         SqlDataAdapter da = new SqlDataAdapter("SP_FN_Caja_UpdateInsert", cn);
                         da.SelectCommand.CommandType = CommandType.StoredProcedure;
                         da.SelectCommand.Parameters.AddWithValue("@idCaja", oFN_Caja.idCaja);
+                        da.SelectCommand.Parameters.AddWithValue("@idTipoCaja", oFN_Caja.idTipoCaja);
                         da.SelectCommand.Parameters.AddWithValue("@idEmpresa", oFN_Caja.idEmpresa);
                         da.SelectCommand.Parameters.AddWithValue("@PeriodoAno", oFN_Caja.PeriodoAno);
                         da.SelectCommand.Parameters.AddWithValue("@NroCaja", oFN_Caja.NroCaja);

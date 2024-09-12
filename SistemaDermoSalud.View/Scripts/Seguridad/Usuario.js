@@ -24,51 +24,33 @@ var txtPassword = document.getElementById("txtPassword");
 var chkActivo = document.getElementById("chkActivo");
 
 function mostrarLista(rpta) {
-    crearTablaModal(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         listaDatos = listas[0].split("▼");
         var listaRol = listas[1].split("▼");
         llenarCombo(listaRol, "cboRol", "Seleccione");
-        listar();
+        listar(listaDatos);
     }
 }
-function crearTablaUsuario(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info d-none d-md-flex' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-    for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0:
-                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-                break;
-            case 2:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-            case 6:
-                contenido += "              <div class='col-12 col-md-1'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
+function listar(r) {
+    let newDatos = [];
+    if (r[0] !== '') {
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idUsuario: valor[0],
+                CodigoGenerado: valor[1],
+                RolDescripcion: valor[2],
+                Usuario: valor[3],
+                FechaModificacion: valor[4],
+                UsuarioModificacionDescripcion: valor[5],
+                Estado: valor[6]
+            })
+        });
     }
-    contenido += "          </div>";
-
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
+    let cols = ["RolDescripcion", "Usuario", "FechaModificacion"];
+    loadDataTable(cols, newDatos, "idUsuario", "tbDatos", cadButtonOptions(), false);
 }
-function configurarFiltroUsuario(cabe) {
-    var texto = document.getElementById("txtFiltro");
-    texto.onkeyup = function () {
-        matriz = crearMatriz(listaDatos);
-        mostrarMatrizUsuario(matriz, cabeceras, "divTabla", "contentPrincipal");
-    };
-}
-
 function ExportarPDFs(orientation, titulo, cabeceras, matriz, nombre, tipo, v) {
     var texto = "";
     var columns = [];
@@ -152,17 +134,6 @@ function editItem(id) {
     gbi("btnCancelarDetalle").style.display = "";
 
 }
-
-function listar() {
-    matriz = crearMatriz(listaDatos);
-    configurarFiltroUsuario(cabeceras);
-    mostrarMatrizUsuario(matriz, cabeceras, "divTabla", "contentPrincipal");
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
-}
-
 function mostrarMatrizUsuario(matriz, cabeceras, tabId, contentID) {
     var nRegistros = matriz.length;
     if (nRegistros > 0) {
@@ -290,13 +261,13 @@ function mostrarDetalle(opcion, id) {
     limpiarTodo();
     switch (opcion) {
         case 1:
-            //AbrirModal('modal-form');
             show_hidden_Formulario();
             lblTituloPanel.innerHTML = "Nuevo Usuario";//Titulo Insertar
             break;
         case 2:
+            let idMarca = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
             lblTituloPanel.innerHTML = "Editar Usuario";//Titulo Modificar
-            TraerDetalle(id);
+            TraerDetalle(idMarca);
             show_hidden_Formulario();
             break;
     }
@@ -320,24 +291,23 @@ function validarFormulario() {
     return error;
 }
 function eliminar(id) {
-    //if (confirm("¿Está seguro que desea eliminar?") == false) return false;
-    swal({
-        title: "Desea Eliminar este Usuario?",
-        text: "No se podrá recuperar los datos eliminados.",
-        type: "warning",
+    let idUsuario = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
+    Swal.fire({
+        title: '¿Estás seguro de eliminar este Usuario?',
+        text: '¡No podrás revertir esto!',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Si, Eliminar",
-        closeOnConfirm: false,
-        closeOnCancel: false,
-    },
-        function (isConfirm) {
-            if (isConfirm) {
-                var url = "Seg_Usuario/Eliminar?idUsuario=" + id;
-                enviarServidor(url, eliminarListar);
-            } else {
-                swal("Cancelado", "No se elminó al Usuario", "error");
-            }
-        });
+        confirmButtonText: 'Si, Eliminalo!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            var url = "Seg_Usuario/Eliminar?idUsuario=" + idUsuario;
+            enviarServidor(url, eliminarListar);
+        } else {
+            Swal.fire('Cancelado', 'No se eliminó la marca', 'error');
+        }
+    });
 }
 function eliminarListar(rpta) {
     if (rpta != "") {
@@ -358,5 +328,5 @@ function eliminarListar(rpta) {
     }
     mostrarRespuesta(res, mensaje, tipo);
     listaDatos = data[2].split("▼");
-    listar();
+    listar(listaDatos);
 }

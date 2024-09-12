@@ -967,62 +967,61 @@ function validate(css) {
     return value;
 }
 //
+
 function BuscarxRuc() {
     if (txtNroDocumento.value.trim().length == 11) {
         var d = txtNroDocumento.value;
-        var url = "/SocioNegocio/bsn?r=" + d + "&t=" + gbi("cboTipoDocumento").value;
-        enviarServidor(url, cargarBusqueda);
+        //var url = "https://localhost:7100/api/Sunat/" + gbi("txtNroDocumento").value;
+        var url = "http://niveldigital.pe:8035/api/Sunat/" + gbi("txtNroDocumento").value;
+        enviarServidor(url, cargarBusquedaSunat);
+        gbi("txtNroDocumento").value = d;
+    }
+    else {
+
+        var d = txtNroDocumento.value;
+        //var url = "https://localhost:7100/api/Reniec/" + gbi("txtNroDocumento").value;
+        var url = "http://niveldigital.pe:8035/api/Reniec" + gbi("txtNroDocumento").value;
+        enviarServidor(url, cargarBusquedaReniec);
         gbi("txtNroDocumento").value = d;
     }
 }
-function cargarBusqueda(rpta) {
-    if (rpta != "") {
-        if (rpta == "Error") {
-            MensajeRapido("Este N° de RUC no existe", "Mensaje", "info");
-        }
-        else {
-            var p = JSON.parse(rpta);
-            txtRazonSocial.value = p.nombre_o_razon_social;
-            txtNroDocumento.value = p.ruc;
-            cboTipoPersona.value = 2;
-            cboTipoDocumento.value = 4;
-            gbi("txtCondicionC").value = p.estado_del_contribuyente;
-            gbi("txtEstadoC").value = p.condicion_de_domicilio;
-            gbi("tb_DetalleFDir").innerHTML = "";
-            if (p.departamento.trim() != "")
-                for (var i = 0; i < cboDepartamento.options.length; i++) {
-                    if (cboDepartamento.options[i].text == p.departamento) {
-                        cboDepartamento.selectedIndex = i;
-                        CargarProvincias();
-                        for (var j = 0; j < cboProvincia.options.length; j++) {
-                            if (cboProvincia.options[j].text == p.provincia) {
-                                cboProvincia.selectedIndex = j;
-                                CargarDistritos();
-                                for (var k = 0; k < cboDistrito.options.length; k++) {
-                                    if (cboDistrito.options[k].text == p.distrito) {
-                                        cboDistrito.selectedIndex = k;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-            if (p.direccion.trim() != "") {
-                txtDireccion.value = p.direccion_completa;
-                addItemDir(0, []);
-                limpiarCamposDetalleDir();
-            }
-            else {
-                MensajeRapido("No se encontró ninguna dirección para el Cliente.", "Mensaje", "info");
-            }
-        }
+function cargarBusquedaSunat(rpta) {
+    if (rpta) {
+        let objPersona = JSON.parse(rpta);
+        $("#txtRazonSocial").val(objPersona.razonSocial);
+        $("#txtEstadoC").val(objPersona.estado);
+        $("#txtCondicionC").val(objPersona.condicion);
+        let cad = "";
+        cad += "<tr class='rowDetDireccion'>";
+        cad += '<td class="" data-id="0">' + (document.getElementsByClassName("rowDetDireccion").length + 1) + '</td>';
+        cad += '<td class="">' + objPersona.direccion + '</td>';
+        cad += '<td class="">' + cadButton("Direccion") + '</td>';
+        cad += "</tr>";
+        document.getElementById("tbDirecciones").innerHTML += cad;
+    }
+    else {
+        MensajeRapido("No hay respuesta del servidor remoto.", "Error", "error");
+    }
+}
+function cargarBusquedaReniec(rpta) {
+    if (rpta) {
+        let objPersona = JSON.parse(rpta);
+        console.log(objPersona);
+        $("#txtRazonSocial").val(objPersona.nombres + ' ' + objPersona.apellidoPaterno + ' ' + objPersona.apellidoMaterno);
+        $("#txtEstadoC").val("ACTIVO");
+        $("#txtCondicionC").val("HABIDO");
+        let cad = "";
+        cad += "<tr class='rowDetDireccion'>";
+        cad += '<td class="" data-id="0">' + (document.getElementsByClassName("rowDetDireccion").length + 1) + '</td>';
+        cad += '<td class="">' + objPersona.direccion + '</td>';
+        cad += '<td class="">' + cadButton("Direccion") + '</td>';
+        cad += "</tr>";
+        document.getElementById("tbDirecciones").innerHTML += cad;
     }
     else {
         MensajeRapido("No hay respuesta del servidor remoto.", "Error", "error");
     }
 }
 // ESTADO Y condicion de contribuyenye
-
 
 

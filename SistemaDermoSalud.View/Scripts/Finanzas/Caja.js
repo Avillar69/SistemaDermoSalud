@@ -73,20 +73,24 @@ function listar(r) {
 
     if (r[0] !== '') {
         let newDatos = [];
+        console.log(r);
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
                 idCaja: valor[0],
                 descripcion: valor[1],
                 fechaApertura: valor[2],
+                horaApertura: valor[7],
                 fechaCierre: valor[3],
+                horaCierre: valor[8],
                 montoInicio: valor[4],
                 montoSaldo: valor[5],
-                estadoCaja: valor[6]
+                estadoCaja: valor[6],
+                tipoCaja: valor[9]
             })
         });
         console.log(newDatos);
-        let cols = ["descripcion", "fechaApertura", "fechaCierre", "montoInicio", "montoSaldo", "estadoCaja"];
+        let cols = ["tipoCaja","descripcion", "fechaApertura", "horaApertura", "fechaCierre", "horaCierre", "montoInicio", "montoSaldo", "estadoCaja"];
         loadDataTable(cols, newDatos, "idCaja", "tbDatos", cadButtonOptions(), false);
     }
 
@@ -219,7 +223,8 @@ function configurarBotonesModal() {
             frm.append("PeriodoAno", gbi("txtPeriodo").value);
             frm.append("NroCaja", gbi("txtNroCaja").value);
             frm.append("FechaApertura", gbi("dtpFechaInicio").value);
-            frm.append("idMoneda", gbi("txtMoneda").dataset.id);
+            frm.append("idTipoCaja", gbi("cboTipoCaja").value);
+            frm.append("idMoneda", gbi("txtMoneda").value);
             frm.append("MontoInicio", gbi("txtSaldoInicial").value);
             frm.append("MontoIngreso", gbi("txtMontoIngreso").value);
             frm.append("MontoSalida", gbi("txtMontoSalida").value);
@@ -363,11 +368,11 @@ function mostrarBusqueda(rpta) {
 }
 function validarFormularioCaja() {
     var error = true;
-    var sInicial = parseFloat(gbi("txtSaldoInicial").value);
-    if (sInicial == 0) {
-        error = false;
-        swal("Error", "Debe ingresar un saldo inicial mayor a 0", "error")
-    }
+    //var sInicial = parseFloat(gbi("txtSaldoInicial").value);
+    //if (sInicial == 0) {
+    //    error = false;
+    //    Swal.fire("Error", "Debe ingresar un saldo inicial mayor a 0", "error")
+    //}
     if (validarControl("txtSaldoInicial")) error = false;
     if (validarControl("txtMoneda")) error = false;
     return error;
@@ -453,10 +458,13 @@ function CargarDetalles(rpta) {
             gbi("txtSaldoInicial").value = listaCabecera[7];//Monto Inicio
             gbi("txtUsuarioResp").value = listaCabecera[8];//Usuario Responsable
             gbi("txtInicial").value = listaCabecera[7];//Saldo inicial
+            gbi("txtMoneda").value = listaCabecera[6];
             gbi("txtMontoIngreso").value = listaCabecera[9];//Ingresp
             gbi("txtMontoSalida").value = listaCabecera[10];//Salida
-            gbi("txtSaldoFinal").value = listaCabecera[11];//Saldo Final 
-            adc(listaMoneda, listaCabecera[6], "txtMoneda", 1);
+            gbi("txtSaldoFinal").value = listaCabecera[11];//Saldo Final
+            //adc(listaMoneda, listaCabecera[6], "txtMoneda", 1);
+            //console.log(listaCabecera);
+            gbi("cboTipoCaja").value = listaCabecera[14];//Saldo Final 
 
             gbi("cboTipoPago").value = "1";
             gbi("cboTipoPago").selectedOptions[0].innerHTML;
@@ -543,7 +551,7 @@ function DesbloquearCaja() {
 }
 function CargarDetalleCaja(r) {
 
-    var montoIngreso = 0; var montoIngresoEfectivo = 0; var montoIngresoTarjeta = 0;
+    var montoIngreso = 0; var montoIngresoEfectivo = 0; var montoIngresoTarjeta = 0; var montoIngresoYape = 0;
     var montoSalida = 0;
     if (r[0] !== '') {
         let newDatos = [];
@@ -566,15 +574,21 @@ function CargarDetalleCaja(r) {
                 Tarjeta: valor[10]
             })
 
-            var ingreso; var salida; var ingresoEfectivo; var ingresoTarjeta;
-            ingreso = valor[5]; ingresoEfectivo = valor[5]; ingresoTarjeta = valor[5];
+            var ingreso; var salida; var ingresoEfectivo;
+            ingreso = valor[5];
+            ingresoEfectivo = valor[5];
+            ingresoTarjeta = valor[5];
             salida = valor[5];
             if (valor[6] == "I") {
-                montoIngreso = parseFloat(montoIngreso) + parseFloat(ingreso);
-
-                switch (valor[7]) {
-                    case "1": montoIngresoEfectivo = parseFloat(montoIngresoEfectivo) + parseFloat(ingresoEfectivo); break;
-                    case "2": montoIngresoTarjeta = parseFloat(montoIngresoTarjeta) + parseFloat(ingresoEfectivo); break;
+                console.log(valor[8]);
+                switch (valor[8]) {
+                    case "EFECTIVO":
+                        montoIngreso = parseFloat(montoIngreso) + parseFloat(ingreso);
+                        montoIngresoEfectivo = parseFloat(montoIngresoEfectivo) + parseFloat(ingresoEfectivo);
+                        break;
+                    case "TARJETA":
+                        montoIngresoTarjeta = parseFloat(montoIngresoTarjeta) + parseFloat(ingresoEfectivo); break;
+                    default: montoIngresoYape = parseFloat(montoIngresoYape) + parseFloat(ingresoEfectivo); break;
                 }
             } else {
                 montoSalida = parseFloat(montoSalida) + parseFloat(salida);
@@ -585,10 +599,11 @@ function CargarDetalleCaja(r) {
             txtSaldoFinal.value = (montoInicial + montoIngreso - montoSalida).toFixed(2);
             gbi("txtIngresoEfectivo").value = montoIngresoEfectivo.toFixed(2);
             gbi("txtIngresoTarjeta").value = montoIngresoTarjeta.toFixed(2);
+            gbi("txtIngresoYape").value = montoIngresoYape.toFixed(2);
 
         });
         listaDetalleCajaReal = newDatos;
-        let cols = ["Index", "DescripcionConcepto", "SubTotalNacional", "IGVNacional", "TotalNacional","TipoPago"];
+        let cols = ["Index", "DescripcionConcepto", "SubTotalNacional", "IGVNacional", "TotalNacional", "TipoPago"];
         loadDataTable(cols, newDatos, "idCajaDetalle", "tb_DetalleCaja", cadButtonOptions(), false);
     }
 
@@ -1352,6 +1367,6 @@ function actualizarCerrarCaja(rpta) { //rpta es mi lista de colores
         if (res == "OK") { show_hidden_Formulario(true); }
         mostrarRespuesta(res, mensaje, tipo);
         listaDatos = data[2].split("▼");
-        listar();
+        listar(listaDatos);
     }
 }

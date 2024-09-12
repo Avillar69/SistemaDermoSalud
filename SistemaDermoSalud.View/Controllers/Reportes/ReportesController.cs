@@ -17,12 +17,29 @@ namespace SistemaDermoSalud.View.Controllers.Reportes
         // GET: Reportes
         public ActionResult RegistroVentas()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
         public ActionResult ReporteVentas()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
+        public ActionResult ReporteGastosxDia()
+        {
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
+        }
+
 
         public string ObtenerDatos_RegistroVenta()
         {

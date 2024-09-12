@@ -27,9 +27,9 @@ namespace SistemaDermoSalud.Controllers
 
             ResultDTO<Ma_ProductoDTO> oResultDTO = oProductoBL.ListarTodo(1);
             ResultDTO<Ma_MarcaDTO> oResultMarcaDTO = oMarcaBL.ListarTodo(1);
-            
-            string listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProducto","Descripcion","Marca","Estado","CodigoProducto"});
-            string listaMarca = Serializador.rSerializado(oResultMarcaDTO.ListaResultado, new string[] { "idMarca","Marca"});
+
+            string listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProducto", "Descripcion", "Marca", "Estado", "CodigoProducto" });
+            string listaMarca = Serializador.rSerializado(oResultMarcaDTO.ListaResultado, new string[] { "idMarca", "Marca" });
             return String.Format("{0}↔{1}↔{2}↔{3}", oResultDTO.Resultado, oResultDTO.MensajeError, listaMarca, listaProducto);
         }
         public string ObtenerDatosxID(int id)
@@ -38,7 +38,7 @@ namespace SistemaDermoSalud.Controllers
             ResultDTO<Ma_ProductoDTO> oResultDTO = oProductoBL.ListarxID(id);
             string listaProducto = "";
             listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { });
-            return String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError,listaProducto);
+            return String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
         }
         public string Grabar(Ma_ProductoDTO oProductoDTO)
         {
@@ -46,16 +46,16 @@ namespace SistemaDermoSalud.Controllers
             Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
             Ma_ProductoBL oProductoBL = new Ma_ProductoBL();
             string listaProducto = "";
-            if(oProductoDTO.idProducto == 0)
+            if (oProductoDTO.idProducto == 0)
             {
                 oProductoDTO.UsuarioCreacion = eSEGUsuario.idUsuario;
             }
             oProductoDTO.UsuarioModificacion = eSEGUsuario.idUsuario;
             oResultDTO = oProductoBL.UpdateInsert(oProductoDTO);
-            
+
             List<Ma_ProductoDTO> lstProductoDTO = oResultDTO.ListaResultado;
-            listaProducto = Serializador.rSerializado(lstProductoDTO, new string[] { "idProducto", "Descripcion", "Marca", "Estado" });
-            return string.Format("{0}↔{1}↔{2}",oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
+            listaProducto = Serializador.rSerializado(lstProductoDTO, new string[] { "idProducto", "Descripcion", "Marca", "Estado", "CodigoProducto" });
+            return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
         }
         public string Eliminar(Ma_ProductoDTO oProductoDTO)
         {
@@ -66,7 +66,16 @@ namespace SistemaDermoSalud.Controllers
             oResultDTO = oProductoBL.Delete(oProductoDTO);
             List<Ma_ProductoDTO> lstProductoDTO = oResultDTO.ListaResultado;
             listaProducto = Serializador.rSerializado(lstProductoDTO, new string[] { "idProducto", "Descripcion", "Marca", "Estado" });
-            return string.Format("{0}↔{1}↔{2}",oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
+            return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
+        }
+        public string ObtenerIDByCodigoBarras(string cb)
+        {
+
+            Ma_ProductoBL oProductoBL = new Ma_ProductoBL();
+            ResultDTO<Ma_ProductoDTO> oResultDTO = oProductoBL.ObtenerIDByCodigoBarras(cb);
+            string listaProducto = "";
+            listaProducto = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idProducto" });
+            return String.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, listaProducto);
         }
     }
 }

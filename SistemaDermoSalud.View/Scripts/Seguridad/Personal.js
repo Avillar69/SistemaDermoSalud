@@ -27,14 +27,13 @@ var chkActivo = document.getElementById("chkActivo");
 var dbimg64 = "";
 var txtColor = document.getElementById("mycp")
 function mostrarLista(rpta) {
-    crearTablaModal(cabeceras, "cabeTabla");
     if (rpta != "") {
         var listas = rpta.split("↔");
         var resultado = listas[0];
         if (resultado == "OK") {
             listaDatos = listas[2].split("▼");
             llenarCombo(listas[3].split("▼"), "cboCargo", "Seleccione");
-            listar();
+            listar(listaDatos);
         }
     }
 }
@@ -43,109 +42,22 @@ function imgClick() {
     fI.click();
 }
 
-$(function () {
-    $('#mycp').colorpicker();
-});
-function crearTablaModal(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-    for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0:
-                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-                break;
-            case 2:
-                contenido += "              <div class='col-12 col-md-3'>";
-                break;
-            case 6:
-                contenido += "              <div class='col-12 col-md-1'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
-    }
-    contenido += "          </div>";
-
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
-}
-function configurarFiltro() {
-    var texto = document.getElementById("txtFiltro");
-    texto.onkeyup = function () {
-        matriz = crearMatriz(listaDatos);
-        configurarPaginacion(matriz, registrosPagina, paginasBloque, indiceActualBloque);
-        indiceActualBloque = 0;
-        indiceActualPagina = 0;;
-        mostrarMatrizPersonal(0, registrosPagina, paginasBloque, indiceActualBloque, matriz, indiceActualPagina);
-    };
-
-}
-function listar() {
-    configurarFiltro();
-    matriz = crearMatriz(listaDatos);
-    configurarFiltro(cabeceras);
-    mostrarMatrizPersonal(matriz, cabeceras, "divTabla", "contentPrincipal");
-    reziseTabla();
-    $(window).resize(function () {
-        reziseTabla();
-    });
-}
-
-function mostrarMatrizPersonal(matriz, cabeceras, tabId, contentID) {
-    var nRegistros = matriz.length;
-    if (nRegistros > 0) {
-        nRegistros = matriz.length;
-        var dat = [];
-        for (var i = 0; i < nRegistros; i++) {
-            if (i < nRegistros) {
-                var contenido2 = "<div class='row panel salt' id='num" + i + "' tabindex='" + (100 + i) + "' style='padding:3px 20px;margin-bottom:2px;cursor:pointer;'>";
-                for (var j = 0; j < cabeceras.length; j++) {
-                    contenido2 += "<div class='col-12 ";
-                    switch (j) {
-                        case 0:
-                            contenido2 += "col-md-2' style='display:none;'>";
-                            break;
-                        case 2:
-                            contenido2 += "col-md-3' style='padding-top:5px;'>";
-                            break;
-                        case 5:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                        case 6:
-                            contenido2 += "col-md-1' style='padding-top:5px;'>";
-                            break;
-                        default:
-                            contenido2 += "col-md-2' style='padding-top:5px;'>";
-                            break;
-                    }
-                    contenido2 += "<span class='d-sm-none'>" + cabeceras[j] + " : </span><span id='tp" + i + "-" + j + "'>" + matriz[i][j] + "</span>";
-                    contenido2 += "</div>";
-                }
-                contenido2 += "<div class='col-12 col-md-2'>";
-
-                contenido2 += "<div class='row saltbtn'>";
-                contenido2 += "<div class='col-12'>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-danger pull-right m-l-10' style='padding:3px 10px;' onclick='eliminar(\"" + matriz[i][0] + "\")'> <i class='fa fa-trash-o fs-11'></i> </button>";
-                contenido2 += "<button type='button' class='btn btn-sm waves-effect waves-light btn-info pull-right' style='padding:3px 10px;' onclick='mostrarDetalle(2, \"" + matriz[i][0] + "\")'> <i class='fa fa-pencil fs-11'></i></button>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                contenido2 += "</div>";
-                dat.push(contenido2);
-            }
-            else break;
-        }
-        var clusterize = new Clusterize({
-            rows: dat,
-            scrollId: tabId,
-            contentId: contentID
+function listar(r) {
+    let newDatos = [];
+    if (r[0] !== '') {
+        r.forEach(function (e) {
+            let valor = e.split("▲");
+            newDatos.push({
+                idPersonal: valor[0],
+                Documento: valor[1],
+                NombreCompleto: valor[2],
+                FechaIngreso: valor[3],
+                Estado: valor[4]
+            })
         });
     }
+    let cols = ["Documento", "NombreCompleto", "FechaIngreso", "Estado"];
+    loadDataTable(cols, newDatos, "idPersonal", "tbDatos", cadButtonOptions(), false);
 }
 function TraerDetalle(id) {
     var url = "Personal/ObtenerDatosxID/?id=" + id;
@@ -183,7 +95,7 @@ function actualizarListar(rpta) {
         }
         mostrarRespuesta(res, mensaje, tipo);
         listaDatos = data[2].split("▼");
-        listar();
+        listar(listaDatos);
     }
 }
 function configurarBotonesModal() {
@@ -213,6 +125,8 @@ function configurarBotonesModal() {
             frm.append("idCargo", cboCargo.value);
             frm.append("Planilla", gbi("chkPlanilla").checked);
             frm.append("Colegiatura", txtColegiatura.value);
+            frm.append("Sueldo", gbi("txtSueldo").value);
+            frm.append("TipoJornada", gbi("cboTipoJornada").value);
             enviarServidorPost(url, actualizarListar, frm);
         }
     };
@@ -235,10 +149,9 @@ function configurarBotonesModal() {
         }
     }
 
-    gbi("mycp").onchange = function () { this.style.backgroundColor = this.value; };
     var image = document.getElementById('persImg');
     image.onerror = function () {
-        this.src = "../../app-assets/images/users/dftuser.png"; 
+        this.src = "../../app-assets/images/users/dftuser.png";
     };
 }
 
@@ -247,11 +160,13 @@ function adt(v, ctrl) {
     gbi(ctrl).value = v;
 }
 
-$("#txtFechaIngreso").datetimepicker({
-    format: 'DD-MM-YYYY',
+$("#txtFechaIngreso").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
 });
-$("#txtFechaNacimiento").datetimepicker({
-    format: 'DD-MM-YYYY',
+$("#txtFechaNacimiento").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
 });
 
 function CargarDetalles(rpta) {
@@ -278,10 +193,11 @@ function CargarDetalles(rpta) {
         cboCargo.value = listaDetalle[17];
         chkActivo.checked = listaDetalle[19] == "ACTIVO" ? true : false;
         txtColor.value = listaDetalle[20];
+        gbi("txtSueldo").value = listaDetalle[27];
+        gbi("cboTipoJornada").value = listaDetalle[28];
         gbi("persImg").src = imagen == "" ? "../../app-assets/images/users/dftuser.png" : imagen;
         gbi("chkPlanilla").checked = listaDetalle[26] == "TRUE" ? true : false;
-        gbi("mycp").onchange();
-        $('#mycp').colorpicker('setValue', gbi("mycp").value);
+        //$('#mycp').colorpicker('setValue', gbi("mycp").value);
     }
 }
 function mostrarDetalle(opcion, id) {
@@ -289,14 +205,14 @@ function mostrarDetalle(opcion, id) {
     limpiarTodo();
     switch (opcion) {
         case 1:
+            txtID.value = "";
             show_hidden_Formulario();
             lblTituloPanel.innerHTML = "Nuevo Personal";
-            $('#mycp').colorpicker('setValue', "RGB(30, 209, 0)");
-            gbi("mycp").style.backgroundColor = "RGB(30, 209, 0)";
             break;
         case 2:
+            let idPersonal = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
             lblTituloPanel.innerHTML = "Editar Personal";
-            TraerDetalle(id);
+            TraerDetalle(idPersonal);
             show_hidden_Formulario();
             break;
     }
@@ -319,23 +235,23 @@ function validarFormulario() {
     return error;
 }
 function eliminar(id) {
-    swal({
-        title: "Desea Eliminar este Personal?",
-        text: "No se podrá recuperar los datos eliminados.",
-        type: "warning",
+    let idPersonal = id.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
+    Swal.fire({
+        title: '¿Estás seguro de eliminar este Personal?',
+        text: '¡No podrás revertir esto!',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Si, Eliminar",
-        closeOnConfirm: false,
-        closeOnCancel: false,
-    },
-        function (isConfirm) {
-            if (isConfirm) {
-                var url = "Personal/Eliminar?idPersonal=" + id;
-                enviarServidor(url, eliminarListar);
-            } else {
-                swal("Cancelado", "No se elminó al Personal", "error");
-            }
-        });
+        confirmButtonText: 'Si, Eliminalo!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            var url = "Personal/Eliminar?idPersonal=" + idPersonal;
+            enviarServidor(url, eliminarListar);
+        } else {
+            Swal.fire('Cancelado', 'No se eliminó al Personal', 'error');
+        }
+    });
 }
 function eliminarListar(rpta) {
     if (rpta != "") {
@@ -355,5 +271,5 @@ function eliminarListar(rpta) {
     }
     mostrarRespuesta(res, mensaje, tipo);
     listaDatos = data[2].split("▼");
-    listar();
+    listar(listaDatos);
 }

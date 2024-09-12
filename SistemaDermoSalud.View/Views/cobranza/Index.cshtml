@@ -6,7 +6,7 @@
 }
 }
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cobranza";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
 
@@ -16,15 +16,15 @@
             <div class="card-header border-0">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        <h3 class="content-header-title mb-0">Pagos</h3>
+                        <h3 class="content-header-title mb-0">Cobranzas</h3>
                         <div class="row breadcrumbs-top">
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a href="#">Compras</a>
+                                        <a href="#">Ventas</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Pagos
+                                        Cobranzas
                                     </li>
                                 </ol>
                             </div>
@@ -78,7 +78,7 @@
                                     <th class="sort" data-sort="serie">Serie</th>
                                     <th class="sort" data-sort="numero">Número</th>
                                     <th class="sort" data-sort="descripcion">Descripcion</th>
-                                    <th class="sort" data-sort="pago">Pago</th>
+                                    <th class="sort" data-sort="pago">Cobro</th>
                                     <th class="sort" data-sort="operacion">Operación</th>
                                     <th class="sort" data-sort="monto">Monto</th>
                                     <th class="sort" data-sort="action"></th>
@@ -104,7 +104,7 @@
         <div class="card-header p-b-0">
             <div class="row">
                 <div class="col-sm-9 mt-2">
-                    <h3 class='panel-title' id='lblTituloPanel'>Registro Pago</h3>
+                    <h3 class='panel-title' id='lblTituloPanel'>Registro Cobranza</h3>
                 </div>
                 <div class="col-sm-3 pull-right">
                     <button type='button' class='btn btn-success pull-right waves-effect waves-light' id='btnGrabar' style="margin-left:10px;">Guardar</button>
@@ -427,4 +427,4 @@
         </div>
     </div>
 </div>
-<script src="~/Scripts/Compras/PagaSocio.js"></script>
+<script src="~/Scripts/Ventas/cobranza.js"></script>

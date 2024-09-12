@@ -23,7 +23,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
         int flgIgv = 0;
         double montoIgv = 0;
         //////Prueba
-        
+
         //DERMOSALUD
         public const string ruta = "https://api.pse.pe/api/v1/3538db4eee244c76be698f746650fd56904ca4c787ec432bad1ac11226621987";
         // # TOKEN para enviar documentos
@@ -54,6 +54,12 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
             AD_CuentaOrigenBL CuentaOrigen = new AD_CuentaOrigenBL();
             Ma_TipoAfectacionBL oMa_TipoAfectacionBL = new Ma_TipoAfectacionBL();
 
+            Ma_TipoPersonaBL oMa_TipoPersonaBL = new Ma_TipoPersonaBL();
+            Ma_TipoDocumentoBL oMa_TipoDocumentoBL = new Ma_TipoDocumentoBL();
+
+
+            ResultDTO<Ma_TipoPersonaDTO> lbeMa_TipoPersonaDTO = oMa_TipoPersonaBL.ListarTodo();
+            ResultDTO<Ma_TipoDocumentoDTO> lbeMa_TipoDocumentoDTO = oMa_TipoDocumentoBL.ListarTodo();
             ResultDTO<AD_SocioNegocioDTO> oListaSocios = oAD_SocioNegocioBL.ListarProv(eSEGUsuario.idEmpresa, "C");
             ResultDTO<Ma_MonedaDTO> oListaMoneda = oMa_MonedaBL.ListarTodo(eSEGUsuario.idEmpresa);
             ResultDTO<Ma_FormaPagoDTO> oListaFormaPago = oMa_FormaPagoBL.ListarTodo(eSEGUsuario.idEmpresa, "A");
@@ -74,6 +80,8 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
             string listaBanco = Serializador.rSerializado(oListaBancos.ListaResultado, new string[] { "idBanco", "Descripcion" });
             string listaCuentaOrigen = Serializador.rSerializado(oListaCuentaOrigen.ListaResultado, new string[] { "idCuentaOrigen", "NumeroCuenta" });
             string listaTipoAfectacion = Serializador.rSerializado(oListaAfectacion.ListaResultado, new string[] { "idTipoAfectacion", "Descripcion" });
+            string listaMa_TipoPersona = Serializador.rSerializado(lbeMa_TipoPersonaDTO.ListaResultado, new string[] { "idTipoPersona", "Descripcion" });
+            string listaMa_TipoDocumento = Serializador.rSerializado(lbeMa_TipoDocumentoDTO.ListaResultado, new string[] { "idTipoDocumento", "Descripcion" });
 
             List<VEN_DocumentoVentaDTO> listaImpresion = oListaDocumentoVentas.ListaResultado.OrderBy(y => y.SerieDocumento).OrderBy(x => x.CodigoSunat).ToList();
             string listaDocImpresion = Serializador.rSerializado(listaImpresion, new string[]
@@ -81,7 +89,10 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
 
             string listaDocImpresionPorCliente = Serializador.rSerializado(oListaReportePorCliente.ListaResultado, new string[] { });
 
-            return String.Format("{0}↔{1}↔{2}↔{3}↔{4}↔{5}↔{6}↔{7}↔{8}↔{9}↔{10}↔{11}↔{12}↔{13}", "OK", listaSocios, listaMoneda, listaFormaPago, listaComprobantes, listaTipoCompra, listaDocumentoVentas, fechaInicio.ToString("dd-MM-yyyy"), fechaFin.ToString("dd-MM-yyyy"), listaBanco, listaCuentaOrigen, listaTipoAfectacion, listaDocImpresion, listaDocImpresionPorCliente);
+            return String.Format("{0}↔{1}↔{2}↔{3}↔{4}↔{5}↔{6}↔{7}↔{8}↔{9}↔{10}↔{11}↔{12}↔{13}↔{14}↔{15}", "OK", listaSocios, listaMoneda,
+                listaFormaPago, listaComprobantes, listaTipoCompra, listaDocumentoVentas,
+                fechaInicio.ToString("dd-MM-yyyy"), fechaFin.ToString("dd-MM-yyyy"), listaBanco, listaCuentaOrigen,
+                listaTipoAfectacion, listaDocImpresion, listaDocImpresionPorCliente, listaMa_TipoPersona, listaMa_TipoDocumento);
         }
         public string ObtenerDatosxID(int id)
         {
@@ -234,7 +245,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
             invoice.cliente_email = "";//"andres_vl89@hotmail.com";
             invoice.cliente_email_1 = "";
             invoice.cliente_email_2 = "";
-            invoice.fecha_de_emision =objVenta.FechaDocumento;
+            invoice.fecha_de_emision = objVenta.FechaDocumento;
             invoice.fecha_de_vencimiento = DateTime.Now.AddDays(10);
             invoice.moneda = 1;
             invoice.tipo_de_cambio = objVenta.TipoCambio;
@@ -253,7 +264,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
             invoice.percepcion_base_imponible = "";
             invoice.total_percepcion = "";
             invoice.detraccion = false;
-            invoice.observaciones = objVenta.ObservacionVenta;
+            invoice.observaciones = "Hora : "+DateTime.Now.ToString("HH:mm:ss") + " | "+  objVenta.ObservacionVenta;
             invoice.documento_que_se_modifica_tipo = "";
             invoice.documento_que_se_modifica_serie = "";
             invoice.documento_que_se_modifica_numero = "";
@@ -327,7 +338,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
                     //if (objVenta.flgIGV == true) { item.subtotal = item.cantidad * item.valor_unitario * 100 / 118; } else { item.subtotal = item.cantidad * item.valor_unitario; }
                     //item.igv = (item.subtotal - (item.subtotal * Convert.ToDouble(objVenta.PorcDescuento) / 100)) * 0.18;//item.igv = (item.subtotal - Convert.ToDouble(dscto)) * 0.18;
                 }
-                item.descuento = (item.subtotal * Convert.ToDouble(objVenta.PorcDescuento) / 100); //"";                             
+                item.descuento = ""; //"";                             
                 item.tipo_de_igv = 1;
                 item.total = item.subtotal + item.igv;
                 item.anticipo_regularizacion = false;
@@ -400,7 +411,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
             { "idDocumentoVenta", "FechaDocumento", "SerieDocumento", "NumDocumento","ClienteRazon", "SubTotalNacional", "IGVNacional", "TotalNacional"});
             return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, lista_Venta);
         }
-        public string Anular(VEN_DocumentoVentaDTO oVEN_DocumentoVentaDTO)
+        public string Anular(int idDocumentoVenta)
         {
 
             VN_DocumentoVentaBL oVN_DocumentoVentaBL = new VN_DocumentoVentaBL();
@@ -408,7 +419,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
             DateTime fechaFin = DateTime.Today;
             ResultDTO<VEN_DocumentoVentaDTO> oResultDTO;
             Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
-            VEN_DocumentoVentaDTO oVenta = oVN_DocumentoVentaBL.ListarxIDVenta(oVEN_DocumentoVentaDTO.idDocumentoVenta);
+            VEN_DocumentoVentaDTO oVenta = oVN_DocumentoVentaBL.ListarxIDVenta(idDocumentoVenta);
             Invoice objNubefact = CrearObjetoNubefact_Anular(oVenta);
             string json = JsonConvert.SerializeObject(objNubefact, Formatting.Indented);
             Console.WriteLine(json);
@@ -417,7 +428,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
 
             //int VCaja = oVN_DocumentoVentaBL.ValidarEnCaja(oVEN_DocumentoVentaDTO.idDocumentoVenta);
 
-            if (oVEN_DocumentoVentaDTO.idDocumentoVenta > 0)
+            if (idDocumentoVenta > 0)
             {
                 //Envío de datos a nubefact
                 string json_de_respuesta = SendJson(ruta, json_en_utf_8, token);
@@ -445,7 +456,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
                     rpta += "CODIGO DE BARRAS: " + leer_respuesta.codigo_de_barras;
                     rpta += "ERRORES: " + leer_respuesta.errors;
 
-                    oResultDTO_Venta = oVN_DocumentoVentaBL.Anular(oVEN_DocumentoVentaDTO, fechaInicio, fechaFin);
+                    oResultDTO_Venta = oVN_DocumentoVentaBL.Anular(idDocumentoVenta, fechaInicio, fechaFin);
                 }
                 else
                 {
@@ -454,7 +465,7 @@ namespace SistemaDermoSalud.View.Controllers.Ventas
             }
             else
             {
-                oResultDTO_Venta = oVN_DocumentoVentaBL.Anular(oVEN_DocumentoVentaDTO, fechaInicio, fechaFin);
+                oResultDTO_Venta = oVN_DocumentoVentaBL.Anular(idDocumentoVenta, fechaInicio, fechaFin);
             }
 
             if (oResultDTO_Venta != null)

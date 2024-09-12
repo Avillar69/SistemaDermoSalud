@@ -28,11 +28,9 @@ namespace SistemaDermoSalud.Entities
         public int UsuarioCreacion { get; set; }
         public int UsuarioModificacion { get; set; }
         public bool Estado { get; set; }
-
         public string Usuario { get; set; }
         public string Moneda { get; set; }
         public string Opcion { get; set; }
-
         public decimal TotalIngreso { get; set; }
         public decimal MontoTotal { get; set; }
         public string RazonSocial { get; set; }
@@ -40,5 +38,9 @@ namespace SistemaDermoSalud.Entities
         public string Direccion { get; set; }
         public decimal MontoEfectivo { get; set; }
         public decimal MontoTarjeta { get; set; }
+        public int idTipoCaja { get; set; }
+        public string TipoCaja { get; set; }
+        public string HoraApertura { get; set; }
+        public string HoraCierre { get; set; }
     }
 }

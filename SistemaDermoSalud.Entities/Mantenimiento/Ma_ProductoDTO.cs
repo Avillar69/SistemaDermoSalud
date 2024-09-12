@@ -22,13 +22,14 @@ namespace SistemaDermoSalud.Entities.Mantenimiento
         public string CodigoProducto { get; set; }
         public string CodigoAutogenerado { get; set; }
         public int idTalla { get; set; }
-        public int idColor{ get; set; }
+        public int idColor { get; set; }
         public decimal PrecioVenta { get; set; }
         public decimal PrecioOriginal { get; set; }
         public decimal MargenGananciaDeseado { get; set; }
         public decimal MargenGananciaPermitido { get; set; }
         public decimal PorcDescuentoMaximo { get; set; }
-        public string Genero{ get; set; }
+        public string Genero { get; set; }
         public string CodigoBarras { get; set; }
+        public bool PermiteDescuento { get; set; }
     }
 }

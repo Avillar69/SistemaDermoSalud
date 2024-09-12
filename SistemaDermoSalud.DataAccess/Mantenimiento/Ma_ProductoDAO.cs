@@ -124,9 +124,10 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oProductoDTO.PrecioOriginal = Convert.ToDecimal(dr["PrecioOriginal"].ToString());
                         oProductoDTO.MargenGananciaDeseado = Convert.ToDecimal(dr["MargenGananciaDeseado"].ToString());
                         oProductoDTO.MargenGananciaPermitido = Convert.ToDecimal(dr["MargenGananciaPermitido"].ToString());
-                        oProductoDTO.PorcDescuentoMaximo = Convert.ToDecimal(dr["PorcDescuentoMaximo"].ToString());
+                        oProductoDTO.PorcDescuentoMaximo = Convert.ToDecimal(dr["DescuentoMax"].ToString());
                         oProductoDTO.Genero = dr["Genero"] == null ? "" : dr["Genero"].ToString();
                         oProductoDTO.CodigoBarras = dr["CodigoBarras"] == null ? "" : dr["CodigoBarras"].ToString();
+                        oProductoDTO.PermiteDescuento = Convert.ToBoolean(dr["PermiteDescuento"].ToString());
                         oResultDTO.ListaResultado.Add(oProductoDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -175,6 +176,7 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         da.SelectCommand.Parameters.AddWithValue("@PorcDescuentoMaximo", oProducto.PorcDescuentoMaximo);
                         da.SelectCommand.Parameters.AddWithValue("@Genero", oProducto.Genero);
                         da.SelectCommand.Parameters.AddWithValue("@CodigoBarras", oProducto.CodigoBarras);
+                        da.SelectCommand.Parameters.AddWithValue("@PermiteDescuento", oProducto.PermiteDescuento);
 
                         int rpta = da.SelectCommand.ExecuteNonQuery();
                         if (rpta == 1)
@@ -236,6 +238,36 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oResultDTO.MensajeError = ex.Message;
                         oResultDTO.ListaResultado = new List<Ma_ProductoDTO>();
                     }
+                }
+            }
+            return oResultDTO;
+        }
+        public ResultDTO<Ma_ProductoDTO> ObtenerIDByCodigoBarras(string CodigoBarras)
+        {
+            ResultDTO<Ma_ProductoDTO> oResultDTO = new ResultDTO<Ma_ProductoDTO>();
+            oResultDTO.ListaResultado = new List<Ma_ProductoDTO>();
+            using (SqlConnection cn = new Conexion().conectar())
+            {
+                try
+                {
+                    cn.Open();
+                    SqlDataAdapter da = new SqlDataAdapter("SP_Ma_Producto_ListarIDByCodigoBarras", cn);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@CodigoBarras", CodigoBarras);
+                    SqlDataReader dr = da.SelectCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        Ma_ProductoDTO oProductoDTO = new Ma_ProductoDTO();
+                        oProductoDTO.idProducto = Convert.ToInt32(dr["idProducto"].ToString());
+                        oResultDTO.ListaResultado.Add(oProductoDTO);
+                    }
+                    oResultDTO.Resultado = "OK";
+                }
+                catch (Exception ex)
+                {
+                    oResultDTO.Resultado = "Error";
+                    oResultDTO.MensajeError = ex.Message;
+                    oResultDTO.ListaResultado = new List<Ma_ProductoDTO>();
                 }
             }
             return oResultDTO;

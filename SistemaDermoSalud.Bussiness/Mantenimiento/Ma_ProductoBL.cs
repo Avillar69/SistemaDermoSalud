@@ -30,5 +30,9 @@ namespace SistemaDermoSalud.Business
         {
             return oProductoDAO.Delete(oProductoDTO);
         }
+        public ResultDTO<Ma_ProductoDTO> ObtenerIDByCodigoBarras(string CodigoBarras)
+        {
+            return oProductoDAO.ObtenerIDByCodigoBarras(CodigoBarras);
+        }
     }
 }

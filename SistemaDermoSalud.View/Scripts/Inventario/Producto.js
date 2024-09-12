@@ -154,6 +154,7 @@ function mostrarDetalle(opcion, id) {
     switch (opcion) {
         case 1:
             chkActivo.checked = true;
+            gbi("chkDescuento").checked = false;
             show_hidden_Formulario();
             lblTituloPanel.innerHTML = "Nuevo Producto";
             gbi("txtCodigoProducto").focus();
@@ -285,6 +286,7 @@ function configurarBotonesModal() {
             frm.append("PorcDescuentoMaximo", gbi("txtPorcDescuentoMaximo").value);
             frm.append("Genero", gbi("cboGenero").value);
             frm.append("CodigoBarras", gbi("txtCodigoBarras").value);
+            frm.append("PermiteDescuento", gbi("chkDescuento").checked);
             enviarServidorPost(url, actualizarListar, frm);
         }
     };
@@ -351,6 +353,7 @@ function CargarDetalles(rpta) {
         var datos = rpta.split("↔");
         var a = datos[0].split("▲");
         var listaDetalle = datos[2].split("▲");
+        console.log(listaDetalle);
         txtID.value = listaDetalle[0];
         txtDescripcion.value = listaDetalle[1];
         cboMarca.value = listaDetalle[2];
@@ -367,6 +370,7 @@ function CargarDetalles(rpta) {
         gbi("txtPorcDescuentoMaximo").value = listaDetalle[18];
         gbi("cboGenero").value = listaDetalle[19];
         gbi("txtCodigoBarras").value = listaDetalle[20];
+        gbi("chkDescuento").checked = listaDetalle[21] == "FALSE" ? false : true;
     }
 }
 //

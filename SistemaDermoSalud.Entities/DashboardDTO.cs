@@ -38,9 +38,8 @@ namespace SistemaDermoSalud.Entities
         public decimal VentasOctubre { get; set; }
         public decimal VentasNoviembre { get; set; }
         public decimal VentasDiciembre { get; set; }
-        public List<DashboardDocDTO> listaCompras { get; set; } = new List<DashboardDocDTO>();
-        public List<DashboardDocDTO> listaVentas { get; set; } = new List<DashboardDocDTO>();
-        public List<DashboardDocDTO> listaCitas { get; set; } = new List<DashboardDocDTO>();
+        public List<DashboardTopProductoDTO> listaTopArticulos { get; set; } = new List<DashboardTopProductoDTO>();
+        public List<DashboardTopClientesDTO> listaVentas { get; set; } = new List<DashboardTopClientesDTO>();
         ///
         //datos para el grafico circular
         public int idServicio { get; set; }
@@ -50,8 +49,5 @@ namespace SistemaDermoSalud.Entities
         public decimal C_Menor { get; set; }
         public decimal Nutricion { get; set; }
         public decimal T_Piel { get; set; }
-
-        public List<VEN_DocumentoVentaDTO> listaVentaDoc { get; set; } = new List<VEN_DocumentoVentaDTO>();
-        public List<COM_DocumentoCompraDTO> listaCompraDoc { get; set; } = new List<COM_DocumentoCompraDTO>();
     }
 }

@@ -16,6 +16,7 @@ var listaTipoAfectacion;
 var listaSocioPorSiaca;
 var listarCuentasO;
 var listarBanco;
+var PorcDescuentoMax = 0;
 /*fin de objetos globales pago detalle*/
 var lp2;
 var idxDetalle = 0;
@@ -31,24 +32,127 @@ configBM();
 //$("#txtFilFecIn").datetimepicker({
 //    format: 'DD-MM-YYYY',
 //});
-//$("#txtFilFecFn").datetimepicker({
-//    format: 'DD-MM-YYYY',
-//});
-//$("#txtFechaCobroCheque").datetimepicker({
-//    format: 'DD-MM-YYYY',
-//});
-//$("#txtFecha").datetimepicker({
-//    format: 'DD-MM-YYYY',
-//});
+$("#txtFilFecIn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
+$("#txtFilFecFn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
+$("#txtFecha").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
 $('#collapseOne-2').on('shown.bs.collapse', function () {
-})
-$(document).ready(function () {
-    //gbi("txtFecha").onchange = function () {
-    //    var url = 'TipoCambio/ObtenerDatosTipoCambio?fecha=' + gbi("txtFecha").value;
-    //    enviarServidor(url, CargarTipoCambio);
-    //};
 });
 
+function crearCadDetalleDireccion() {
+    let listaDirecciones = "";
+    listaDirecciones += "0";
+    listaDirecciones += "|0";
+    listaDirecciones += "|1";
+    listaDirecciones += "|-";
+    listaDirecciones += "|0|01-01-2000|01-01-2000|1|1|true";
+    listaDirecciones += "¯";
+    return listaDirecciones;
+}
+$(document).ready(function () {
+    $("#btnGrabar_Modal").click(function () {
+
+        var url = "/SocioNegocio/GrabarCliente";
+        var frm = new FormData();
+        frm.append("idSocioNegocio", "0");
+        frm.append("idTipoPersona", $("#cboTipoPersona").val());
+        frm.append("RazonSocial", $("#txtRazonSocial").val());
+        frm.append("idTipoDocumento", $("#cboTipoDocumentoP").val());
+        frm.append("Documento", $("#txtNroDocumentoP").val());
+        frm.append("idPais", 1);
+        frm.append("idDepartamento", "00");
+        frm.append("idProvincia", "0000");
+        frm.append("idDistrito", "000000");
+        frm.append("Web", " ");
+        frm.append("Mail", " ");
+        frm.append("Cliente", true);
+        frm.append("Proveedor", false);
+        frm.append("Estado", true);
+
+        frm.append("Lista_Contacto", "");
+        frm.append("Lista_Direccion", crearCadDetalleDireccion());
+        frm.append("Lista_Telefono", " ");
+        frm.append("Lista_CuentaBancaria", " ");
+        enviarServidorPost(url, actualizarListaClientes, frm);
+    });
+    $("#cboTipoDocumentoP").change(function () {
+        switch ($("#cboTipoDocumentoP").val()) {
+            case "2":
+                $("#btnBSN").html("Reniec");
+                $("#btnBSN").prop("disabled", false);
+
+                break;
+            case "4":
+                $("#btnBSN").html("Sunat");
+                $("#btnBSN").prop("disabled", false);
+
+                break;
+            default:
+                $("#btnBSN").html("-");
+                $("#btnBSN").prop("disabled", true);
+
+                break;
+        }
+    });
+    $("#btnModalCliente").click(function () {
+        AbrirModal("modal-Modal");
+    })
+    $("#btnBSN").click(function () {
+        BuscarxRuc();
+    })
+    $("#btnCancelarCli").click(function () {
+        CerrarModal("modal-Modal");
+    })
+    $('#txtCodigoBarras').on('keypress', function (event) {
+        if (event.which == 13) { // 13 is the keycode for Enter
+            var url = "Producto/ObtenerIDByCodigoBarras?cb=" + $("#txtCodigoBarras").val();
+            enviarServidor(url, mostrarIdProducto);
+        }
+    });
+    $('#txtPorDescuentoDet').on('keyup', function (event) {
+        calcularTotal();
+    });
+    $('#txtDescuentoPrincipal').on('keyup', function (event) {
+        calcularSumaDetalle();
+    });
+});
+function mostrarIdProducto(r) {
+    var data = r.split("↔");
+    if (data[0] == "OK") {
+        $("#cboProducto").val(data[2]).trigger("change");
+    }
+}
+function actualizarListaClientes(rpta) {
+    if (rpta != "") { //validar cuando respuesta sea vacio
+        var data = rpta.split("↔");
+        var res = data[0];
+        var mensaje = "";
+        var tipo = "";
+
+        if (res == "OK") {
+            mensaje = "Se adicionó al cliente";
+            tipo = "success";
+        }
+        else {
+            mensaje = data[1];
+            tipo = "error";
+        }
+        if (res == "OK") {
+            CerrarModal("modal-Modal");
+            Swal.fire(res, mensaje, tipo);
+            listaSocios = data[2].split("▼");
+            cargarDatosClientes(listaSocios);
+        }
+    }
+}
 function mostrarLista(rpta) {
     if (rpta != "") {
         var listas = rpta.split("↔");
@@ -67,7 +171,8 @@ function mostrarLista(rpta) {
             listaTipoAfectacion = listas[11].split("▼");
             listaImpresion = listas[12].split("▼");
             listaReportePorCliente = listas[13].split("▼");
-
+            let listaTipoPersona = listas[14].split("▼");
+            let listaTipoDocumento = listas[15].split("▼");
             if (listaTipoAfectacion != "") llenarComboIGV(listaTipoAfectacion, "cboTipoAfectacion");
 
 
@@ -76,6 +181,8 @@ function mostrarLista(rpta) {
             cargarDatosProveedores(listaSocios);
             cargarDatosMonedas(listaMoneda);
             cargarDatosFormaPago(listaFormaPago);
+            cargarDatosTipoDocumentoP(listaTipoDocumento);
+            cargarDatosTipoPersona(listaTipoPersona);
 
             let urlProducts = "/OperacionesStock/cargarProductos";
             enviarServidor(urlProducts, cargarDatosProductos);
@@ -94,7 +201,78 @@ function mostrarLista(rpta) {
         listar(listaDatos);
     }
 }
+function BuscarxRuc() {
+    let txtNroDocumentoP = gbi("txtNroDocumentoP");
+    if (txtNroDocumentoP.value.trim().length == 11) {
+        var d = txtNroDocumentoP.value;
+        //var url = "https://localhost:7100/api/Sunat/" + gbi("txtNroDocumentoP").value;
+        var url = "http://niveldigital.pe:8035/api/Sunat/" + gbi("txtNroDocumentoP").value;
+        enviarServidor(url, cargarBusquedaSunat);
+        gbi("txtNroDocumentoP").value = d;
+    }
+    else {
 
+        var d = txtNroDocumentoP.value;
+        //var url = "https://localhost:7100/api/Reniec/" + gbi("txtNroDocumentoP").value;
+        var url = "http://niveldigital.pe:8035/api/Reniec/" + gbi("txtNroDocumentoP").value;
+        enviarServidor(url, cargarBusquedaReniec);
+        gbi("txtNroDocumentoP").value = d;
+    }
+}
+function cargarBusquedaSunat(rpta) {
+    if (rpta) {
+        let objPersona = JSON.parse(rpta);
+        $("#txtRazonSocial").val(objPersona.razonSocial);
+        $("#txtEstadoC").val(objPersona.estado);
+        $("#txtCondicionC").val(objPersona.condicion);
+        $("#txtDireccion").val(objPersona.direccion);
+        //let cad = "";
+        //cad += "<tr class='rowDetDireccion'>";
+        //cad += '<td class="" data-id="0">' + (document.getElementsByClassName("rowDetDireccion").length + 1) + '</td>';
+        //cad += '<td class="">' + objPersona.direccion + '</td>';
+        //cad += '<td class="">' + cadButton("Direccion") + '</td>';
+        //cad += "</tr>";
+    }
+    else {
+        MensajeRapido("No hay respuesta del servidor remoto.", "Error", "error");
+    }
+}
+function cargarBusquedaReniec(rpta) {
+    if (rpta) {
+        let objPersona = JSON.parse(rpta);
+        console.log(objPersona);
+
+        $("#txtRazonSocial").val(objPersona.nombres + " " + objPersona.apellidoPaterno + " " + objPersona.apellidoMaterno);
+        $("#txtEstadoC").val("");
+        $("#txtCondicionC").val("");
+        $("#txtDireccion").val("-");
+    }
+    else {
+        MensajeRapido("No hay respuesta del servidor remoto.", "Error", "error");
+    }
+}
+function cargarDatosTipoPersona(r) {
+    let TipoPersonas = r;
+    $("#cboTipoPersona").empty();
+    $("#cboTipoPersona").append(`<option value="">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        TipoPersonas.forEach(element => {
+            $("#cboTipoPersona").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+}
+function cargarDatosTipoDocumentoP(r) {
+    let TipoDocumentos = r;
+    $("#cboTipoDocumentoP").empty();
+    $("#cboTipoDocumentoP").append(`<option value="">Seleccione</option>`);
+
+    if (r && r.length > 0) {
+        TipoDocumentos.forEach(element => {
+            $("#cboTipoDocumentoP").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+        });
+    }
+}
 function cargarDatosTipoCompra(r) {
     let tipoCompras = r
     $("#cboTipoCompra").empty();
@@ -120,6 +298,43 @@ function cargarDatosTipoDocumento(r) {
 
         var url = 'DocumentoVenta/ObtenerSeriexTipoDocumento?id=' + gbi("cboTipoDocumento").value;
         enviarServidor(url, CargarSeriesVenta);
+    });
+}
+function cargarDatosClientes(r) {
+    $('#cboRazonSocial').select2('destroy');
+    $('#cboRazonSocial').html('');
+    let proveedores = r
+    let arr = [{
+        id: 0,
+        text: "Seleccione",
+    }];
+    for (var j = 0; j < proveedores.length; j++) {
+        let objChild = {
+            id: proveedores[j].split('▲')[0],
+            text: proveedores[j].split('▲')[2]
+        };
+        arr.push(objChild);
+    }
+    $("#cboRazonSocial").select2({
+        placeholder: "Seleccione",
+        data: arr, allowClear: true,
+        escapeMarkup: function (e) {
+            return e;
+        }
+    });
+
+    $("#cboRazonSocial").change(function () {
+        var selectedValue = $(this).val();
+        if (selectedValue !== "" && selectedValue !== null) {
+            for (let i = 0; i < proveedores.length; i++) {
+                if (selectedValue === proveedores[i].split("▲")[0]) {
+                    $("#txtNroDocumento").val(proveedores[i].split("▲")[1])
+                }
+            }
+            var url = "/SocioNegocio/ObtenerDireccionxID?id=" + selectedValue;
+            enviarServidor(url, cargarDatosDireccion);
+
+        }
     });
 }
 function cargarDatosProveedores(r) {
@@ -226,10 +441,27 @@ function cargarPrecio(r) {
     if (r.split('↔')[0] == "OK") {
         let listas = r.split('↔');
         let lp = listas[2].split("▲");
-        console.log(lp);
+
         precioProducto = lp[14];
         let Precio = lp[14];
+        PorcDescuentoMax = lp[18];
         gbi("txtPrecio").value = Precio == null ? 0 : Precio;
+
+        $("#txtCantidad").val("1").trigger("change");
+        if (lp[21] == "FALSE") {
+            gbi("txtPorDescuentoDet").disabled = true;
+            gbi("txtPorDescuentoDet").value = "0.00";
+            gbi("txtTotalDesc").disabled = true;
+        }
+        else {
+            gbi("txtPorDescuentoDet").disabled = false;
+            gbi("txtTotalDesc").disabled = false;
+        }
+        calcularTotal();
+    }
+    else {
+
+        gbi("txtPorDescuentoDet").disabled = true;
     }
 }
 function listar(r) {
@@ -272,6 +504,13 @@ function loadDataTableV(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
     columnas.push(itemBtn);
     tbDatos = $('#' + tid).DataTable({
         data: datos,
+        createdRow: function (row, data, dataIndex) {
+            if (data.estado == `INACTIVO`) {
+                $(row).addClass('table-danger');
+            } else {
+                $(row).addClass('table-success');
+            }
+        },
         columns: columnas,
         rowId: rid,
         order: arrOrder,
@@ -335,7 +574,7 @@ function cadButtonOptions() {
     cad += '<a class="dropdown-item" href="javascript:void(0)" onclick="mostrarDetalle(9,this)"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Imprimir</a>';
     cad += '</li>';
     cad += '<li>';
-    cad += '<a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="javascript:void(0)" onclick="eliminar(this)"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Eliminar</a>';
+    cad += '<a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="javascript:void(0)" onclick="eliminar(this)"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Anular</a>';
     cad += '</li>';
     cad += '</ul>';
     cad += '</div>';
@@ -363,16 +602,10 @@ function rptaValidacion(m) {
         cboMoneda.selectedIndex = 1;
         cboFormaPago.selectedIndex = 1;
         cboTipoAfectacion.selectedIndex = 0;
-        //adc(listaMoneda, 1, "txtMoneda", 1);
-        //adc(listaFormaPago, 2, "txtFormaPago", 1);
         gbi("btnEnviarSunat").style.display = "none";
-        console.log("si entro");
-        //gbi("txtTipoVenta").value = "PRODUCTOS";
-        //gbi("txtTipoVenta").dataset.id = "1";
-        //gb("txtNroDocumento").value = "00000000";
-        //gb("txtDireccionA").value = "-";
-    } else {
-        swal('Error', 'Debe aperturar una caja para ingresar ventas', 'error');
+    }
+    else {
+        Swal.fire('Error', 'Debe aperturar una caja para ingresar ventas', 'error');
     }
 }
 function mostrarDetalle(opcion, idRow) {
@@ -383,6 +616,10 @@ function mostrarDetalle(opcion, idRow) {
         case 1:
             limpiarTodo();
             enviarServidorPost("caja/ValidarCajaAperturada", rptaValidacion);
+            break;
+        case 8:
+            id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+            enviarServidorPost("DocumentoVenta/Anular?idDocumentoVenta=" + id, reloadDelete);
             break;
         case 9:
             id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
@@ -402,6 +639,9 @@ function mostrarDetalle(opcion, idRow) {
             break;
     }
 }
+function reloadDelete(r) {
+    console.log(r);
+}
 function redirectPDF(r) {
     window.open(r);
 }
@@ -417,26 +657,23 @@ function BloquearDetalle() {
     gbi("btnGrabar").style.display = "none";
 
 }
-function eliminar(id) {
-    swal({
-        title: 'Desea Eliminar el Documento de  Venta? ',
+function eliminar(idRow) {
+    let id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+    Swal.fire({
+        title: 'Desea Anular el Documento de  Venta? ',
         text: 'No podrá recuperar los datos eliminados.',
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si, Eliminalo!',
-        closeOnConfirm: false,
-        closeOnCancel: false
-    },
-        function (isConfirm) {
-            if (isConfirm) {
-                IdEliminar = "";
-                IdEliminar = id;
-                var u = "PagarSocio/BuscarPago?id=" + id + "&idEmpresa=" + 2;
-                enviarServidor(u, BuscarPago);
-            } else {
-                swal('Cancelado', 'No se eliminó el Documento Venta', 'error');
-            }
-        });
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            var url = "DocumentoVenta/Anular?idDocumentoVenta=" + id;
+            enviarServidor(url, eliminarListar);
+        } else {
+            Swal.fire('Cancelado', 'No se eliminó la marca', 'error');
+        }
+    });
 }
 function BuscarPago(rpta) {
     if (rpta != '') {
@@ -471,6 +708,7 @@ function BuscarPago(rpta) {
     }
 }
 function eliminarListar(rpta) {
+    console.log(rpta);
     if (rpta != '') {
         var data = rpta.split('↔');
         var res = data[0];
@@ -478,8 +716,7 @@ function eliminarListar(rpta) {
         if (res == 'OK') {
             mensaje = 'Se eliminó el Documento de venta';
             tipo = 'success';
-            listaDatos = data[2].split('▼');
-            listar();
+            $("#btnBuscar").click();
         }
         else {
             mensaje = data[1]
@@ -580,7 +817,7 @@ function configBM() {
                         frm.append("FechaDocumento", gvt("txtFecha"));
                         frm.append("SerieDocumento", gbi("cboNroSerie").value);
                         frm.append("NumDocumento", gvt("txtNroComprobante"));
-                        switch (gbi("cboTipoVenta").dataset.id) {
+                        switch (gbi("cboTipoCompra").value) {
                             case "1": frm.append("cadDetalle", crearCadDetalle()); break;
                             case "2": frm.append("cadDetalle", crearCadDetalleServicio()); break;
                             case "3": frm.append("cadDetalle", crearCadDetalleOtroServicio()); break;
@@ -606,8 +843,8 @@ function configBM() {
                         frm.append("TipoPago", gbi("cboTipoPago").selectedOptions[0].text.length == 0 ? " " : gbi("cboTipoPago").selectedOptions[0].text);
                         frm.append("Tarjeta", gbi("cboTarjeta").selectedOptions[0].text.length == 0 ? " " : gbi("cboTarjeta").selectedOptions[0].text);
                         frm.append("NroOperacion", gbi("txtNOperacion").value.length == 0 ? " " : gbi("txtNOperacion").value);
-                        frm.append("FormaPago", gbi("txtFormaPago").value);
-                        swal({ title: "<div class='loader' style='margin:0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
+                        frm.append("FormaPago", gbi("cboFormaPago").selectedOptions[0].text);
+                        Swal.fire({ title: "<div class='loader' style='margin:0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
                         enviarServidorPost(url, actualizarListar, frm);
                     }
                 }
@@ -710,6 +947,7 @@ function configBM() {
                                         frm.append("ObservacionCaja", " ");
 
                                 }
+                                Swal.fire({ title: "<div class='loader' style='margin:0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
                                 enviarServidorPost(url, actualizarListar, frm);
                             }
                         });
@@ -824,6 +1062,7 @@ function configBM() {
                                 frm.append("TotalDescuentoNacional", gvt("txtDescuento"));
                                 frm.append("TotalDescuentoExtranjero", gvt("txtDescuento"));
                                 frm.append("TotalNacional", gvt("txtTotalF"));
+                                frm.append("idTipoPago", gbi("cboTipoPago").value);
                                 frm.append("TipoPago", gbi("cboTipoPago").selectedOptions[0].text);
                                 frm.append("FormaPago", gbi("txtFormaPago").value);
                                 switch (gbi("cboTipoPago").selectedOptions[0].text) {
@@ -842,7 +1081,7 @@ function configBM() {
                                         frm.append("ObservacionCaja", " ");
 
                                 }
-                                swal({ title: "<div class='loader' style='margin:0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
+                                Swal.fire({ title: "<div class='loader' style='margin:0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
                                 enviarServidorPost(url, actualizarListar, frm);
                             }
                         });
@@ -857,11 +1096,26 @@ function configBM() {
 function calcularTotal() {
     let txtPrecio = 0;
     let txtCantidad = 0;
+    let txtPorDescuentoDet = 0;
+
     (gbi("txtPrecio").value == "") ? txtPrecio = 0 : txtPrecio = gbi("txtPrecio").value;
     (gbi("txtCantidad").value == "") ? txtCantidad = 0 : txtCantidad = gbi("txtCantidad").value;
+    (gbi("txtPorDescuentoDet").value == "") ? txtPorDescuentoDet = 0 : txtPorDescuentoDet = gbi("txtPorDescuentoDet").value;
 
-    let tot = parseFloat(txtCantidad) * parseFloat(txtPrecio);
-    gbi("txtTotal").value = tot.toFixed(2);
+    if (parseFloat(txtPorDescuentoDet) <= parseFloat(PorcDescuentoMax)) {
+        let tot = parseFloat(txtCantidad) * parseFloat(txtPrecio);
+        gbi("txtTotal").value = tot.toFixed(2);
+        let totSinDes = tot * (100 - parseFloat(txtPorDescuentoDet)) / 100;
+        gbi("txtTotalDesc").value = totSinDes.toFixed(2);
+    }
+    else {
+        Swal.fire("Alerta", "El porcentaje de descuento es mayor al permitido", "info");
+
+        let tot = parseFloat(txtCantidad) * parseFloat(txtPrecio);
+        gbi("txtTotal").value = tot.toFixed(2);
+        gbi("txtPorDescuentoDet").value = (0).toFixed(2);
+        gbi("txtTotalDesc").value = tot.toFixed(2);
+    }
 }
 
 function validarAgregarDetalle() {
@@ -873,12 +1127,14 @@ function validarAgregarDetalle() {
     return error;
 }
 function limpiarCamposDetalle() {
-    document.getElementById("lblDetalleId").innerHTML = "";
-    document.getElementById("lblDocumentoId").innerHTML = "";
+    document.getElementById("txtCodigoBarras").value = "";
     $("#cboProducto").val(null).trigger('change');
     document.getElementById("txtCantidad").value = "";
     document.getElementById("txtPrecio").value = "";
     document.getElementById("txtTotal").value = "";
+    document.getElementById("txtPorDescuentoDet").value = "";
+    document.getElementById("txtTotalDesc").value = "";
+    PorcDescuentoMax = 0;
 }
 //function calcularSumaDetalle() {
 //    var sum = 0;
@@ -911,7 +1167,7 @@ function cadButtonDet(t) {
     cad += '<a class="dropdown-item edit-item-btn" href="javascript:void(0)" onclick="edit' + t + '(this)"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Editar</a>';
     cad += '</li>';
     cad += '<li>';
-    cad += '<a class="dropdown-item remove-item-btn" href="javascript:void(0)" onclick="deleteRowDet(this);"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Eliminar</a>';
+    cad += '<a class="dropdown-item remove-item-btn" href="javascript:void(0)" onclick="deleteRowDet(this);"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Eliminar</a>';
     cad += '</li>';
     cad += '</ul>';
     cad += '</div>';
@@ -929,8 +1185,8 @@ function addRowDetalle(tipo, data) {
             cad += '<td class="" data-id="' + $("#cboProducto").val() + '">' + $("#cboProducto option:selected").text() + '</td>';
             cad += '<td class="">' + parseFloat($("#txtCantidad").val()).toFixed(2) + '</td>';
             cad += '<td class="">UNI</td>';
-            cad += '<td class="">' + parseFloat($("#txtPrecio").val()).toFixed(3) + '</td>';
-            cad += '<td class="">' + parseFloat($("#txtTotal").val()).toFixed(3) + '</td>';
+            cad += '<td class="">' + (parseFloat($("#txtTotalDesc").val()) / parseFloat($("#txtCantidad").val())).toFixed(3) + '</td>';
+            cad += '<td class="">' + parseFloat($("#txtTotalDesc").val()).toFixed(3) + '</td>';
             cad += '<td class="">' + cadButtonDet("Detalle") + '</td>';
             cad += "</tr>";
             document.getElementById("tbDetalle").innerHTML += cad;
@@ -941,8 +1197,8 @@ function addRowDetalle(tipo, data) {
             cad += '<td class="" data-id="' + $("#cboProducto").val() + '">' + $("#cboProducto option:selected").text() + '</td>';
             cad += '<td class="">' + parseFloat($("#txtCantidad").val()).toFixed(2) + '</td>';
             cad += '<td class="">UNI</td>';
-            cad += '<td class="">' + parseFloat($("#txtPrecio").val()).toFixed(3) + '</td>';
-            cad += '<td class="">' + parseFloat($("#txtTotal").val()).toFixed(3) + '</td>';
+            cad += '<td class="">' + (parseFloat($("#txtTotalDesc").val()) / parseFloat($("#txtCantidad").val())).toFixed(3) + '</td>';
+            cad += '<td class="">' + parseFloat($("#txtTotalDesc").val()).toFixed(3) + '</td>';
             cad += '<td class="">' + cadButtonDet("Detalle") + '</td>';
             $("#tbDetalle")[0].rows[idxDetalle - 1].innerHTML = cad;
         }
@@ -1164,13 +1420,17 @@ function calcularSumaDetalle() {
         gbi("txtGravada").value = (parseFloat((parseFloat(sum * 100 / 118)).toFixed(3))).toFixed(2);
         gbi("txtDescuento").value = (parseFloat((parseFloat(gbi("txtGravada").value * gbi("txtDescuentoPrincipal").value / 100)).toFixed(3))).toFixed(2);
         gbi("txtIGVF").value = (parseFloat(((parseFloat(gbi("txtGravada").value - gbi("txtDescuento").value).toFixed(3)) * 18 / 100).toFixed(3))).toFixed(2);
-        gbi("txtTotalF").value = (parseFloat((parseFloat(((parseFloat(gbi("txtGravada").value) + parseFloat(gbi("txtIGVF").value) - gbi("txtDescuento").value)).toFixed(3))).toFixed(1))).toFixed(2);
+        gbi("txtTotalF").value = (parseFloat((parseFloat(((parseFloat(gbi("txtGravada").value) + parseFloat(gbi("txtIGVF").value) - gbi("txtDescuento").value)).toFixed(3))).toFixed(2))).toFixed(2);
+
+        gbi("txtGravada").value = (parseFloat(gbi("txtTotalF").value) - parseFloat(gbi("txtIGVF").value)).toFixed(2);
     }
     else {
         gbi("txtGravada").value = (parseFloat((parseFloat(sum)).toFixed(3))).toFixed(2);
         gbi("txtDescuento").value = (parseFloat((parseFloat(gbi("txtGravada").value * gbi("txtDescuentoPrincipal").value / 100)).toFixed(1))).toFixed(2);
-        gbi("txtIGVF").value = (parseFloat((((parseFloat(gbi("txtGravada").value - gbi("txtDescuento").value).toFixed(3)) * 18 / 100)).toFixed(1))).toFixed(2);
+        gbi("txtIGVF").value = (parseFloat((((parseFloat(gbi("txtGravada").value - gbi("txtDescuento").value).toFixed(3)) * 18 / 100)).toFixed(2))).toFixed(2);
         gbi("txtTotalF").value = (parseFloat((parseFloat(((parseFloat(gbi("txtGravada").value) + parseFloat(gbi("txtIGVF").value) - parseFloat(gbi("txtDescuento").value))).toFixed(3))).toFixed(1))).toFixed(2);
+
+        gbi("txtGravada").value = (parseFloat(gbi("txtTotalF").value) - parseFloat(gbi("txtIGVF").value)).toFixed(2);
     }
     //gratuita
     gbi("txtGratuita").value = 0.00;// (parseFloat((parseFloat(sumGratuita)).toFixed(3))).toFixed(2);
@@ -1185,7 +1445,7 @@ function calcularSumaDetalle() {
         gbi("txtExportacion").value = (parseFloat((parseFloat(sumExportacion - descuento), 1).toFixed(3))).toFixed(2);
         gbi("txtTotalF").value = (parseFloat((parseFloat(sumaTotal), 1).toFixed(3))).toFixed(2);
     } else {
-        gbi("txtExportacion").value = (0).toFixed(2);
+        gbi("txtExportacion").value = "0.00";
     }
 }
 function actualizarListar(rpta) {
@@ -1267,8 +1527,7 @@ function validarFormulario_Sunat() {
     return error;
 }
 function CargarDetalles(rpta) {
-    gbi("tb_DetalleF").innerHTML = "";
-    gbi("tb_DetalleServicio").innerHTML = "";
+
     if (rpta != '') {
         var listas = rpta.split('↔');
         var Resultado = listas[0];
@@ -1331,8 +1590,8 @@ function CargarDetalles(rpta) {
             adt(datos[42], "txtDescuento");
             adt(datos[63], "txtCita");
 
-            gbi("tb_DetalleF").querySelectorAll("button").forEach(item => { item.disabled = true; });
-            gbi("tb_DetalleServicio").querySelectorAll("button").forEach(item => { item.disabled = true; });
+            //gbi("tb_DetalleF").querySelectorAll("button").forEach(item => { item.disabled = true; });
+            //gbi("tb_DetalleServicio").querySelectorAll("button").forEach(item => { item.disabled = true; });
         }
         else {
             mostrarRespuesta(Resultado, mensaje, 'error');
@@ -1621,10 +1880,10 @@ function mostrarBusqueda(rpta) {
         listaDatos = listas[2].split('▼');
         listaImpresion = listas[3].split("▼");
         listaReportePorCliente = listas[4].split("▼");
-
-        matriz = crearMatriz(listaDatos);
-        configurarFiltro(cabeceras);
-        mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
+        listar(listaDatos);
+        //matriz = crearMatriz(listaDatos);
+        //configurarFiltro(cabeceras);
+        //mostrarMatriz(matriz, cabeceras, "divTabla", "contentPrincipal");
     }
 }
 function BuscarxFecha(f1, f2) {
@@ -1646,18 +1905,12 @@ function limpiarTodo() {
     let fecha = new Date();
     let fecPart = {
         day: (fecha.getDate() < 10 ? `0${fecha.getDate()}` : fecha.getDate()),
-        month: (fecha.getMonth() + 1),
+        month: (fecha.getMonth() + 1 < 10 ? `0${fecha.getMonth() + 1}` : fecha.getMonth() + 1),
         year: fecha.getFullYear()
     };
     gbi("txtFecha").value = `${fecPart.day}-${fecPart.month}-${fecPart.year}`;
     //gbi("txtFecha").onchange();
     limpiarCamposDetalle();
-}
-function limpiarCamposDetalle() {
-    //bDM("txtCategoria");
-    gbi("txtCantidad").value = "";
-    gbi("txtPrecio").value = "";
-    gbi("txtTotal").value = "";
 }
 function limpiarTablaDetalle() {
     $("#tb_DetalleF").html("");

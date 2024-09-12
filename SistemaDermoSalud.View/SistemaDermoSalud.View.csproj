@@ -4322,6 +4322,8 @@
     <Content Include="Scripts\LabMedica\Recetas.js" />
     <Content Include="Scripts\logos.js" />
     <Content Include="Scripts\Reportes\RegistroVentas.js" />
+    <Content Include="Scripts\Reportes\ReportedeGastos.js" />
+    <Content Include="Scripts\Ventas\cobranza.js" />
     <Content Include="Scripts\Ventas\DocVenta.js" />
     <Content Include="Scripts\Ventas\NotaCredito.js" />
     <Content Include="Scripts\Ventas\Pedido.js" />
@@ -5212,6 +5214,7 @@
     <Compile Include="Controllers\Seguridad\Seg_UsuarioController.cs" />
     <Compile Include="Controllers\ServiciosController.cs" />
     <Compile Include="Controllers\TipoServicioController.cs" />
+    <Compile Include="Controllers\Ventas\cobranzaController.cs" />
     <Compile Include="Controllers\Ventas\CuentaCobrarController.cs" />
     <Compile Include="Controllers\Ventas\DocumentoVentaController.cs" />
     <Compile Include="Controllers\Ventas\NotaCreditoController.cs" />
@@ -5286,6 +5289,8 @@
     <Content Include="Views\Shared\_LayoutLoginFooter.cshtml" />
     <Content Include="Views\Color\Index.cshtml" />
     <Content Include="Views\Talla\Index.cshtml" />
+    <Content Include="Views\cobranza\Index.cshtml" />
+    <Content Include="Views\Reportes\ReporteGastosxDia.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

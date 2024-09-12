@@ -67,6 +67,7 @@
     <Compile Include="CONF_Comision_MedicoDTO.cs" />
     <Compile Include="DashboardDocDTO.cs" />
     <Compile Include="DashboardDTO.cs" />
+    <Compile Include="DashboardTopProductoDTO.cs" />
     <Compile Include="Finanzas\FN_PagosDetalle.cs" />
     <Compile Include="Finanzas\FN_PagosDTO.cs" />
     <Compile Include="Finanzas\FN_TipoCambioDTO.cs" />

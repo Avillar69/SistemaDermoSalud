@@ -36,5 +36,7 @@ namespace SistemaDermoSalud.Entities
         public string Colegiatura { get; set; }
         public string NombreCompleto { get; set; }
         public bool Planilla { get; set; }
+        public decimal Sueldo { get; set; }
+        public int TipoJornada { get; set; }
     }
 }

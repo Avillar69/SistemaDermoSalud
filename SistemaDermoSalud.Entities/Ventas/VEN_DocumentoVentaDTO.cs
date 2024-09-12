@@ -41,7 +41,7 @@ namespace SistemaDermoSalud.Entities
         public string cadDetalle { get; set; }
         public List<VEN_DocumentoVentaDetalleDTO> oListaDetalle { get; set; }
         public string ObservacionVenta { get; set; }
-        
+
         public int idTipoAfectacion { get; set; }
         public decimal MontoxCobrar { get; set; }
 
@@ -55,7 +55,7 @@ namespace SistemaDermoSalud.Entities
         public decimal TotalDescuentoNacional { get; set; }//1
         public decimal TotalDescuentoExtranjero { get; set; }//1
         public decimal TotalExportacion { get; set; }//58
-        
+
         //lote
         public string Lote { get; set; }
         public decimal CantidadLote { get; set; }
@@ -97,6 +97,8 @@ namespace SistemaDermoSalud.Entities
         public decimal Inafecto { get; set; }
         public decimal Total { get; set; }
         public string ObservacionCaja { get; set; }
+        //Campo Agregado
+        public int idTipoPago { get; set; }
     }
     public class VEN_DocumentoVenta_ReportePorCliente
     {
