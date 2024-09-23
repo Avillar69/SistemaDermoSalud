@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Transactions;
 using SistemaDermoSalud.Entities;
 using SistemaDermoSalud.Entities.Mantenimiento;
+using SistemaDermoSalud.Entities.Reportes;
 
 namespace SistemaDermoSalud.DataAccess.Mantenimiento
 {
@@ -38,6 +39,72 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                     oResultDTO.Resultado = "Error";
                     oResultDTO.MensajeError = ex.Message;
                     oResultDTO.ListaResultado = new List<Ma_ProductoDTO>();
+                }
+            }
+            return oResultDTO;
+        }
+        public ResultDTO<RepProductoAgotarseDTO> ReporteProductoxAgotarse( SqlConnection cn = null)
+        {
+            ResultDTO<RepProductoAgotarseDTO> oResultDTO = new ResultDTO<RepProductoAgotarseDTO>();
+            oResultDTO.ListaResultado = new List<RepProductoAgotarseDTO>();
+            using ((cn == null ? cn = new Conexion().conectar() : cn))
+            {
+                try
+                {
+                    if (cn.State == ConnectionState.Closed) { cn.Open(); }
+                    SqlDataAdapter da = new SqlDataAdapter("SP_Reporte_ProductosxAgotarse", cn);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dr = da.SelectCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        RepProductoAgotarseDTO oProductoDTO = new RepProductoAgotarseDTO();
+                        oProductoDTO.Marca = dr["Marca"] == null ? "" : dr["Marca"].ToString();
+                        oProductoDTO.CodigoProducto = dr["CodigoProducto"] == null ? "" : dr["CodigoProducto"].ToString();
+                        oProductoDTO.Producto = dr["Producto"] == null ? "" : dr["Producto"].ToString();
+                        oProductoDTO.Stock = Convert.ToDecimal(dr["Stock"] == null ? 0 : Convert.ToDecimal(dr["Stock"].ToString()));
+                        oResultDTO.ListaResultado.Add(oProductoDTO);
+                    }
+                    oResultDTO.Resultado = "OK";
+                }
+                catch (Exception ex)
+                {
+                    oResultDTO.Resultado = "Error";
+                    oResultDTO.MensajeError = ex.Message;
+                    oResultDTO.ListaResultado = new List<RepProductoAgotarseDTO>();
+                }
+            }
+            return oResultDTO;
+        }
+        public ResultDTO<RepProductoAgotarseDTO> ReporteProductoSinVenta(DateTime FechaInicio, DateTime FechaFin, SqlConnection cn = null)
+        {
+            ResultDTO<RepProductoAgotarseDTO> oResultDTO = new ResultDTO<RepProductoAgotarseDTO>();
+            oResultDTO.ListaResultado = new List<RepProductoAgotarseDTO>();
+            using ((cn == null ? cn = new Conexion().conectar() : cn))
+            {
+                try
+                {
+                    if (cn.State == ConnectionState.Closed) { cn.Open(); }
+                    SqlDataAdapter da = new SqlDataAdapter("SP_Reporte_ProductosNoVendidos", cn);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@FechaInicio", FechaInicio);
+                    da.SelectCommand.Parameters.AddWithValue("@FechaFin", FechaFin);
+                    SqlDataReader dr = da.SelectCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        RepProductoAgotarseDTO oFN_CajaDTO = new RepProductoAgotarseDTO();
+                        oFN_CajaDTO.Marca = dr["Marca"] == null ? "" : dr["Marca"].ToString();
+                        oFN_CajaDTO.CodigoProducto = dr["CodigoProducto"] == null ? "" : dr["CodigoProducto"].ToString();
+                        oFN_CajaDTO.Producto = dr["Producto"] == null ? "" : dr["Producto"].ToString();
+                        oFN_CajaDTO.Stock = Convert.ToDecimal(dr["Stock"] == null ? 0 : Convert.ToDecimal(dr["Stock"].ToString()));
+                        oResultDTO.ListaResultado.Add(oFN_CajaDTO);
+                    }
+                    oResultDTO.Resultado = "OK";
+                }
+                catch (Exception ex)
+                {
+                    oResultDTO.Resultado = "Error";
+                    oResultDTO.MensajeError = ex.Message;
+                    oResultDTO.ListaResultado = new List<RepProductoAgotarseDTO>();
                 }
             }
             return oResultDTO;

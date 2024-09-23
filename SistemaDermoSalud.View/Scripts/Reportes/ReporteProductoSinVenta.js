@@ -16,7 +16,6 @@ $("#txtFilFecFn").flatpickr({
 });
 
 function mostrarLista(rpta) {
-    console.log(rpta);
     if (rpta != "") {
         var listas = rpta.split("↔");
         var Resultado = listas[0];
@@ -38,21 +37,19 @@ function listar(r) {
         r.forEach(function (e) {
             let valor = e.split("▲");
             newDatos.push({
-                fechaCreacion: valor[0],
-                descripcionConcepto: valor[1],
-                observaciones: valor[2],
-                totalNacional: valor[3],
-                tipoPago: valor[4],
+                marca: valor[0],
+                codigoProducto: valor[1],
+                producto: valor[2],
+                stock: valor[3]
             })
         });
-        console.log(newDatos);
-        let cols = ["fechaCreacion", "descripcionConcepto", "observaciones", "totalNacional", "tipoPago"];
+        let cols = ["marca", "codigoProducto", "producto", "stock"];
         loadDataTable(cols, newDatos, "fechaCreacion", "tbDatos", cadButtonOptions(), false);
     }
 
 }
 function BuscarxFecha(f1, f2) {
-    var url = '/Reportes/ReporteVenta_GastosxDia?fechaInicio=' + f1 + '&fechaFin=' + f2 + '&idTipoDctos=' + 2;
+    var url = '/Reportes/ReporteVenta_ProductoSinVenta?fechaInicio=' + f1 + '&fechaFin=' + f2 + '&idTipoDctos=' + 2;
     enviarServidor(url, mostrarBusqueda);
 }
 

@@ -10,7 +10,7 @@ using System.Transactions;
 
 namespace SistemaDermoSalud.DataAccess
 {
-  public   class AD_SocioNegocioDAO
+    public class AD_SocioNegocioDAO
     {
         public ResultDTO<AD_SocioNegocioDTO> ListarTodo(int idEmpresa, SqlConnection cn = null)
         {
@@ -65,6 +65,37 @@ namespace SistemaDermoSalud.DataAccess
             }
             return oResultDTO;
         }
+        public ResultDTO<AD_SocioNegocioDTO> ListarxNroDocumento(string nroDocumento)
+        {
+            ResultDTO<AD_SocioNegocioDTO> oResultDTO = new ResultDTO<AD_SocioNegocioDTO>();
+            oResultDTO.ListaResultado = new List<AD_SocioNegocioDTO>();
+            using (SqlConnection cn = new Conexion().conectar())
+            {
+                try
+                {
+                    cn.Open();
+                    SqlDataAdapter da = new SqlDataAdapter("SP_AD_SocioNegocio_ListarxDocumento", cn);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@nroDocumento", nroDocumento);
+                    SqlDataReader dr = da.SelectCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        AD_SocioNegocioDTO oAD_SocioNegocioDTO = new AD_SocioNegocioDTO();
+                        oAD_SocioNegocioDTO.idSocioNegocio = Convert.ToInt32(dr["idSocioNegocio"].ToString());
+                        oAD_SocioNegocioDTO.RazonSocial = dr["RazonSocial"].ToString();
+                        oResultDTO.ListaResultado.Add(oAD_SocioNegocioDTO);
+                    }
+                    oResultDTO.Resultado = "OK";
+                }
+                catch (Exception ex)
+                {
+                    oResultDTO.Resultado = "Error";
+                    oResultDTO.MensajeError = ex.Message;
+                    oResultDTO.ListaResultado = new List<AD_SocioNegocioDTO>();
+                }
+            }
+            return oResultDTO;
+        }
         public ResultDTO<AD_SocioNegocioDTO> ListarxID(int idSocioNegocio)
         {
             ResultDTO<AD_SocioNegocioDTO> oResultDTO = new ResultDTO<AD_SocioNegocioDTO>();
@@ -101,6 +132,7 @@ namespace SistemaDermoSalud.DataAccess
                         oAD_SocioNegocioDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"].ToString());
                         oAD_SocioNegocioDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"].ToString());
                         oAD_SocioNegocioDTO.Estado = Convert.ToBoolean(dr["Estado"].ToString());
+                        oAD_SocioNegocioDTO.CantCompras = Convert.ToInt32(dr["CantCompras"].ToString());
                         oResultDTO.ListaResultado.Add(oAD_SocioNegocioDTO);
                     }
                     if (oResultDTO.ListaResultado.Count > 0)
@@ -304,25 +336,10 @@ namespace SistemaDermoSalud.DataAccess
                     {
                         AD_SocioNegocioDTO oAD_SocioNegocioDTO = new AD_SocioNegocioDTO();
                         oAD_SocioNegocioDTO.idSocioNegocio = Convert.ToInt32(dr["idSocioNegocio"] == null ? 0 : Convert.ToInt32(dr["idSocioNegocio"].ToString()));
-                        //oAD_SocioNegocioDTO.CodigoGenerado = dr["CodigoGenerado"] == null ? "" : dr["CodigoGenerado"].ToString();
-                        //oAD_SocioNegocioDTO.idEmpresa = Convert.ToInt32(dr["idEmpresa"] == null ? 0 : Convert.ToInt32(dr["idEmpresa"].ToString()));
-                        //oAD_SocioNegocioDTO.idTipoPersona = Convert.ToInt32(dr["idTipoPersona"] == null ? 0 : Convert.ToInt32(dr["idTipoPersona"].ToString()));
                         oAD_SocioNegocioDTO.RazonSocial = dr["RazonSocial"] == null ? "" : dr["RazonSocial"].ToString();
                         oAD_SocioNegocioDTO.idTipoDocumento = Convert.ToInt32(dr["idTipoDocumento"] == null ? 0 : Convert.ToInt32(dr["idTipoDocumento"].ToString()));
                         oAD_SocioNegocioDTO.Documento = dr["Documento"] == null ? "" : dr["Documento"].ToString();
-                        //oAD_SocioNegocioDTO.idPais = Convert.ToInt32(dr["idPais"] == null ? 0 : Convert.ToInt32(dr["idPais"].ToString()));
-                        //oAD_SocioNegocioDTO.idDepartamento = dr["idDepartamento"] == null ? "" : (dr["idDepartamento"].ToString());
-                        //oAD_SocioNegocioDTO.idProvincia = (dr["idProvincia"] == null ? "" : (dr["idProvincia"].ToString()));
-                        //oAD_SocioNegocioDTO.idDistrito = dr["idDistrito"] == null ? "" : dr["idDistrito"].ToString();
-                        //oAD_SocioNegocioDTO.Web = dr["Web"] == null ? "" : dr["Web"].ToString();
-                        //oAD_SocioNegocioDTO.Mail = dr["Mail"] == null ? "" : dr["Mail"].ToString();
                         oAD_SocioNegocioDTO.Cliente = Convert.ToBoolean(dr["Cliente"] == null ? false : Convert.ToBoolean(dr["Cliente"].ToString()));
-                        //oAD_SocioNegocioDTO.Proveedor = Convert.ToBoolean(dr["Proveedor"] == null ? false : Convert.ToBoolean(dr["Proveedor"].ToString()));
-                        //oAD_SocioNegocioDTO.FechaCreacion = Convert.ToDateTime(dr["FechaCreacion"].ToString());
-                        //oAD_SocioNegocioDTO.FechaModificacion = Convert.ToDateTime(dr["FechaModificacion"].ToString());
-                        //oAD_SocioNegocioDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioCreacion"].ToString()));
-                        //oAD_SocioNegocioDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioModificacion"].ToString()));
-                        //oAD_SocioNegocioDTO.Estado = Convert.ToBoolean(dr["Estado"] == null ? false : Convert.ToBoolean(dr["Estado"].ToString()));
 
                         oAD_SocioNegocioDTO.DesUsuarioModificacion = dr["DesUsuarioModificacion"].ToString();
                         oAD_SocioNegocioDTO.DesTipoDocumento = dr["DesTipoDocumento"].ToString();

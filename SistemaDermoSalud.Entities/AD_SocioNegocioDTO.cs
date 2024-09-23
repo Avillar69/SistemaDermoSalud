@@ -42,6 +42,7 @@ namespace SistemaDermoSalud.Entities
         public List<AD_SocioNegocio_DireccionDTO> oListaDireccion { get; set; }
         public List<AD_SocioNegocio_TelefonoDTO> oListaTelefono { get; set; }
         public List<AD_SocioNegocio_CuentaBancariaDTO> oListaCuentaBancaria { get; set; }
+        public int CantCompras { get; set; }
     }
     //objecto lista detalle
     public class AD_SocioNegocio_ContactoDTO

@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 using SistemaDermoSalud.Business;
 using SistemaDermoSalud.Entities;
@@ -32,12 +33,20 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
         }
         public ActionResult IndexPro()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
         //clientes
         public ActionResult IndexCli()
         {
-            return PartialView();
+            if (Session["Config"] == null) return RedirectToAction("Login", "Home");
+            else
+            {
+                return PartialView();
+            }
         }
 
         public string ObtenerDatos()
@@ -139,18 +148,27 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
         }
         public string GrabarCliente(AD_SocioNegocioDTO oAD_SocioNegocioDTO)
         {
-            ResultDTO<AD_SocioNegocioDTO> oResultDTO;
-            Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
             AD_SocioNegocioBL oAD_SocioNegocioBL = new AD_SocioNegocioBL();
-            if (oAD_SocioNegocioDTO.idSocioNegocio == 0)
+            ResultDTO<AD_SocioNegocioDTO> oResultDTOVal = oAD_SocioNegocioBL.ListarxNroDocumento(oAD_SocioNegocioDTO.Documento);
+            ResultDTO<AD_SocioNegocioDTO> oResultDTO;
+
+            if (oResultDTOVal.ListaResultado.Count == 0)
             {
-                oAD_SocioNegocioDTO.UsuarioCreacion = eSEGUsuario.idUsuario;
+                Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
+                if (oAD_SocioNegocioDTO.idSocioNegocio == 0)
+                {
+                    oAD_SocioNegocioDTO.UsuarioCreacion = eSEGUsuario.idUsuario;
+                }
+                oAD_SocioNegocioDTO.UsuarioModificacion = eSEGUsuario.idUsuario;
+                oAD_SocioNegocioDTO.idEmpresa = eSEGUsuario.idEmpresa;
+                oResultDTO = oAD_SocioNegocioBL.UpdateInsertCli(oAD_SocioNegocioDTO, eSEGUsuario.idUsuario);
+                string lista_Cliente = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idSocioNegocio", "Documento", "RazonSocial", "FechaModificacion", "Estado" });
+                return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, lista_Cliente);
             }
-            oAD_SocioNegocioDTO.UsuarioModificacion = eSEGUsuario.idUsuario;
-            oAD_SocioNegocioDTO.idEmpresa = eSEGUsuario.idEmpresa;
-            oResultDTO = oAD_SocioNegocioBL.UpdateInsertCli(oAD_SocioNegocioDTO, eSEGUsuario.idUsuario);
-            string lista_Cliente = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idSocioNegocio", "Documento", "RazonSocial", "FechaModificacion", "Estado" });
-            return string.Format("{0}↔{1}↔{2}", oResultDTO.Resultado, oResultDTO.MensajeError, lista_Cliente);
+            else
+            {
+                return string.Format("{0}↔{1}", "Error", "Ya existe un cliente con ese N° de Documento");
+            }
         }
         public string Eliminar(AD_SocioNegocioDTO oAD_SocioNegocioDTO)
         {
@@ -244,12 +262,14 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
             AD_SocioNegocioBL oAD_SocioNegocioBL = new AD_SocioNegocioBL();
             ResultDTO<AD_SocioNegocioDTO> oResultDTO = oAD_SocioNegocioBL.ListarxID(id);
             string listaSocio_Direccion = "";
+            int cantCompras = 0;
             if (oResultDTO.ListaResultado[0].oListaDireccion.Count() > 0)
             {
+                cantCompras = oResultDTO.ListaResultado[0].CantCompras;
                 listaSocio_Direccion = Serializador.Serializar(oResultDTO.ListaResultado[0].oListaDireccion, '▲', '▼', new string[] { "idDireccion", "Direccion" }, false);
             }
-            return String.Format("{0}↔{1}↔{2}",
-                oResultDTO.Resultado, oResultDTO.MensajeError, listaSocio_Direccion);
+            return String.Format("{0}↔{1}↔{2}↔{3}",
+                oResultDTO.Resultado, oResultDTO.MensajeError, listaSocio_Direccion, cantCompras);
         }
 
         /*-----------------------------------------Metodos de modificacion 3/04/2018   kevin-------------------------------------*/
@@ -275,7 +295,7 @@ namespace SistemaDermoSalud.View.Controllers.Administracion
             ResultDTO<Ma_UbigeoDTO> lbe_Departamentos = oMa_UbigeoBL.ListarDepartamentos();
             ResultDTO<Ma_UbigeoDTO> lbe_Provincias = oMa_UbigeoBL.ListarProvincias();
             ResultDTO<Ma_UbigeoDTO> lbe_Distritos = oMa_UbigeoBL.ListarDistritos();
-            
+
             //cadenas
             string listaAD_SocioNegocio = Serializador.rSerializado(oResultDTO.ListaResultado, new string[] { "idSocioNegocio", "Documento", "RazonSocial", "FechaModificacion", "Estado" });
             string listaMa_Pais = Serializador.rSerializado(lbeMa_PaisDTO.ListaResultado, new string[] { "idPais", "Descripcion" });

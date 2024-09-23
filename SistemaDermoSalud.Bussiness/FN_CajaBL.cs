@@ -1,5 +1,6 @@
 ﻿using SistemaDermoSalud.DataAccess;
 using SistemaDermoSalud.Entities;
+using SistemaDermoSalud.Entities.Reportes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,10 @@ namespace SistemaDermoSalud.Business
         public ResultDTO<FN_CajaDTO> ListarxFecha(DateTime FechaInicio, DateTime FechaFin)
         {
             return oFN_CajaDAO.ListarxFecha(FechaInicio, FechaFin);
+        }
+        public ResultDTO<RepGastosxDiaDTO> RepGastosxDia(DateTime FechaInicio, DateTime FechaFin)
+        {
+            return oFN_CajaDAO.RepGastosxDia(FechaInicio, FechaFin);
         }
         public ResultDTO<FN_CajaDTO> ListarxID(int idCaja)
         {

@@ -32,13 +32,14 @@ var listaConcepto2;
 var listaDetalleCajaReal = [];
 var listaDetalleCajaPDF = [];
 
-//$("#txtFilFecIn").datetimepicker({
-//    format: 'DD-MM-YYYY',
-//});
-//$("#txtFilFecFn").datetimepicker({
-//    format: 'DD-MM-YYYY',
-//});
-//$('#datepicker-range').datetimepicker({ format: 'DD-MM-YYYY' });
+$("#txtFilFecIn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
+$("#txtFilFecFn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
 $('#collapseOne-2').on('shown.bs.collapse', function () {
     reziseTabla();
 })
@@ -91,7 +92,7 @@ function listar(r) {
         });
         console.log(newDatos);
         let cols = ["tipoCaja","descripcion", "fechaApertura", "horaApertura", "fechaCierre", "horaCierre", "montoInicio", "montoSaldo", "estadoCaja"];
-        loadDataTable(cols, newDatos, "idCaja", "tbDatos", cadButtonOptions(), false);
+        loadDataTableC(cols, newDatos, "idCaja", "tbDatos", cadButtonOptions(), false);
     }
 
 }
@@ -360,10 +361,7 @@ function mostrarBusqueda(rpta) {
     if (rpta != '') {
         var listas = rpta.split('↔');
         listaDatos = listas[2].split('▼');
-        matriz = crearMatriz(listaDatos);
-        configurarFiltro(cabeceras);
-        mostrarMatrizCaja(matriz, cabeceras, "divTabla", "contentPrincipal");
-        reziseTabla();
+        listar(listaDatos);
     }
 }
 function validarFormularioCaja() {
@@ -607,6 +605,75 @@ function CargarDetalleCaja(r) {
         loadDataTable(cols, newDatos, "idCajaDetalle", "tb_DetalleCaja", cadButtonOptions(), false);
     }
 
+}
+function loadDataTableC(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
+    var columnas = [];
+    for (var i = 0; i < cols.length; i++) {
+        let item = {
+            data: cols[i]
+        };
+        columnas.push(item);
+    }
+    let itemBtn = {
+        "data": null,
+        "defaultContent": "<center>" + btns + "</center>"
+    };
+    columnas.push(itemBtn);
+    tbDatos = $('#' + tid).DataTable({
+        data: datos,
+        createdRow: function (row, data, dataIndex) {
+            if (data.estadoCaja == `CERRADA`) {
+                $(row).addClass('table-danger');
+            } else {
+                $(row).addClass('table-success');
+            }
+        },
+        columns: columnas,
+        rowId: rid,
+        order: arrOrder,
+        columnDefs:
+            [
+                {
+                    "targets": 0,
+                    "visible": showFirstField,
+                },
+                {
+                    "targets": columnas.length - 2,
+                    "width": "10%",
+                    "visible": false
+                }],
+        searching: !0,
+        bLengthChange: !0,
+        destroy: !0,
+        pagingType: "full_numbers",
+        info: !1,
+        paging: !0,
+        pageLength: 10,
+        responsive: !0,
+        footer: false,
+        deferRender: !1,
+        language: {
+            "decimal": "",
+            "emptyTable": "No existen registros a mostrar.",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            search: "_INPUT_",
+            searchPlaceholder: "Buscar ",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "<<",
+                "last": ">>",
+                "next": ">",
+                "previous": "<"
+            }
+        }
+    });
 }
 function actualizarDetalle(rpta) { //rpta es mi lista de colores
     if (rpta != "") { //validar cuando respuesta sea vacio

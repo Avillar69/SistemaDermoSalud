@@ -19,6 +19,10 @@ namespace SistemaDermoSalud.Business
         {
             return oAD_SocioNegocioDAO.ListarxID(idSocioNegocio);
         }
+        public ResultDTO<AD_SocioNegocioDTO> ListarxNroDocumento(string nroDocumento) {
+
+            return oAD_SocioNegocioDAO.ListarxNroDocumento(nroDocumento);
+        }
         public ResultDTO<AD_SocioNegocioDTO> UpdateInsert(AD_SocioNegocioDTO oAD_SocioNegocioDTO, int idUsuario)
         {
             return oAD_SocioNegocioDAO.UpdateInsert(oAD_SocioNegocioDTO, idUsuario);

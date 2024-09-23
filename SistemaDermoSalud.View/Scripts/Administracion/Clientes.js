@@ -211,7 +211,7 @@ function configurarBotonesModal() {
             frm.append("Lista_Direccion", crearCadDetalleDireccion());
             frm.append("Lista_Telefono", crearCadDetalleTelefono());
             frm.append("Lista_CuentaBancaria", crearCadDetalleCuenta());
-            /*swal({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });*/
+            Swal.fire({ title: "<div class='loader' style='margin: 0px 200px;'></div>Procesando información", html: true, showConfirmButton: false });
             enviarServidorPost(url, actualizarListar, frm);
         }
     };
@@ -721,6 +721,9 @@ function actualizarListar(rpta) { //rpta es mi lista de colores
                 listaDatos = data[2].split("▼");
                 listar(listaDatos);
             }, 1000);
+        }
+        else {
+            Swal.fire(res, mensaje, tipo);
         }
     }
 }

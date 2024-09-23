@@ -16,7 +16,7 @@ namespace SistemaDermoSalud.Entities
         public string NroCaja { get; set; }
         public string Descripcion { get; set; }
         public DateTime FechaApertura { get; set; }
-        public DateTime FechaCierre { get; set; }
+        public string FechaCierre { get; set; }
         public int idMoneda { get; set; }
         public decimal MontoInicio { get; set; }
         public decimal MontoIngreso { get; set; }

@@ -26,7 +26,7 @@ namespace SistemaDermoSalud.View.Controllers
             Seg_UsuarioDTO eSEGUsuario = ((ObjSesionDTO)Session["Config"]).SessionUsuario;
             Ma_MarcaBL oMarcaBL = new Ma_MarcaBL();
             ResultDTO <Ma_MarcaDTO> oResultLabDTO = oMarcaBL.ListarTodo(1);
-            string ListaMarca = Serializador.rSerializado(oResultLabDTO.ListaResultado, new string[]{"idMarca","Marca","FechaCreacion","Estado"});
+            string ListaMarca = Serializador.rSerializado(oResultLabDTO.ListaResultado, new string[]{"idMarca","Marca","FechaCreacion","TotalCompra","TotalVenta","StockActual","Estado"});
             return String.Format("{0}↔{1}↔{2}", oResultLabDTO.Resultado,oResultLabDTO.MensajeError,ListaMarca);
         }
         public string ObtenerDatosxID(int id)

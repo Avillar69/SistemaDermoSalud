@@ -1,4 +1,4 @@
-﻿var cabeceras = ["Producto", "Marca", "Estado"];
+﻿var cabeceras = ["Código", "Nombre", "Marca"];
 var posiciones = [0, 1, 2, 3];
 var listaDatos;
 var matriz = [];

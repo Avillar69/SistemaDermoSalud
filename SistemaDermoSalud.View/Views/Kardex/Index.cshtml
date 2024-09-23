@@ -10,9 +10,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
-
 <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-
 <div class="row" id="rowTabla">
     <div class="col-lg-12">
         <div class="card" id="orderList">
@@ -47,28 +45,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-6 mb-2">
-                        <div class="input-group">
+                    <div class="col-12 col-md-4 col-lg-4 mb-2">
+                        <div class="input-group" style="flex-wrap:nowrap;">
                             <div class="input-group-text">Marca</div>
-                            <select class="form-select" aria-label="Default select example" id="cboMarca">
+                            <select class="form-select" id="cboMarca">
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-6 mb-2">
-                        <div class="input-group">
+                    <div class="col-12 col-md-8 col-lg-8 mb-2">
+                        <div class="input-group" style="flex-wrap:nowrap;">
                             <div class="input-group-text">Producto</div>
-                            <select class="form-select" aria-label="Default select example" id="cboProducto">
+                            <select class="form-select" id="cboProducto">
                             </select>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-6 mb-2">
                         <div class="input-group">
                             <div class="input-group-text">Fecha</div>
-                            <input type="date" class="form-control" id="txtFilFecIn">
+                            <input type="text" class="form-control flatpickr flatpickr-input" id="txtFilFecIn" data-provider="flatpickr" data-date-format="d/m/Y" autocomplete="off" />
                             <div class="input-group-text bg-primary border-primary text-white">
                                 <i class="ri-calendar-2-line"></i>
                             </div>
-                            <input type="date" class="form-control" id="txtFilFecFn">
+                            <input type="text" class="form-control flatpickr-input" id="txtFilFecFn" data-provider="flatpickr" data-date-format="d/m/Y" autocomplete="off" />
                         </div>
                     </div>
                     <div class="col-12 col-md-2 col-lg-2 mb-2">
@@ -97,17 +95,8 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 @Scripts.Render("~/bundles/basics")
 <script src="~/assets/js/jspdf.debug.js"></script>
 <script src="~/assets/js/jspdf.min.js"></script>
 <script src="~/assets/js/jspdf.plugin.autotable.js"></script>
-<script src="~/assets/js/code.jquery.com_jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script src="~/Scripts/Inventario/Kardex.js"></script>

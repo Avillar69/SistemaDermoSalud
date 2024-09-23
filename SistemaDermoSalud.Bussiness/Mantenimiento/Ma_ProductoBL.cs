@@ -1,6 +1,8 @@
 using SistemaDermoSalud.Entities;
 using SistemaDermoSalud.Entities.Mantenimiento;
 using SistemaDermoSalud.DataAccess.Mantenimiento;
+using SistemaDermoSalud.Entities.Reportes;
+using System;
 
 namespace SistemaDermoSalud.Business
 {
@@ -16,6 +18,14 @@ namespace SistemaDermoSalud.Business
             return oProductoDAO.ListarporMarca(p);
         }
 
+        public ResultDTO<RepProductoAgotarseDTO> ReporteProductoxAgotarse()
+        {
+            return oProductoDAO.ReporteProductoxAgotarse();
+        }
+        public ResultDTO<RepProductoAgotarseDTO> ReporteProductoSinVenta(DateTime FechaInicio, DateTime FechaFin)
+        {
+            return oProductoDAO.ReporteProductoSinVenta(FechaInicio, FechaFin);
+        }
         public ResultDTO<Ma_ProductoDTO> ListarxID(int idProducto)
         {
             return oProductoDAO.ListarxID(idProducto);

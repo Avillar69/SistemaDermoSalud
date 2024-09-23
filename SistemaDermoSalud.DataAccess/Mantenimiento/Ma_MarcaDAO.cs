@@ -29,10 +29,10 @@ namespace SistemaDermoSalud.DataAccess.Mantenimiento
                         oMarcaDTO.idMarca = Convert.ToInt32(dr["idMarca"] == null ? 0 : Convert.ToInt32(dr["idMarca"].ToString()));
                         oMarcaDTO.Marca = dr["Marca"] == null ? "" : dr["Marca"].ToString();
                         oMarcaDTO.FechaCreacion = Convert.ToDateTime(dr["FechaCreacion"].ToString());
-                        oMarcaDTO.FechaModificacion = Convert.ToDateTime(dr["FechaModificacion"].ToString());
-                        oMarcaDTO.UsuarioCreacion = Convert.ToInt32(dr["UsuarioCreacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioCreacion"].ToString()));
-                        oMarcaDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioModificacion"].ToString()));
                         oMarcaDTO.Estado = Convert.ToBoolean(dr["Estado"] == null ? false : Convert.ToBoolean(dr["Estado"].ToString()));
+                        oMarcaDTO.TotalCompra = Convert.ToInt32(dr["TotalCompra"] == null ? 0 : Convert.ToInt32(dr["TotalCompra"].ToString()));
+                        oMarcaDTO.TotalVenta = Convert.ToInt32(dr["TotalVenta"] == null ? 0 : Convert.ToInt32(dr["TotalVenta"].ToString()));
+                        oMarcaDTO.StockActual = Convert.ToInt32(dr["StockActual"] == null ? 0 : Convert.ToInt32(dr["StockActual"].ToString()));
                         oResultDTO.ListaResultado.Add(oMarcaDTO);
                     }
                     oResultDTO.Resultado = "OK";

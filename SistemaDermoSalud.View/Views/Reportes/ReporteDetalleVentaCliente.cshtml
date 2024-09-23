@@ -1,30 +1,28 @@
 ﻿@using System.Web.Optimization;
-@{if (Session["Config"] == null)
-    { @Html.Raw("<script>");
-    @Html.Raw("location.href=window.location.origin+'/Home/Login';");
-    @Html.Raw("</script>");
-}
-}
 @{
-    ViewBag.Title = "Reporte de Gastos por Día";
+    ViewBag.Title = "Reporte Ventas Cliente por Artículo";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
-
+<style>
+    .floatThead-wrapper {
+        margin-top: 10px;
+    }
+</style>
 <div class="row" id="rowTabla">
     <div class="col-lg-12">
         <div class="card" id="orderList">
             <div class="card-header border-0">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        <h3 class="content-header-title mb-0">Reporte Gastos x Día</h3>
+                        <h3 class="content-header-title mb-0">Detalle Ventas por Cliente</h3>
                         <div class="row breadcrumbs-top">
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a href="#">Reportes</a>
+                                        <a href="#">Reporte</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Reporte de Gastos x Día
+                                        Detalle Ventas por Cliente
                                     </li>
                                 </ol>
                             </div>
@@ -48,6 +46,16 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-group" style="flex-wrap:nowrap;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Cliente</span>
+                            </div>
+                            <div class="input-group">
+                                <select class="form-control" id="cboRazonSocial"></select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-6 col-sm-6 mb-2">
                         <div class="input-group mb-2" style="flex-wrap: nowrap;">
                             <div class="input-group-prepend">
@@ -76,11 +84,12 @@
                             <thead class="text-muted table-light">
                                 <tr class="">
                                     <th class="sort" data-sort="fecha">Fecha</th>
-                                    <th class="sort" data-sort="serie">Concepto</th>
-                                    <th class="sort" data-sort="numero">Observación</th>
-                                    <th class="sort" data-sort="razon">Total</th>
-                                    <th class="sort" data-sort="total">Forma de Pago</th>
-                                    <th class="sort" data-sort="actions"></th>
+                                    <th class="sort" data-sort="serie">Tipo Comprobante</th>
+                                    <th class="sort" data-sort="numero">N° Comprobante</th>
+                                    <th class="sort" data-sort="razon">Artículo</th>
+                                    <th class="sort" data-sort="subtotal">Cantidad</th>
+                                    <th class="sort" data-sort="igv">Precio</th>
+                                    <th class="sort" data-sort="total">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,5 +102,5 @@
     </div>
 </div>
 @Scripts.Render("~/bundles/basics")
-<script src='~/Scripts/Reportes/ReportedeGastos.js'></script>
+<script src='~/Scripts/Reportes/DetalleVentaCliente.js'></script>
 

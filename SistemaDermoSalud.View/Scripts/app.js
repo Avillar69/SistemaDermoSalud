@@ -667,41 +667,41 @@ function crearMatrizModalDoc(listaDatos) {
     }
     return matrizModal;
 }
-function crearMatriz(listaDatos) {
-    var nRegistros = listaDatos.length;
-    var nCampos;
-    var campos;
-    var c = 0;
-    var textos = document.getElementById("txtFiltro").value.trim();
-    matriz = [];
-    var exito;
-    if (listaDatos != "") {
+//function crearMatriz(listaDatos) {
+//    var nRegistros = listaDatos.length;
+//    var nCampos;
+//    var campos;
+//    var c = 0;
+//    var textos = document.getElementById("txtFiltro").value.trim();
+//    matriz = [];
+//    var exito;
+//    if (listaDatos != "") {
 
-        for (var i = 0; i < nRegistros; i++) {
-            campos = listaDatos[i].split("▲");
-            nCampos = campos.length;
-            exito = true;
-            if (textos.trim() != "") {
-                for (var l = 1; l < nCampos; l++) {
-                    exito = true;
-                    exito = exito && campos[l].toLowerCase().indexOf(textos.toLowerCase()) != -1;
-                    if (exito) break;
-                }
-            }
-            if (exito) {
-                matriz[c] = [];
-                for (var j = 0; j < nCampos; j++) {
-                    matriz[c][j] = campos[j];
-                }
-                c++;
-            }
-        }
-    } else {
-        if (document.getElementById("contentPrincipal"))
-            document.getElementById("contentPrincipal").innerHTML = "";
-    }
-    return matriz;
-}
+//        for (var i = 0; i < nRegistros; i++) {
+//            campos = listaDatos[i].split("▲");
+//            nCampos = campos.length;
+//            exito = true;
+//            if (textos.trim() != "") {
+//                for (var l = 1; l < nCampos; l++) {
+//                    exito = true;
+//                    exito = exito && campos[l].toLowerCase().indexOf(textos.toLowerCase()) != -1;
+//                    if (exito) break;
+//                }
+//            }
+//            if (exito) {
+//                matriz[c] = [];
+//                for (var j = 0; j < nCampos; j++) {
+//                    matriz[c][j] = campos[j];
+//                }
+//                c++;
+//            }
+//        }
+//    } else {
+//        if (document.getElementById("contentPrincipal"))
+//            document.getElementById("contentPrincipal").innerHTML = "";
+//    }
+//    return matriz;
+//}
 function configurarBotonesModal() {
     var btnGrabar = document.getElementById("btnGrabar");
     btnGrabar.onclick = function () {

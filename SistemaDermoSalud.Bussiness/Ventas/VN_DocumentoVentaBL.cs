@@ -1,7 +1,9 @@
 ﻿using SistemaDermoSalud.DataAccess;
 using SistemaDermoSalud.Entities;
+using SistemaDermoSalud.Entities.Reportes;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,5 +70,9 @@ namespace SistemaDermoSalud.Business
         {
             return oVEN_DocumentoVentaDAO.Actualizar(oVEN_DocumentoVentaDTO, fechaInicio, fechaFin);
         }
+        public ResultDTO<Rep_DocumentoVentaDetalleCliente> ListarDetalleVentaCliente(int idEmpresa, DateTime fechaInicio, DateTime fechaFin, int idCliente)
+        {
+            return oVEN_DocumentoVentaDAO.ListarDetalleVentaCliente(idEmpresa, fechaInicio, fechaFin, idCliente);
+        }   
     }
 }

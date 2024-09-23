@@ -1,4 +1,5 @@
 ﻿using SistemaDermoSalud.Entities;
+using SistemaDermoSalud.Entities.Reportes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -1078,7 +1079,46 @@ namespace SistemaDermoSalud.DataAccess
             }
             return oResultDTO;
         }
+        public ResultDTO<Rep_DocumentoVentaDetalleCliente> ListarDetalleVentaCliente(int idEmpresa, DateTime fechaInicio, DateTime fechaFin, int idCliente, SqlConnection cn = null)
+        {
+            ResultDTO<Rep_DocumentoVentaDetalleCliente> oResultDTO = new ResultDTO<Rep_DocumentoVentaDetalleCliente>();
+            oResultDTO.ListaResultado = new List<Rep_DocumentoVentaDetalleCliente>();
+            using ((cn == null ? cn = new Conexion().conectar() : cn))
+            {
+                try
+                {
+                    if (cn.State == ConnectionState.Closed) { cn.Open(); }
+                    SqlDataAdapter da = new SqlDataAdapter("SP_Ven_DocumentoVentaDetalle_ListarxCliente", cn);
+                    da.SelectCommand.Parameters.AddWithValue("@idEmpresa", idEmpresa);
+                    da.SelectCommand.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+                    da.SelectCommand.Parameters.AddWithValue("@FechaFin", fechaFin);
+                    da.SelectCommand.Parameters.AddWithValue("@idCliente", idCliente);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dr = da.SelectCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        Rep_DocumentoVentaDetalleCliente oVEN_DocumentoVentaDTO = new Rep_DocumentoVentaDetalleCliente(); 
+                        oVEN_DocumentoVentaDTO.FechaDocumento = dr["FechaDocumento"] == null ? "" : dr["FechaDocumento"].ToString();
+                        oVEN_DocumentoVentaDTO.TipoComprobante = dr["TipoComprobante"] == null ? "" : dr["TipoComprobante"].ToString();
+                        oVEN_DocumentoVentaDTO.NroComprobante = dr["NroComprobante"] == null ? "" : dr["NroComprobante"].ToString();
+                        oVEN_DocumentoVentaDTO.DescripcionArticulo = dr["DescripcionArticulo"] == null ? "" : dr["DescripcionArticulo"].ToString();
+                        oVEN_DocumentoVentaDTO.Cantidad = Convert.ToDecimal(dr["Cantidad"] == null ? 0 : Convert.ToDecimal(dr["Cantidad"].ToString()));
+                        oVEN_DocumentoVentaDTO.PrecioNacional = Convert.ToDecimal(dr["PrecioNacional"] == null ? 0 : Convert.ToDecimal(dr["PrecioNacional"].ToString()));
+                        oVEN_DocumentoVentaDTO.TotalNacional = Convert.ToDecimal(dr["TotalNacional"] == null ? 0 : Convert.ToDecimal(dr["TotalNacional"].ToString()));
 
+                        oResultDTO.ListaResultado.Add(oVEN_DocumentoVentaDTO);
+                    }
+                    oResultDTO.Resultado = "OK";
+                }
+                catch (Exception ex)
+                {
+                    oResultDTO.Resultado = "Error";
+                    oResultDTO.MensajeError = ex.Message;
+                    oResultDTO.ListaResultado = new List<Rep_DocumentoVentaDetalleCliente>();
+                }
+            }
+            return oResultDTO;
+        }
 
     }
 }

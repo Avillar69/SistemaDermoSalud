@@ -29,18 +29,27 @@ function mostrarLista(rpta) {
 }
 function listar(r) {
     let newDatos = [];
-    if (r[0] !== '') {        
+    let totalCompras = 0;
+    let totalVentas = 0;
+    if (r[0] !== '') {
         r.forEach(function (e) {
             let valor = e.split("▲");
+            totalCompras += parseInt(valor[3]);
+            totalVentas += parseInt(valor[4]);
             newDatos.push({
                 idMarca: valor[0],
                 marca: valor[1],
+                totalCompra: valor[3],
+                totalVenta: valor[4],
+                stock: valor[5],
                 fechaCreacion: valor[2],
-                estado: valor[3]
+                estado: valor[6]
             })
-        });        
-    }    
-    let cols = ["marca", "fechaCreacion", "estado"];
+        }); 
+        $("#spTCompra").html(totalCompras);
+        $("#spTVenta").html(totalVentas);
+    }
+    let cols = ["marca", "totalCompra", "totalVenta", "stock", "fechaCreacion", "estado"];
     loadDataTable(cols, newDatos, "idMarca", "tbDatos", cadButtonOptions(), false);
 }
 function cadButtonOptions() {
@@ -126,7 +135,7 @@ function loadDataTable(cols, datos, rid, tid, btns, arrOrder, showFirstField) {
     });
 }
 function mostrarDetalle(opcion, id) {
-    let lblTituloPanel = document.getElementById('lblTituloPanel');   
+    let lblTituloPanel = document.getElementById('lblTituloPanel');
     limpiarTodo();
     switch (opcion) {
         case 1:
@@ -188,7 +197,7 @@ function eliminarListar(rpta) {
     setTimeout(function () {
         listaDatos = data[2].split("▼");
         listar(listaDatos);
-    }, 1000);    
+    }, 1000);
 }
 //
 //
@@ -249,8 +258,8 @@ function actualizarListar(rpta) {
                 show_hidden_Formulario(true);
                 listaDatos = data[2].split("▼");
                 listar(listaDatos);
-            }, 1000);           
-        }       
+            }, 1000);
+        }
     }
 }
 //

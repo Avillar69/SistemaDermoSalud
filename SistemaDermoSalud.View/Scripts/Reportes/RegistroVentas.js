@@ -70,73 +70,6 @@ function listar(r) {
     }
 
 }
-//Tabla
-function crearMatriz(listaDatos) {
-    var nRegistros = listaDatos.length;
-    var nCampos;
-    var campos;
-    var c = 0;
-    //var textos = document.getElementById("txtFiltro").value.trim();
-    matriz = [];
-    var exito;
-    if (listaDatos != "") {
-
-        for (var i = 0; i < nRegistros; i++) {
-            campos = listaDatos[i].split("▲");
-            nCampos = campos.length;
-            exito = true;
-            //if (textos.trim() != "") {
-            //    for (var l = 1; l < nCampos; l++) {
-            //        exito = true;
-            //        exito = exito && campos[l].toLowerCase().indexOf(textos.toLowerCase()) != -1;
-            //        if (exito) break;
-            //    }
-            //}
-            if (exito) {
-                matriz[c] = [];
-                for (var j = 0; j < nCampos; j++) {
-                    matriz[c][j] = campos[j];
-                }
-                c++;
-            }
-        }
-    } else {
-        document.getElementById("contentPrincipal").innerHTML = "";
-    }
-    return matriz;
-}
-function crearTablaCompras(cabeceras, div) {
-    var contenido = "";
-    nCampos = cabeceras.length;
-    contenido += "";
-    contenido += "          <div class='row panel bg-info' style='color:white;margin-bottom:5px;padding:5px 20px 0px 20px;'>";
-    for (var i = 0; i < nCampos; i++) {
-        switch (i) {
-            case 0: case 8:
-                contenido += "              <div class='col-12 col-md-2' style='display:none;'>";
-                break;
-            case 1:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-            case 3: case 2: case 5: case 6: case 7:
-                contenido += "              <div class='col-12 col-md-1'>";
-                break;
-            case 4:
-                contenido += "              <div class='col-12 col-md-3'>";
-                break;
-            default:
-                contenido += "              <div class='col-12 col-md-2'>";
-                break;
-        }
-        contenido += "                  <label>" + cabeceras[i] + "</label>";
-        contenido += "              </div>";
-    }
-    contenido += "          </div>";
-
-    var divTabla = gbi(div);
-    divTabla.innerHTML = contenido;
-}
-//
 function configBM() {
     var btnPDF = gbi("btnImprimirPDF");
     btnPDF.onclick = function () {
@@ -158,17 +91,6 @@ function mostrarBusqueda(rpta) {
     }
 }
 function BuscarxFecha(f1, f2) {
-    //var chkConTicket = document.getElementById("chkTicket").checked;
-    //var chkSinTicket = document.getElementById("chkSinTicket").checked;
-    //var chkTickets = document.getElementById("chkTickets").checked;
-    //var Documentos;
-    //if (chkConTicket == true) {
-    //    Documentos = 1;
-    //} else {
-    //    Documentos = 2
-    //}
-    //var Documentos = chkFacturas + "-" + chkBoletas + "-" + chkTickets;
-
     var url = '/Reportes/ObtenerPorFecha_RegistroVentas?fechaInicio=' + f1 + '&fechaFin=' + f2 + '&idTipoDctos=' + 2;
     enviarServidor(url, mostrarBusqueda);
 }

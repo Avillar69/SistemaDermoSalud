@@ -1,4 +1,5 @@
 ﻿using SistemaDermoSalud.Entities;
+using SistemaDermoSalud.Entities.Reportes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -36,7 +37,7 @@ namespace SistemaDermoSalud.DataAccess
                         oFN_CajaDTO.NroCaja = dr["NroCaja"] == null ? "" : dr["NroCaja"].ToString();
                         oFN_CajaDTO.Descripcion = dr["Descripcion"] == null ? "" : dr["Descripcion"].ToString();
                         oFN_CajaDTO.FechaApertura = Convert.ToDateTime(dr["FechaApertura"].ToString());
-                        oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString());
+                        oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString()).ToShortDateString();
                         oFN_CajaDTO.idMoneda = Convert.ToInt32(dr["idMoneda"] == null ? 0 : Convert.ToInt32(dr["idMoneda"].ToString()));
                         oFN_CajaDTO.MontoInicio = Convert.ToDecimal(dr["MontoInicio"] == null ? 0 : Convert.ToDecimal(dr["MontoInicio"].ToString()));
                         oFN_CajaDTO.MontoIngreso = Convert.ToDecimal(dr["MontoIngreso"] == null ? 0 : Convert.ToDecimal(dr["MontoIngreso"].ToString()));
@@ -90,7 +91,6 @@ namespace SistemaDermoSalud.DataAccess
                         oFN_CajaDTO.NroCaja = dr["NroCaja"] == null ? "" : dr["NroCaja"].ToString();
                         oFN_CajaDTO.Descripcion = dr["Descripcion"] == null ? "" : dr["Descripcion"].ToString();
                         oFN_CajaDTO.FechaApertura = Convert.ToDateTime(dr["FechaApertura"].ToString());
-                        oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString());
                         oFN_CajaDTO.idMoneda = Convert.ToInt32(dr["idMoneda"] == null ? 0 : Convert.ToInt32(dr["idMoneda"].ToString()));
                         oFN_CajaDTO.MontoInicio = Convert.ToDecimal(dr["MontoInicio"] == null ? 0 : Convert.ToDecimal(dr["MontoInicio"].ToString()));
                         oFN_CajaDTO.MontoIngreso = Convert.ToDecimal(dr["MontoIngreso"] == null ? 0 : Convert.ToDecimal(dr["MontoIngreso"].ToString()));
@@ -104,7 +104,16 @@ namespace SistemaDermoSalud.DataAccess
                         oFN_CajaDTO.UsuarioModificacion = Convert.ToInt32(dr["UsuarioModificacion"] == null ? 0 : Convert.ToInt32(dr["UsuarioModificacion"].ToString()));
                         oFN_CajaDTO.Estado = Convert.ToBoolean(dr["Estado"] == null ? false : Convert.ToBoolean(dr["Estado"].ToString()));
                         oFN_CajaDTO.HoraApertura = dr["HoraApertura"] == null ? "" : dr["HoraApertura"].ToString();
-                        oFN_CajaDTO.HoraCierre = dr["HoraCierre"] == null ? "" : dr["HoraCierre"].ToString();
+                        if (oFN_CajaDTO.EstadoCaja=="ABIERTA")
+                        {
+                            oFN_CajaDTO.FechaCierre = "--";
+                            oFN_CajaDTO.HoraCierre = "--";
+                        }
+                        else
+                        {
+                            oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString()).ToShortDateString();
+                            oFN_CajaDTO.HoraCierre = dr["HoraCierre"] == null ? "" : dr["HoraCierre"].ToString();
+                        }
                         oResultDTO.ListaResultado.Add(oFN_CajaDTO);
                     }
                     oResultDTO.Resultado = "OK";
@@ -114,6 +123,42 @@ namespace SistemaDermoSalud.DataAccess
                     oResultDTO.Resultado = "Error";
                     oResultDTO.MensajeError = ex.Message;
                     oResultDTO.ListaResultado = new List<FN_CajaDTO>();
+                }
+            }
+            return oResultDTO;
+        }
+
+        public ResultDTO<RepGastosxDiaDTO> RepGastosxDia(DateTime FechaInicio, DateTime FechaFin, SqlConnection cn = null)
+        {
+            ResultDTO<RepGastosxDiaDTO> oResultDTO = new ResultDTO<RepGastosxDiaDTO>();
+            oResultDTO.ListaResultado = new List<RepGastosxDiaDTO>();
+            using ((cn == null ? cn = new Conexion().conectar() : cn))
+            {
+                try
+                {
+                    if (cn.State == ConnectionState.Closed) { cn.Open(); }
+                    SqlDataAdapter da = new SqlDataAdapter("SP_ReporteGastosxDia", cn);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    da.SelectCommand.Parameters.AddWithValue("@FechaInicio", FechaInicio);
+                    da.SelectCommand.Parameters.AddWithValue("@FechaFin", FechaFin);
+                    SqlDataReader dr = da.SelectCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        RepGastosxDiaDTO oFN_CajaDTO = new RepGastosxDiaDTO();
+                        oFN_CajaDTO.FechaCreacion = Convert.ToDateTime(dr["FechaCreacion"].ToString()).ToShortDateString();
+                        oFN_CajaDTO.DescripcionConcepto = dr["DescripcionConcepto"] == null ? "" : dr["DescripcionConcepto"].ToString();
+                        oFN_CajaDTO.Observaciones = dr["Observaciones"] == null ? "" : dr["Observaciones"].ToString();
+                        oFN_CajaDTO.TotalNacional = Convert.ToDecimal(dr["TotalNacional"] == null ? 0 : Convert.ToDecimal(dr["TotalNacional"].ToString()));
+                        oFN_CajaDTO.TipoPago = dr["TipoPago"] == null ? "" : dr["TipoPago"].ToString();
+                        oResultDTO.ListaResultado.Add(oFN_CajaDTO);
+                    }
+                    oResultDTO.Resultado = "OK";
+                }
+                catch (Exception ex)
+                {
+                    oResultDTO.Resultado = "Error";
+                    oResultDTO.MensajeError = ex.Message;
+                    oResultDTO.ListaResultado = new List<RepGastosxDiaDTO>();
                 }
             }
             return oResultDTO;
@@ -144,7 +189,7 @@ namespace SistemaDermoSalud.DataAccess
                         oFN_CajaDTO.NroCaja = dr["NroCaja"].ToString();
                         oFN_CajaDTO.Descripcion = dr["Descripcion"].ToString();
                         oFN_CajaDTO.FechaApertura = Convert.ToDateTime(dr["FechaApertura"].ToString());
-                        oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString());
+                        oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString()).ToShortDateString();
                         oFN_CajaDTO.idMoneda = Convert.ToInt32(dr["idMoneda"].ToString());
                         oFN_CajaDTO.MontoInicio = Convert.ToDecimal(dr["MontoInicio"].ToString());
                         oFN_CajaDTO.MontoIngreso = Convert.ToDecimal(dr["MontoIngreso"].ToString());
@@ -322,7 +367,7 @@ namespace SistemaDermoSalud.DataAccess
                     {
                         FN_CajaDTO oFN_CajaDTO = new FN_CajaDTO();
                         oFN_CajaDTO.FechaApertura = Convert.ToDateTime(dr["FechaApertura"].ToString());
-                        oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString());
+                        oFN_CajaDTO.FechaCierre = Convert.ToDateTime(dr["FechaCierre"].ToString()).ToShortDateString();
                         oFN_CajaDTO.RazonSocial = dr["RazonSocial"].ToString();
                         oFN_CajaDTO.Ruc = dr["Ruc"].ToString();
                         oFN_CajaDTO.Direccion = dr["Direccion"].ToString();

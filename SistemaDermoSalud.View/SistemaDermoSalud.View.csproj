@@ -4321,8 +4321,11 @@
     <Content Include="Scripts\Finanzas\PorcentajeMedico.js" />
     <Content Include="Scripts\LabMedica\Recetas.js" />
     <Content Include="Scripts\logos.js" />
+    <Content Include="Scripts\Reportes\DetalleVentaCliente.js" />
     <Content Include="Scripts\Reportes\RegistroVentas.js" />
     <Content Include="Scripts\Reportes\ReportedeGastos.js" />
+    <Content Include="Scripts\Reportes\ReporteProductoAgotado.js" />
+    <Content Include="Scripts\Reportes\ReporteProductoSinVenta.js" />
     <Content Include="Scripts\Ventas\cobranza.js" />
     <Content Include="Scripts\Ventas\DocVenta.js" />
     <Content Include="Scripts\Ventas\NotaCredito.js" />
@@ -5291,6 +5294,10 @@
     <Content Include="Views\Talla\Index.cshtml" />
     <Content Include="Views\cobranza\Index.cshtml" />
     <Content Include="Views\Reportes\ReporteGastosxDia.cshtml" />
+    <Content Include="Views\Reportes\ReporteDetalleVentaCliente.cshtml" />
+    <Content Include="Views\Reportes\ReporteProductoAgotado.cshtml" />
+    <Content Include="Views\Reportes\ReporteProductoSinVenta.cshtml" />
+    <Content Include="Views\Reportes\ReporteUtilidades.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

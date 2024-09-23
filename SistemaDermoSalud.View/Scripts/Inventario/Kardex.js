@@ -6,33 +6,111 @@ var nombreEmpresa = "HARI´S SPORT EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITAD
 var rucEmpresa = "20612173452";
 var direccionEmpresa = "JR. ANCASH NRO. 1265 (ESQUINA CON TARAPACA) JUNIN - HUANCAYO - HUANCAYO";
 
-//$("#txtFilFecIn").datetimepicker({
-//    format: 'DD-MM-YYYY',
-//});
-//$("#txtFilFecFn").datetimepicker({
-//    format: 'DD-MM-YYYY',
-//});
+var url = "/Reportes/ObtenerDatos_RegistroVenta";
+enviarServidor(url, mostrarLista);
+
+function mostrarLista(rpta) {
+    if (rpta != "") {
+        var listas = rpta.split("↔");
+        var Resultado = listas[0];
+        if (Resultado == "OK") {
+            var fechaInicio = listas[1];
+            var fechaFin = listas[2];
+            gbi("txtFilFecIn").value = fechaInicio;
+            gbi("txtFilFecFn").value = fechaFin;
+        }
+        else {
+            mostrarRespuesta(Resultado, mensaje, "error");
+        }
+    }
+}
+$("#txtFilFecIn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
+$("#txtFilFecFn").flatpickr({
+    enableTime: false,
+    dateFormat: "d-m-Y"
+});
 $(function () {
     let urlMarcas = "/Marca/ObtenerDatos";
     enviarServidor(urlMarcas, cargarDatosMarca);
     configBM();
 });
+//function cargarDatosMarca(r) {
+//    $('#cboMarca').select2('destroy');
+//    $('#cboMarca').html('');
+//    let rd = r.split("↔");
+//    //let marcas = rd[2].split("▼");
+//    //$("#cboMarca").empty();
+//    //$("#cboMarca").append(`<option value="0">Seleccione</option>`);
+//    //$("#cboProducto").empty();
+//    //$("#cboProducto").append(`<option value="0">Seleccione</option>`);
+
+//    //if (r && r.length > 0) {
+//    //    marcas.forEach(element => {
+//    //        $("#cboMarca").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+//    //    });
+//    //}
+
+
+//    let proveedores = rd[2].split("▼");
+//    let arr = [{
+//        id: 0,
+//        text: "Seleccione",
+//    }];
+//    for (var j = 0; j < proveedores.length; j++) {
+//        let objChild = {
+//            id: proveedores[j].split('▲')[0],
+//            text: proveedores[j].split('▲')[1]
+//        };
+//        arr.push(objChild);
+//    }
+//    $("#cboMarca").select2({
+//        placeholder: "Seleccione",
+//        data: arr, allowClear: true,
+//        escapeMarkup: function (e) {
+//            return e;
+//        }
+//    });
+
+
+//    $("#cboMarca").change(function () {
+//        var selectedValue = $(this).val();
+//        if (selectedValue !== "" && selectedValue !== null) {
+//            var url = "/OperacionesStock/cargarProductoxMarca?idMarca=" + selectedValue;
+//            enviarServidor(url, cargarDatosProductos);
+
+//        }
+//    });
+//}
 function cargarDatosMarca(r) {
+    console.log(r);
+    //$('#cboMarca').select2('destroy');
+    $('#cboMarca').html('');
     let rd = r.split("↔");
     let marcas = rd[2].split("▼");
-    $("#cboMarca").empty();
-    $("#cboMarca").append(`<option value="0">Seleccione</option>`);
-    $("#cboProducto").empty();
-    $("#cboProducto").append(`<option value="0">Seleccione</option>`);
-
-    if (r && r.length > 0) {
-        marcas.forEach(element => {
-            $("#cboMarca").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
-        });
+    let arr = [{
+        id: 0,
+        text: "Seleccione",
+    }];
+    for (var j = 0; j < marcas.length; j++) {
+        let objChild = {
+            id: marcas[j].split('▲')[0],
+            text: marcas[j].split('▲')[1]
+        };
+        arr.push(objChild);
     }
+    $("#cboMarca").select2({
+        placeholder: "Seleccione",
+        data: arr, allowClear: true,
+        escapeMarkup: function (e) {
+            return e;
+        }
+    });
     $("#cboMarca").change(function () {
         var selectedValue = $(this).val();
-        if (selectedValue !== "" && selectedValue !== null) {            
+        if (selectedValue !== "" && selectedValue !== null) {
             var url = "/OperacionesStock/cargarProductoxMarca?idMarca=" + selectedValue;
             enviarServidor(url, cargarDatosProductos);
 
@@ -42,16 +120,36 @@ function cargarDatosMarca(r) {
 function cargarDatosProductos(r) {
     let rd = r.split("↔");
     let productos = rd[2].split("▼");
-    $("#cboProducto").empty();
-    $("#cboProducto").append(`<option value="0">Seleccione</option>`);
-    if (r && r.length > 0) {
-        productos.forEach(element => {
-            $("#cboProducto").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
-        });
+
+    $('#cboProducto').html('');
+    let arr = [{
+        id: 0,
+        text: "Seleccione",
+    }];
+    for (var j = 0; j < productos.length; j++) {
+        let objChild = {
+            id: productos[j].split('▲')[0],
+            text: productos[j].split('▲')[1]
+        };
+        arr.push(objChild);
     }
+    $("#cboProducto").select2({
+        placeholder: "Seleccione",
+        data: arr, allowClear: true,
+        escapeMarkup: function (e) {
+            return e;
+        }
+    });
+    //$("#cboProducto").empty();
+    //$("#cboProducto").append(`<option value="0">Seleccione</option>`);
+    //if (r && r.length > 0) {
+    //    productos.forEach(element => {
+    //        $("#cboProducto").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
+    //    });
+    //}
 }
 function configBM() {
-    
+
     var btnBuscar = gbi("btnBuscar");
     btnBuscar.onclick = function () {
         var error = true;
@@ -64,7 +162,7 @@ function configBM() {
     var btnExcel = gbi("btnImprimirExcel");
     btnExcel.onclick = function () {
         window.addEventListener('focus', window_focus, false);
-       
+
         try {
             var cabecera = "Fecha,Doc,Articulo,U.M.,Stock Inicial,Precio,Cant. Entrada,Precio Entrada,Total Entrada";
             window.location = "Kardex/exportarExcel?local=1&fechaInicio=" + gbi("txtFilFecIn").value + "&fechaFin=" + gbi("txtFilFecFn").value + "&cabecera=" + cabecera;
@@ -168,6 +266,7 @@ function ImprimirKardex(matriz) {
     doc.setFontType("bold");
 
     for (var i = 0; i < data.length; i++) {
+        console.log(data);
         if (artActual != data[i][2]) {
             if (xid + (n * xad) + xad > height - 30) {
                 doc.addPage();

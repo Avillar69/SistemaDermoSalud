@@ -111,6 +111,16 @@ $(document).ready(function () {
     $("#btnCancelarCli").click(function () {
         CerrarModal("modal-Modal");
     })
+    $('#txtNroDocumento').on('keypress', function (event) {
+        if (event.which == 13) { // 13 is the keycode for Enter
+            for (var i = 0; i < listaSocios.length; i++) {
+                if (listaSocios[i].split('▲')[2] == $("#txtNroDocumento").val()) {
+                    $("#cboRazonSocial").val(listaSocios[i].split('▲')[0]).trigger("change");
+                    break;
+                }
+            }
+        }
+    });
     $('#txtCodigoBarras').on('keypress', function (event) {
         if (event.which == 13) { // 13 is the keycode for Enter
             var url = "Producto/ObtenerIDByCodigoBarras?cb=" + $("#txtCodigoBarras").val();
@@ -150,6 +160,8 @@ function actualizarListaClientes(rpta) {
             Swal.fire(res, mensaje, tipo);
             listaSocios = data[2].split("▼");
             cargarDatosClientes(listaSocios);
+        } else {
+            Swal.fire(res, mensaje, tipo);
         }
     }
 }
@@ -325,7 +337,7 @@ function cargarDatosClientes(r) {
 
     $("#cboRazonSocial").change(function () {
         var selectedValue = $(this).val();
-        if (selectedValue !== "" && selectedValue !== null) {
+        if (selectedValue !== "" && selectedValue !== null && selectedValue != "0") {
             for (let i = 0; i < proveedores.length; i++) {
                 if (selectedValue === proveedores[i].split("▲")[0]) {
                     $("#txtNroDocumento").val(proveedores[i].split("▲")[1])
@@ -334,6 +346,9 @@ function cargarDatosClientes(r) {
             var url = "/SocioNegocio/ObtenerDireccionxID?id=" + selectedValue;
             enviarServidor(url, cargarDatosDireccion);
 
+        } else {
+            $("#txtNroDocumento").val("");
+            $("#cboDireccion").html("");
         }
     });
 }
@@ -360,7 +375,7 @@ function cargarDatosProveedores(r) {
 
     $("#cboRazonSocial").change(function () {
         var selectedValue = $(this).val();
-        if (selectedValue !== "" && selectedValue !== null) {
+        if (selectedValue !== "" && selectedValue !== null && selectedValue != "0") {
             for (let i = 0; i < proveedores.length; i++) {
                 if (selectedValue === proveedores[i].split("▲")[0]) {
                     $("#txtNroDocumento").val(proveedores[i].split("▲")[2])
@@ -369,12 +384,18 @@ function cargarDatosProveedores(r) {
             var url = "/SocioNegocio/ObtenerDireccionxID?id=" + selectedValue;
             enviarServidor(url, cargarDatosDireccion);
 
+        } else {
+            $("#dvCantCompras").hide(500);
+            $("#txtNroDocumento").val("");
+            $("#cboDireccion").html("");
         }
     });
 }
 function cargarDatosDireccion(r) {
+    console.log(r);
     let dtDireccion = r.split("↔");
     let direcciones = dtDireccion[2].split("▼");
+    let cantCompras = dtDireccion[3];
 
     $("#cboDireccion").empty();
     $("#cboDireccion").append(`<option value="">Seleccione</option>`);
@@ -383,6 +404,8 @@ function cargarDatosDireccion(r) {
             $("#cboDireccion").append(`<option value="${element.split('▲')[0]}">${element.split('▲')[1]}</option>`);
         });
     }
+    $("#spCantCompras").html(cantCompras);
+    $("#dvCantCompras").show(500);
     gbi("cboDireccion").selectedIndex = 1;
 }
 function cargarDatosMonedas(r) {
@@ -661,17 +684,17 @@ function eliminar(idRow) {
     let id = idRow.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
     Swal.fire({
         title: 'Desea Anular el Documento de  Venta? ',
-        text: 'No podrá recuperar los datos eliminados.',
+        text: 'No podrá revertir las anulaciones.',
         type: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Si, Eliminalo!',
+        confirmButtonText: 'Si, anúlalo!',
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.value) {
             var url = "DocumentoVenta/Anular?idDocumentoVenta=" + id;
             enviarServidor(url, eliminarListar);
         } else {
-            Swal.fire('Cancelado', 'No se eliminó la marca', 'error');
+            Swal.fire('Cancelado', 'No se anuló el comprobante', 'error');
         }
     });
 }
@@ -824,7 +847,7 @@ function configBM() {
                         }
                         frm.append("TipoCambio", gvt("txtTipoCambio"));
                         frm.append("Estado", true);
-                        frm.append("ObservacionVenta", gvt("txtObservacion"));
+                        frm.append("ObservacionVenta", gvt("txtObservacion") + "\n" + getTextDescuentos());
                         frm.append("NroCita", gbi("txtCita").value.length == 0 ? "0" : gbi("txtCita").value);
                         var porId = document.getElementById("chkIGV").checked;
                         frm.append("flgIGV", porId);
@@ -913,7 +936,7 @@ function configBM() {
                                 }
                                 frm.append("TipoCambio", gvt("txtTipoCambio"));
                                 frm.append("Estado", true);
-                                frm.append("ObservacionVenta", gvt("txtObservacion"));
+                                frm.append("ObservacionVenta", gvt("txtObservacion") + "\n" + getTextDescuentos());
                                 frm.append("NroCita", gbi("txtCita").value.length == 0 ? "0" : gbi("txtCita").value);
                                 var porId = document.getElementById("chkIGV").checked;
                                 frm.append("flgIGV", porId);
@@ -1046,7 +1069,7 @@ function configBM() {
                                 }
                                 frm.append("TipoCambio", gvt("txtTipoCambio"));
                                 frm.append("Estado", true);
-                                frm.append("ObservacionVenta", gvt("txtObservacion"));
+                                frm.append("ObservacionVenta", gvt("txtObservacion") + "\n" + getTextDescuentos());
                                 frm.append("NroCita", gbi("txtCita").value.length == 0 ? "0" : gbi("txtCita").value);
                                 var porId = document.getElementById("chkIGV").checked;
                                 frm.append("flgIGV", porId);
@@ -1092,6 +1115,16 @@ function configBM() {
             }
         }
     };
+}
+function getTextDescuentos() {
+    let cdet = "";
+    $(".rowDetalle").each(function (obj) {
+        if ($(".rowDetalle")[obj].children[9].innerHTML != "0.00") {
+            cdet += $(".rowDetalle")[obj].children[2].innerHTML + " Dscto. " + $(".rowDetalle")[obj].children[8].innerHTML + "% = S/." + $(".rowDetalle")[obj].children[9].innerHTML;
+            cdet += " | ";
+        }
+    });
+    return cdet;
 }
 function calcularTotal() {
     let txtPrecio = 0;
@@ -1188,6 +1221,8 @@ function addRowDetalle(tipo, data) {
             cad += '<td class="">' + (parseFloat($("#txtTotalDesc").val()) / parseFloat($("#txtCantidad").val())).toFixed(3) + '</td>';
             cad += '<td class="">' + parseFloat($("#txtTotalDesc").val()).toFixed(3) + '</td>';
             cad += '<td class="">' + cadButtonDet("Detalle") + '</td>';
+            cad += '<td class="">' + parseFloat($("#txtPorDescuentoDet").val()).toFixed(2) + '</td>';
+            cad += '<td class="">' + (parseFloat($("#txtTotal").val()) - parseFloat($("#txtTotalDesc").val())).toFixed(2) + '</td>';
             cad += "</tr>";
             document.getElementById("tbDetalle").innerHTML += cad;
         }
@@ -1200,6 +1235,8 @@ function addRowDetalle(tipo, data) {
             cad += '<td class="">' + (parseFloat($("#txtTotalDesc").val()) / parseFloat($("#txtCantidad").val())).toFixed(3) + '</td>';
             cad += '<td class="">' + parseFloat($("#txtTotalDesc").val()).toFixed(3) + '</td>';
             cad += '<td class="">' + cadButtonDet("Detalle") + '</td>';
+            cad += '<td class="">' + parseFloat($("#txtPorDescuentoDet").val()).toFixed(2) + '</td>';
+            cad += '<td class="">' + (parseFloat($("#txtTotal").val()) - parseFloat($("#txtTotalDesc").val())).toFixed(2) + '</td>';
             $("#tbDetalle")[0].rows[idxDetalle - 1].innerHTML = cad;
         }
     } else {

@@ -6,7 +6,7 @@
 }
 }
 @{
-    ViewBag.Title = "Reporte de Gastos por Día";
+    ViewBag.Title = "Productos sin Venta";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
 
@@ -16,7 +16,7 @@
             <div class="card-header border-0">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        <h3 class="content-header-title mb-0">Reporte Gastos x Día</h3>
+                        <h3 class="content-header-title mb-0">Reporte de Utilidades</h3>
                         <div class="row breadcrumbs-top">
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
@@ -24,7 +24,7 @@
                                         <a href="#">Reportes</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Reporte de Gastos x Día
+                                        Reporte de Utilidades
                                     </li>
                                 </ol>
                             </div>
@@ -32,7 +32,6 @@
                     </div>
                     <div class="col-sm-auto">
                         <div role="group" aria-label="Button group with nested dropdown" class="btn-group float-md-right">
-                            <a onclick="mostrarDetalle(1)" class="btn btn-outline-primary" title="Nuevo"><i class="ri-add-line"></i></a>
                             <a id="btnImprimir" class="btn btn-outline-primary hidden" title="Imprimir"><i class=" ri-printer-fill"></i></a>
 
                             <div class="btn-group" role="group">
@@ -75,11 +74,10 @@
                         <table class="table table-bordered dt-responsive table-sm table-striped align-middle dtr-inline collapsed" id="tbDatos">
                             <thead class="text-muted table-light">
                                 <tr class="">
-                                    <th class="sort" data-sort="fecha">Fecha</th>
-                                    <th class="sort" data-sort="serie">Concepto</th>
-                                    <th class="sort" data-sort="numero">Observación</th>
-                                    <th class="sort" data-sort="razon">Total</th>
-                                    <th class="sort" data-sort="total">Forma de Pago</th>
+                                    <th class="sort" data-sort="marca">Marca</th>
+                                    <th class="sort" data-sort="codigoProducto">Codigo Producto</th>
+                                    <th class="sort" data-sort="producto">Producto</th>
+                                    <th class="sort" data-sort="stock">Stock</th>
                                     <th class="sort" data-sort="actions"></th>
                                 </tr>
                             </thead>
@@ -93,5 +91,4 @@
     </div>
 </div>
 @Scripts.Render("~/bundles/basics")
-<script src='~/Scripts/Reportes/ReportedeGastos.js'></script>
-
+<script src='~/Scripts/Reportes/ReporteProductoSinVenta.js'></script>
